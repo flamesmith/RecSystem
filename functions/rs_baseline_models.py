@@ -1,5 +1,12 @@
+import pandas as pd
+import numpy as np
+import io
+import matplotlib.pyplot as plt
+import seaborn as sns
 import math
 from scipy.sparse import csr_matrix
+
+from contextlib import redirect_stdout
 
 def get_topn_popular_items(df, user_id, timestamp, n):
     """
