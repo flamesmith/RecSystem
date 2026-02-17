@@ -94,6 +94,59 @@ def get_topn_reviewed_items(df, user_id, timestamp, review_sample, n):
     # 5️⃣ Return top-N
     return top_items[:n]
 
+def get_topn_trending_items(df, user_id, timestamp, n, n_days = 7):
+    """
+    Returns the top-N trending items up to a given timestamp based on recent purchase trends.
+    Trending items are those that have seen a significant increase in purchases in the last 7 days.
+
+    Parameters:
+    - df: pandas DataFrame with columns ['reviewerID', 'asin', 'unixReviewTime']
+    - user_id: the ID of the user (corresponds to 'reviewerID')
+    - timestamp: cutoff time (recommend items purchased BEFORE this timestamp)
+    - n: number of items to recommend
+
+    Returns:
+    - list of top-N item_ids (ASINs)
+    """
+    # Ensure timestamp is pandas Timestamp
+    timestamp = pd.to_datetime(timestamp)
+
+    # Define recent window
+    recent_start = timestamp - pd.Timedelta(days=n_days)
+
+    # Only consider interactions BEFORE the timestamp
+    df = df[df["unixReviewTime"] < timestamp]
+
+    # Split into recent vs past
+    recent_df = df[df["unixReviewTime"] >= recent_start]
+    past_df = df[df["unixReviewTime"] < recent_start]
+
+    # Count interactions per item
+    recent_counts = recent_df["asin"].value_counts()
+    past_counts = past_df["asin"].value_counts()
+
+    # Combine counts
+    trend_df = pd.DataFrame({
+        "recent": recent_counts,
+        "past": past_counts
+    }).fillna(0)
+
+    # Apply sample size filter
+    trend_df = trend_df[trend_df["past"] > 1]
+
+    # Compute trend score
+    trend_df["score"] = (
+        trend_df["recent"] *
+        np.log1p(trend_df["recent"] / (trend_df["past"] + 1))
+    )
+
+    # Remove items already purchased by user
+    user_items = df[df["reviewerID"] == user_id]["asin"].unique()
+    trend_df = trend_df.drop(index=user_items, errors="ignore")
+
+    # Return top N
+    return trend_df.sort_values("score", ascending=False).head(n).index.tolist()
+
 ## **Create function to recommend items based on co occurrence**
 
 def compute_cooccurrence_before_time(df, cutoff_time):
