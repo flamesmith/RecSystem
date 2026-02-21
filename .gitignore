@@ -1,0 +1,10 @@
+# Data files
+data/*.csv
+
+# macOS
+.DS_Store
+
+# Python
+venv/
+__pycache__/
+*.pyc
