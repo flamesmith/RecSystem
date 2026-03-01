@@ -1,0 +1,1893 @@
+{
+  "Bakeware": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "ann clark",
+        "cybrtrayd",
+        "wilton",
+        "fat daddio",
+        "nordic ware",
+        "le creuset",
+        "bia cordon bleu",
+        "fox run",
+        "paderno world cuisine",
+        "ck product",
+        "villeroy & boch",
+        "coppergifts",
+        "first impression"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "cookie cutter",
+        "candy mold",
+        "chocolate mold",
+        "baking cup",
+        "cupcake wrapper",
+        "baking pan",
+        "cake mold",
+        "rolling pin",
+        "baking mat",
+        "lollipop stick",
+        "baking dish",
+        "casserole",
+        "pizza pan",
+        "muffin pan",
+        "loaf pan",
+        "ice cube tray",
+        "fondant cutter",
+        "fondant mold",
+        "springform",
+        "bundt",
+        "sheet pan",
+        "jelly roll",
+        "pie plate",
+        "ramekin",
+        "piping tip",
+        "pastry bag",
+        "stencil"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "silicone",
+        "cast iron",
+        "enameled",
+        "stainless steel",
+        "stainless",
+        "aluminium",
+        "aluminum",
+        "tin plated steel",
+        "tinplated",
+        "polyresin",
+        "plastic",
+        "paper",
+        "stoneware",
+        "copper",
+        "metal",
+        "carbon steel",
+        "glass",
+        "ceramic",
+        "porcelain",
+        "borosilicate"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "black",
+        "red",
+        "blue",
+        "pink"
+      ]
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "round",
+        "square",
+        "heart",
+        "flower",
+        "dress",
+        "mini",
+        "large",
+        "small"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "non-stick",
+        "durable",
+        "economical",
+        "hard candy"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+\\s?\\d*\\/?\\d*)\\s?(?:inch|inchs|quot|\")",
+        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)\\s?qt"
+      ],
+      "note": "Captures fractions like 9 1/2 and standard inch units"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?pack"
+      ]
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "christmas",
+        "wedding",
+        "birthday",
+        "baby shower",
+        "halloween"
+      ]
+    }
+  },
+  "Coffee, Tea & Espresso": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "cuisinart",
+        "hamilton beach",
+        "keurig",
+        "mr. coffee",
+        "delonghi",
+        "nespresso",
+        "krups",
+        "capresso",
+        "bodum",
+        "baratza",
+        "briel",
+        "black & decker",
+        "jura",
+        "aeropress",
+        "bialetti",
+        "pfaltzgraff"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "coffee maker",
+        "espresso machine",
+        "french press",
+        "coffee grinder",
+        "tea infuser",
+        "tea maker",
+        "milk frother",
+        "percolator",
+        "teapot",
+        "pourover",
+        "coffee mill",
+        "cold brew maker",
+        "iced infuser",
+        "cold press",
+        "moka pot",
+        "cappuccino machine",
+        "tea strainer",
+        "tea ceremony set",
+        "burr grinder",
+        "blade grinder",
+        "infuser",
+        "kettle",
+        "coffee press",
+        "coffee dripper",
+        "espresso maker",
+        "tea steeper"
+      ]
+    },
+    "Sub_Type": {
+      "type": "dictionary",
+      "values": [
+        "conical burr",
+        "single serve",
+        "stovetop",
+        "drip",
+        "pump espresso",
+        "manual",
+        "automatic",
+        "programmable",
+        "thermal",
+        "loose leaf",
+        "hand crank",
+        "matcha bowl",
+        "matcha",
+        "chawan",
+        "mino yaki ware",
+        "digital",
+        "adjustable",
+        "electric",
+        "gooseneck",
+        "travel",
+        "vacuum insulated",
+        "pod",
+        "capsule"
+      ]
+    },
+    "Capacity": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?cup",
+        "(\\d+)\\s?oz",
+        "(\\d+\\.?\\d*)\\s?[Ll]iter",
+        "(\\d+\\.?\\d*)\\s?[Ll]"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "borosilicate glass",
+        "heat resistant glass",
+        "brushed stainless",
+        "stainless steel",
+        "stainless",
+        "ceramic",
+        "bamboo",
+        "plastic",
+        "stoneware",
+        "porcelain",
+        "glass",
+        "silicone",
+        "chrome",
+        "double wall"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "silver",
+        "blue",
+        "red",
+        "brushed"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "carafe",
+        "filter",
+        "basket",
+        "scoop",
+        "mesh strainer",
+        "tea ball",
+        "pitcher",
+        "lid",
+        "pause serve",
+        "certified refurbished"
+      ]
+    },
+    "Capacity_Cups": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]cup",
+        "(\\d+)\\s?cup"
+      ],
+      "note": "Commonly 1, 4, 8, 10, or 12 cups"
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?oz",
+        "(\\d+)\\s?ounce",
+        "(\\d+)\\s?liter",
+        "(\\d+)\\s?l"
+      ]
+    },
+    "Bar_Pressure": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?bar"
+      ],
+      "note": "Espresso machine pressure rating, commonly 15 bar"
+    }
+  },
+  "Cookware": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "all-clad",
+        "calphalon",
+        "cuisinart",
+        "le creuset",
+        "mauviel",
+        "rachael ray",
+        "nordic ware",
+        "lodge",
+        "bormioli rocco",
+        "sitram",
+        "paderno world cuisine",
+        "sur la table",
+        "cook n home",
+        "t-fal",
+        "circulon",
+        "anolon",
+        "farberware",
+        "kitchenaid",
+        "paula deen",
+        "swiss diamond",
+        "kuhn rikon"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "fry pan",
+        "skillet",
+        "dutch oven",
+        "saucepan",
+        "stockpot",
+        "saute pan",
+        "wok",
+        "griddle",
+        "grill pan",
+        "omelet pan",
+        "pressure cooker",
+        "roasting pan",
+        "tea kettle",
+        "egg poacher",
+        "paella pan",
+        "canning jar",
+        "au gratin dish",
+        "stock pot",
+        "sauce pan",
+        "steamer insert",
+        "pasta insert",
+        "pot rack",
+        "lid"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cast iron",
+        "enameled cast iron",
+        "stainless steel",
+        "stainless",
+        "aluminium",
+        "aluminum",
+        "hard anodized",
+        "carbon steel",
+        "copper",
+        "ceramic",
+        "porcelain",
+        "silicone",
+        "glass"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "red",
+        "white",
+        "blue",
+        "green",
+        "orange",
+        "silver",
+        "cherry",
+        "flame",
+        "marseille"
+      ]
+    },
+    "Sub_Type": {
+      "type": "dictionary",
+      "values": [
+        "18/10 stainless",
+        "tri-ply",
+        "multi-ply",
+        "pre-seasoned",
+        "signature",
+        "commercial",
+        "professional",
+        "gourmet",
+        "classic",
+        "chef",
+        "heritage",
+        "profiserie"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "nonstick",
+        "non-stick",
+        "pfoa free",
+        "cadmium free",
+        "scratch resistant",
+        "enamel",
+        "enameled",
+        "square",
+        "round",
+        "oval",
+        "wide mouth",
+        "covered",
+        "with lid",
+        "helper handle",
+        "induction ready",
+        "induction safe",
+        "oven safe",
+        "dishwasher safe"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+\\.?\\d*)\\s?inch",
+        "(\\d+\\.?\\d*)\"",
+        "(\\d+\\.?\\d*)\\s?quot",
+        "(\\d+\\-\\d\\/\\d)\\s?inch"
+      ],
+      "note": "Catches 8, 10, 12 inch and fractions like 9-1/2 inch"
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+\\.?\\d*)\\s?quart",
+        "(\\d+\\.?\\d*)\\s?qt",
+        "(\\d+\\.?\\d*)\\s?-quart"
+      ]
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)"
+      ]
+    }
+  },
+  "Cutlery & Knife Accessories": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "wusthof",
+        "j.a. henckels",
+        "zwilling",
+        "shun",
+        "victorinox",
+        "global",
+        "chicago cutlery",
+        "ginsu",
+        "mundial",
+        "kuhn rikon",
+        "tojiro",
+        "zhen",
+        "kess inhouse",
+        "j.k. adams",
+        "messermeister"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "chef knife",
+        "santoku",
+        "paring knife",
+        "steak knife",
+        "bread knife",
+        "utility knife",
+        "butcher block",
+        "cutting board",
+        "knife sharpener",
+        "kitchen shears",
+        "boning knife",
+        "carving knife",
+        "nakiri",
+        "deba",
+        "gyuto",
+        "magnetic knife holder",
+        "magnetic knife strip",
+        "honing steel",
+        "sharpening system",
+        "whetstone",
+        "diamond hone",
+        "sharpening steel",
+        "cheese knife set",
+        "cheese knife",
+        "meat cleaver",
+        "poultry shear",
+        "pumpkin carving kit",
+        "knife roll",
+        "knife block",
+        "universal knife block",
+        "chopping board",
+        "sheath"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "high carbon stainless steel",
+        "stainless steel",
+        "stainless",
+        "damascus steel",
+        "japanese steel",
+        "german steel",
+        "vg-10",
+        "ceramic",
+        "tempered glass",
+        "carbon steel",
+        "high carbon",
+        "japanese vg-10",
+        "bamboo",
+        "maple",
+        "walnut",
+        "rosewood",
+        "wood",
+        "glass",
+        "plastic",
+        "polypropylene",
+        "end grain",
+        "edge grain"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "red",
+        "white",
+        "natural"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "forged",
+        "stamped",
+        "serrated",
+        "flexible",
+        "full tang",
+        "fibrox pro handle",
+        "fibrox handle",
+        "rosewood handle",
+        "non-slip",
+        "dishwasher safe",
+        "juice groove"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+\\.?\\d*)\\s?inch",
+        "(\\d+\\.?\\d*)\"",
+        "(\\d+\\.?\\d*)\\s?quot",
+        "(\\d+\\-\\d\\/\\d)\\s?inch",
+        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)\\s?quot\\s?x\\s?(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)\\s?quot\\s?x\\s?(\\d+\\.?\\d*)"
+      ],
+      "note": "Blade length (3.5 Paring, 7 Santoku, 8 Chef) and board dimensions"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?stage"
+      ],
+      "note": "Stage refers to sharpeners (e.g., 2-stage sharpener)"
+    }
+  },
+  "Dining & Entertaining": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "3drose",
+        "tervis",
+        "cafepress",
+        "villeroy & boch",
+        "reed & barton",
+        "lolita",
+        "spiegelau",
+        "counterart",
+        "coasterstone",
+        "certified international",
+        "tree-free greetings",
+        "polish pottery",
+        "tupperware"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "coffee mug",
+        "travel tumbler",
+        "wine glass",
+        "dinnerware set",
+        "flatware set",
+        "coaster set",
+        "shot glass",
+        "pilsner glass",
+        "pint glass",
+        "moscow mule mug",
+        "dinner plate",
+        "cereal bowl",
+        "serving tray",
+        "serving bowl",
+        "cake stand",
+        "butter dish",
+        "pitcher",
+        "teapot",
+        "flask",
+        "bowl",
+        "mug"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "ceramic",
+        "porcelain",
+        "bone china",
+        "stoneware",
+        "stainless steel",
+        "stainless",
+        "crystal",
+        "glass",
+        "cork",
+        "bamboo",
+        "wood"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "black",
+        "red",
+        "blue",
+        "pink",
+        "gold",
+        "silver",
+        "green",
+        "yellow",
+        "purple",
+        "clear",
+        "multicolor",
+        "ivory"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "double wall",
+        "insulated",
+        "magic transforming",
+        "two tone",
+        "hand painted",
+        "stemless",
+        "absorbent",
+        "full-sized handle"
+      ]
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]ounce",
+        "(\\d+)\\s?oz",
+        "(\\d+)\\s?ml"
+      ],
+      "note": "Dominant values: 11oz, 15oz, 16oz, 20oz, 24oz"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "service (?:for )?(\\d+)",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Service for X indicates place settings; piece count is total items"
+    }
+  },
+  "Home Brewing & Wine Making": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "mr. beer",
+        "kegco",
+        "taprite",
+        "e.c. kraus",
+        "perlick",
+        "brewcraft",
+        "brewer's best",
+        "home brew ohio",
+        "kegconnection",
+        "deep south barrel",
+        "strange brew",
+        "outlaw gear",
+        "northern brewer",
+        "bev rite",
+        "drinktanks",
+        "buon vino",
+        "vestil",
+        "true brew",
+        "ny brew supply"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "ingredient kit",
+        "starter kit",
+        "equipment kit",
+        "recipe kit",
+        "cleaning kit",
+        "conversion kit",
+        "refill kit",
+        "fermentation kit",
+        "brew kettle",
+        "brewing kettle",
+        "mash tun",
+        "false bottom",
+        "kegerator",
+        "alcohol distiller",
+        "auto siphon",
+        "jockey box",
+        "fermenter",
+        "big mouth bubbler",
+        "carboy",
+        "beer tower",
+        "beer faucet",
+        "co2 tank",
+        "co2 regulator",
+        "wort chiller",
+        "chiller stick",
+        "hydrometer",
+        "beer tap handle",
+        "tap handle",
+        "keg coupler",
+        "aging barrel",
+        "oak barrel",
+        "whiskey barrel",
+        "still",
+        "growler",
+        "corny keg",
+        "mini keg",
+        "keg",
+        "mason jar",
+        "beer bottle",
+        "wine bottle",
+        "beer kit",
+        "wine making kit",
+        "kombucha starter",
+        "drip tray",
+        "air lock",
+        "bottle capper",
+        "bottle cap",
+        "wine cork",
+        "heat shrink capsule",
+        "beer line",
+        "gas line",
+        "beer cap map",
+        "beer cap holder",
+        "label carrier"
+      ]
+    },
+    "Sub_Type": {
+      "type": "dictionary",
+      "values": [
+        "refill pack",
+        "yeast",
+        "hops",
+        "malt extract",
+        "scoby",
+        "beer ingredient kit",
+        "wine corks",
+        "bottle caps",
+        "labels",
+        "pale ale",
+        "ipa",
+        "amber ale",
+        "stout",
+        "lager",
+        "hard cider",
+        "wine",
+        "kombucha",
+        "moonshine",
+        "whiskey",
+        "spirit",
+        "soda"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "stainless steel",
+        "stainless",
+        "american oak",
+        "white oak",
+        "oak",
+        "copper",
+        "glass",
+        "silicone",
+        "high density polyethylene",
+        "hdpe",
+        "pvc",
+        "vinyl",
+        "plastic"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "silver",
+        "chrome"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "ball lock",
+        "pin lock",
+        "sankey",
+        "quick disconnect",
+        "sanitary fitting",
+        "tri-clamp",
+        "npt",
+        "mpt",
+        "barb",
+        "flare",
+        "mfl",
+        "weldless",
+        "cornelius",
+        "double wall",
+        "immersion",
+        "chalkboard surface",
+        "wide mouth",
+        "valve & thermometer",
+        "black hoop"
+      ]
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?gallon",
+        "(\\d+)\\s?gal",
+        "(\\d+)\\s?liter",
+        "(\\d+)\\s?oz",
+        "(\\d+)\\s?ml",
+        "(\\d+)\\s?lb"
+      ],
+      "note": "Common: 1 gal, 5 gal, 64 oz (Growler), 5 lb (CO2 Tank)"
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+\\/\\d+)\\s?npt",
+        "(\\d+\\/\\d+)\\s?inch",
+        "(\\d+\\/\\d+)\\s?quot",
+        "(\\d+\\/\\d+)\""
+      ],
+      "note": "Catches 3/16, 5/16, 3/8, 1/2 hardware/tubing sizes and NPT thread sizes"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?pack",
+        "(\\d+)\\s?count",
+        "(\\d+)\\s?ct",
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)"
+      ]
+    }
+  },
+  "Kitchen & Table Linens": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "xia home fashion",
+        "kay dee designs",
+        "la linen",
+        "michel design works",
+        "heritage lace",
+        "artofabric",
+        "c & f",
+        "pillow perfect",
+        "cafepress"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "tablecloth",
+        "table runner",
+        "apron",
+        "placemat",
+        "napkin",
+        "kitchen towel",
+        "oven mitt",
+        "pot holder",
+        "chair pad",
+        "dish cloth",
+        "table overlay",
+        "napkin ring",
+        "doily",
+        "place card holder"
+      ]
+    },
+    "Sub_Type": {
+      "type": "dictionary",
+      "values": [
+        "bib apron",
+        "waist apron",
+        "baking apron",
+        "grilling apron",
+        "flour sack towel",
+        "tea towel",
+        "seat cushion",
+        "table cover"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "100% cotton",
+        "polyester poplin",
+        "vinyl",
+        "flannel backed vinyl",
+        "burlap",
+        "linen",
+        "satin",
+        "sequin",
+        "lace",
+        "silicone",
+        "woven vinyl"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "black",
+        "red",
+        "blue",
+        "green",
+        "yellow",
+        "pink",
+        "gold",
+        "silver",
+        "brown",
+        "ivory",
+        "beige",
+        "cream",
+        "navy",
+        "burgundy"
+      ]
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "round",
+        "square",
+        "rectangular",
+        "oblong",
+        "oval"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "machine washable",
+        "heat resistant",
+        "pocket",
+        "embroidered",
+        "indoor outdoor",
+        "non-slip",
+        "stripe",
+        "floral"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?quot\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?quot\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?inch\\s?round",
+        "(\\d+)\\s?quot\\s?round",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?quot"
+      ],
+      "note": "Common tablecloth sizes: 60x84, 60x102, 70 round, 52x70"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?pack",
+        "(\\d+)\\s?piece"
+      ],
+      "note": "Common for napkins (Set of 4) and towels (Set of 2)"
+    }
+  },
+  "Kitchen Utensils & Gadgets": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "oxo good grips",
+        "microplane",
+        "zeroll",
+        "olde thompson",
+        "fox run",
+        "ata boy",
+        "westland giftware",
+        "c.r. gibson",
+        "3drose",
+        "kegco",
+        "paderno world cuisine",
+        "magneato",
+        "cafepress"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "kitchen scale",
+        "kitchen timer",
+        "cooking thermometer",
+        "meat thermometer",
+        "garlic press",
+        "peeler",
+        "ice cream scoop",
+        "bottle opener",
+        "bottle stopper",
+        "salt & pepper shakers",
+        "salt/pepper mill",
+        "measuring cups",
+        "measuring spoons",
+        "cheese grater",
+        "spatula",
+        "tongs",
+        "colander",
+        "strainer",
+        "mortar & pestle",
+        "pizza cutter",
+        "cocktail shaker",
+        "ice cube tray",
+        "refrigerator magnet",
+        "locker magnet",
+        "dishwasher magnet",
+        "fridge magnet",
+        "magnet",
+        "spice rack",
+        "trivet",
+        "watermelon slicer",
+        "spiral slicer",
+        "mandoline slicer",
+        "french fry cutter",
+        "herb grinder",
+        "corkscrew",
+        "wine stopper",
+        "whipped cream dispenser",
+        "ice ball mold",
+        "ice cube mold",
+        "measuring cup",
+        "measuring spoon",
+        "food scale",
+        "bbq thermometer"
+      ]
+    },
+    "Sub_Type": {
+      "type": "dictionary",
+      "values": [
+        "digital",
+        "instant read",
+        "manual",
+        "sand timer",
+        "3d resin",
+        "magnetic",
+        "wall mounted",
+        "keychain",
+        "pocket size",
+        "clip",
+        "long probe",
+        "multifunction"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "18/8 stainless steel",
+        "stainless steel",
+        "stainless",
+        "brushed stainless",
+        "cast iron",
+        "ceramic",
+        "silicone",
+        "bamboo",
+        "wooden",
+        "aluminum",
+        "glass",
+        "wood",
+        "high quality resin",
+        "vinyl"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "red",
+        "blue",
+        "green",
+        "yellow",
+        "silver",
+        "stainless"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "dishwasher safe",
+        "heat resistant",
+        "clean/dirty indicator",
+        "ball maker",
+        "pop mold",
+        "paw shaped",
+        "movie poster design"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+\\.?\\d*)\\s?inch",
+        "(\\d+\\.?\\d*)\"",
+        "(\\d+\\.?\\d*)\\s?quot",
+        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?quot\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?quot\\s?x(\\d+)",
+        "(\\d+)\\s?x\\s?(\\d+)\\s?inch"
+      ],
+      "note": "Tool length (e.g., 12-inch tongs) and magnet dimensions (e.g., 2x3)"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?pack",
+        "set (?:of )?(\\d+)"
+      ]
+    }
+  },
+  "Small Appliance Parts & Accessories": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "ge (general electric)",
+        "samsung",
+        "panasonic",
+        "whirlpool",
+        "lg",
+        "kitchenaid",
+        "cuisinart",
+        "kenmore",
+        "magic chef",
+        "keurig",
+        "frigidaire",
+        "hamilton beach",
+        "oster",
+        "magic bullet",
+        "nutri ninja",
+        "nutribullet",
+        "robot coupe",
+        "mr. coffee",
+        "ge",
+        "hqrp"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "glass turntable plate",
+        "sealing ring/gasket",
+        "blender blade",
+        "water filter",
+        "control board",
+        "dough hook",
+        "kneading blade",
+        "ignitor",
+        "microwave handle",
+        "turntable motor",
+        "charcoal filter",
+        "grease filter",
+        "work bowl",
+        "stand mixer cover",
+        "sealing ring",
+        "gasket",
+        "blade assembly",
+        "base gear",
+        "magnetron",
+        "diode",
+        "control panel",
+        "igniter",
+        "vinyl decal",
+        "mixer decal",
+        "skin",
+        "toaster cover",
+        "coaster",
+        "turntable tray"
+      ]
+    },
+    "Sub_Type": {
+      "type": "dictionary",
+      "values": [
+        "microwave",
+        "blender",
+        "stand mixer",
+        "coffee maker",
+        "pressure cooker",
+        "bread machine",
+        "food processor",
+        "gas range/stove",
+        "toaster oven",
+        "juicer",
+        "instant pot"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "glass",
+        "rubber",
+        "stainless steel",
+        "stainless",
+        "silicone",
+        "charcoal",
+        "vinyl",
+        "plastic"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "clear"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "oem",
+        "genuine original",
+        "compatible replacement",
+        "aftermarket"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)mm",
+        "(\\d+\\.?\\d*)\\s?inch",
+        "(\\d+\\s\\d\\/\\d)\\s?inch",
+        "(\\d+\\/\\d+)\\s?inch",
+        "(\\d+\\s\\d\\/\\d)\\s?quot",
+        "(\\d+\\/\\d+)\\s?quot"
+      ],
+      "note": "Dominant in microwave plates: 245mm, 255mm, 270mm, 285mm, 318mm. Fractional sizes: 1/2, 1/4, 3/4"
+    },
+    "Part_Number": {
+      "type": "regex",
+      "patterns": [
+        "DE74-\\d+[A-Z]?",
+        "WB49X\\d+",
+        "WR32X\\d+",
+        "252100500497",
+        "part (?:number )?([A-Z0-9-]+)"
+      ],
+      "note": "Critical for search accuracy. Models like Samsung DE74, GE WB49X/WR32X are prominent."
+    }
+  },
+  "Small Appliances": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "cuisinart",
+        "hamilton beach",
+        "black & decker",
+        "kitchenaid",
+        "panasonic",
+        "oster",
+        "proctor silex",
+        "george foreman",
+        "aroma housewares",
+        "magic chef",
+        "waring pro",
+        "waring commercial",
+        "west bend",
+        "wolfgang puck",
+        "great northern popcorn",
+        "malaha"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "microwave oven",
+        "toaster",
+        "toaster oven",
+        "blender",
+        "hand mixer",
+        "stand mixer",
+        "food processor",
+        "rice cooker",
+        "slow cooker",
+        "pressure cooker",
+        "electric kettle",
+        "milk frother",
+        "sous vide machine",
+        "waffle maker",
+        "deep fryer",
+        "air fryer",
+        "juicer",
+        "meat grinder",
+        "ice cream maker",
+        "wine cooler",
+        "compact refrigerator",
+        "vacuum sealer",
+        "food dehydrator",
+        "precision cooker",
+        "immersion circulator",
+        "soy milk maker",
+        "milk foam maker",
+        "latte frother",
+        "popcorn machine",
+        "meat slicer",
+        "food slicer"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "stainless steel",
+        "stainless",
+        "brushed stainless"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "red",
+        "silver",
+        "stainless",
+        "black stainless steel",
+        "blue"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "convection",
+        "inverter technology",
+        "dual zone",
+        "over-the-range",
+        "countertop",
+        "digital timer",
+        "automatic",
+        "battery operated",
+        "cordless",
+        "cool touch",
+        "ultra quiet",
+        "bpa free",
+        "heavy duty",
+        "commercial grade",
+        "professional",
+        "certified refurbished",
+        "energy star",
+        "extra whisk"
+      ]
+    },
+    "Power_Rating": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?watt",
+        "(\\d+)w"
+      ],
+      "note": "Common: 1000W (Microwave/Sous Vide), 1300 Watt (Ovens)"
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+\\.?\\d*)\\s?cu\\s?ft",
+        "(\\d+\\.?\\d*)\\s?cubic\\s?foot",
+        "(\\d+)\\s?quart",
+        "(\\d+)\\s?cup",
+        "(\\d+)\\s?slice",
+        "(\\d+)\\s?bottle"
+      ],
+      "note": "Microwaves (cu ft), Slow Cookers (quart), Toasters (slice), Wine Coolers (bottle)"
+    },
+    "Voltage": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?volt",
+        "(\\d+)v"
+      ],
+      "note": "Common: 110V (standard US), 220V (international/specialty)"
+    }
+  },
+  "Storage & Organization": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "tupperware",
+        "oxo good grips",
+        "lock & lock",
+        "vera bradley",
+        "con-tact brand",
+        "cafepress",
+        "home basics",
+        "society6",
+        "fit & fresh"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "food storage container",
+        "lunch box",
+        "bento box",
+        "tote bag",
+        "shopping bag",
+        "canister set",
+        "cookie jar",
+        "wine rack",
+        "shelf liner",
+        "dish rack",
+        "paper towel holder",
+        "beverage insulator",
+        "bread box",
+        "lazy susan"
+      ]
+    },
+    "Sub_Type": {
+      "type": "dictionary",
+      "values": [
+        "coolie",
+        "hugger",
+        "lunch bunch",
+        "meal prep container",
+        "modular mate",
+        "drawer liner",
+        "dish drainer",
+        "slim can insulator"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "plastic",
+        "glass",
+        "stainless steel",
+        "stainless",
+        "ceramic",
+        "neoprene",
+        "natural canvas",
+        "burlap",
+        "metal",
+        "tin",
+        "wood"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "blue",
+        "red",
+        "green",
+        "pink",
+        "purple",
+        "clear"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "insulated",
+        "self-adhesive",
+        "easy find lid",
+        "reusable",
+        "collapsible",
+        "stackable",
+        "shoulder strap",
+        "compartment"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?quot"
+      ],
+      "note": "Common for shelf liners (18 inch x 6 quot) and totes"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?pack",
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?oz"
+      ],
+      "note": "Canister sets often come in 3-piece; Coolies in multi-packs"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "disney",
+        "hello kitty",
+        "star wars",
+        "mutant ninja turtles"
+      ]
+    }
+  },
+  "Travel & To-Go Drinkware": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "contigo",
+        "thermos",
+        "yeti",
+        "zojirushi",
+        "3drose",
+        "cafepress",
+        "mugzie",
+        "spoontiques",
+        "tree-free greetings",
+        "artful traveler"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "travel mug",
+        "tumbler",
+        "water bottle",
+        "coffee cup",
+        "flask",
+        "traveler",
+        "cool cup",
+        "beverage bottle",
+        "mug with lid",
+        "mug",
+        "tea cup",
+        "cocoa mug"
+      ]
+    },
+    "Sub_Type": {
+      "type": "dictionary",
+      "values": [
+        "vacuum insulated",
+        "double wall",
+        "double-walled",
+        "thermal",
+        "stainless lined",
+        "wetsuit cover",
+        "self stirring",
+        "camera lens",
+        "morphing"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "stainless steel",
+        "stainless",
+        "acrylic",
+        "ceramic",
+        "glass",
+        "bpa-free plastic",
+        "silicone",
+        "plastic"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "silver",
+        "white",
+        "blue",
+        "red",
+        "green",
+        "pink",
+        "purple",
+        "multicolor",
+        "clear"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "reusable straw",
+        "handle",
+        "spill proof",
+        "leak proof",
+        "sip & go",
+        "autoseal",
+        "flip top",
+        "wetsuit sleeve",
+        "engraving included",
+        "personalized",
+        "dishwasher safe",
+        "microwave safe",
+        "bpa free",
+        "tree-free"
+      ]
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?oz",
+        "(\\d+)\\s?ounce",
+        "(\\d+)\\s?fl oz",
+        "(\\d+)oz"
+      ],
+      "note": "Dominant sizes: 14oz, 16oz, 20oz, 30oz"
+    }
+  },
+  "Water Coolers & Filters": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "brita",
+        "culligan",
+        "pur",
+        "pentek",
+        "3m",
+        "everpure",
+        "aqua-pure",
+        "ispring",
+        "denali pure",
+        "whirlpool",
+        "omnifilter",
+        "omnipure",
+        "tier1",
+        "hydronix",
+        "kx matrikx",
+        "watts",
+        "ge"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "water filter cartridge",
+        "replacement cartridge",
+        "reverse osmosis system",
+        "water cooler",
+        "water dispenser",
+        "water pitcher",
+        "pitcher replacement",
+        "filter housing",
+        "faucet filter",
+        "refrigerator filter",
+        "water distiller",
+        "inline filter",
+        "ro membrane",
+        "alkaline ionizer",
+        "filter kit"
+      ]
+    },
+    "Sub_Type": {
+      "type": "dictionary",
+      "values": [
+        "activated carbon block",
+        "granular activated carbon (gac)",
+        "reverse osmosis (ro)",
+        "sediment filtration",
+        "sediment",
+        "pleated polyester",
+        "string wound",
+        "polypropylene spin",
+        "alkaline/ph balance",
+        "alkaline",
+        "charcoal",
+        "whole house",
+        "under sink",
+        "countertop",
+        "point of use",
+        "universal",
+        "compatible"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "carbon block",
+        "activated carbon",
+        "stainless steel",
+        "stainless",
+        "plastic"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "black",
+        "blue",
+        "clear"
+      ]
+    },
+    "Features": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?micron",
+        "(\\d+)\\s?mic",
+        "(\\d+)\\s?gpd",
+        "(\\d+)\\s?gallon"
+      ],
+      "note": "Micron rating (1, 5, 10, 20). GPD = Gallons Per Day for RO membranes."
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)\\s?quot\\s?x\\s?(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)\\s?quot\\s?x\\s?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)\\s?inch",
+        "(\\d+\\.?\\d*)\\s?quot"
+      ],
+      "note": "Industry standards: 10x2.5 (Standard), 20x4.5 (Big Blue)"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?pack",
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)"
+      ]
+    },
+    "Stage_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?stage",
+        "(\\d+)-stage"
+      ],
+      "note": "Common: 3-stage, 5-stage, 6-stage RO systems"
+    }
+  },
+  "Wine Accessories": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "corkcicle",
+        "picnic plus",
+        "casepro",
+        "wine enthusiast",
+        "3drose",
+        "mugzie",
+        "dropstop",
+        "nola",
+        "carlotta"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "wine aerator",
+        "wine chiller stick",
+        "wine opener",
+        "wine pourer",
+        "wine tote/bag",
+        "wine purse/clutch",
+        "wine carrier",
+        "wine preserver",
+        "wine stopper",
+        "wine decanter",
+        "wine goblet",
+        "aroma kit",
+        "tasting kit",
+        "tasting game",
+        "wine wheel",
+        "bottle collar",
+        "foil cutter",
+        "label remover",
+        "chilling rocks",
+        "reusable ice cube",
+        "whiskey stones",
+        "wine thermometer",
+        "corkscrew",
+        "insulated bag",
+        "travel kit"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "stainless steel",
+        "stainless",
+        "copper wire",
+        "stone",
+        "neoprene",
+        "glass",
+        "canvas",
+        "hybrid insulated sling",
+        "plastic",
+        "satin",
+        "cork",
+        "metal"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "silver",
+        "red"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "aerating",
+        "drip-free",
+        "chilling",
+        "iceless",
+        "insulated",
+        "portable",
+        "oxygenating",
+        "label removal",
+        "temperature monitoring",
+        "picnic",
+        "wedding party",
+        "bridal",
+        "holiday",
+        "premium",
+        "gift boxed",
+        "tasting party",
+        "wine making"
+      ]
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)-in-1",
+        "(\\d+) piece set",
+        "set of (\\d+)",
+        "(\\d+) bottle",
+        "single bottle",
+        "double bottle",
+        "multi-pak"
+      ],
+      "note": "e.g., 3-in-1 chiller sticks (Chiller, Aerator, Pourer); bottle count for totes"
+    }
+  }
+}
