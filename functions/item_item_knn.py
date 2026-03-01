@@ -5,6 +5,7 @@
 # 4. Convert the user purchases to a vector with 1s and 0s to be the same size as similarity matrix.
 # 5. Multiply user vector with similarity matrix and order the scores in descending order for top N most similar items. Remove the items the user has already purchased.
 
+import joblib
 import numpy as np
 import pandas as pd
 from scipy.sparse import csr_matrix
@@ -104,3 +105,15 @@ class ItemItemRecommenderKnn:
         # Sort and return top item IDs
         top_indices = np.argsort(scores)[-top_n:][::-1]
         return [self.items[i] for i in top_indices if scores[i] > 0]
+
+    def save(self, path):
+        """Serialize the trained model to disk using joblib.
+
+        Persists the pruned similarity matrix S_knn and item index mappings.
+        """
+        joblib.dump(self, path)
+
+    @classmethod
+    def load(cls, path):
+        """Load a previously saved ItemItemRecommenderKnn from disk."""
+        return joblib.load(path)

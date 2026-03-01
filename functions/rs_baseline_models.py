@@ -1,280 +1,283 @@
-import pandas as pd
+import warnings
+
+import joblib
 import numpy as np
-import io
-import matplotlib.pyplot as plt
-import seaborn as sns
-import math
+import pandas as pd
 from scipy.sparse import csr_matrix
 
-from contextlib import redirect_stdout
+
+# ---------------------------------------------------------------------------
+# PopularityRecommender
+# ---------------------------------------------------------------------------
+
+class PopularityRecommender:
+    """Recommends globally popular items, trained once on historical data.
+
+    Training pre-ranks all items by interaction count up to cutoff_time.
+    Inference is a simple list filter — no raw data access at request time.
+    """
+
+    def __init__(self):
+        self.ranked_items = None   # list of ASINs sorted by popularity (desc)
+        self.cutoff_time = None
+
+    def fit(self, df, cutoff_time):
+        """Pre-compute global popularity ranking up to cutoff_time.
+
+        Args:
+            df: DataFrame with columns ['reviewerID', 'asin', 'unixReviewTime'].
+            cutoff_time: Unix timestamp; only interactions before this are used.
+
+        Returns:
+            self
+        """
+        self.cutoff_time = cutoff_time
+        df_train = df[df['unixReviewTime'] < cutoff_time]
+        item_counts = df_train.groupby('asin').size().sort_values(ascending=False)
+        self.ranked_items = item_counts.index.tolist()
+        return self
+
+    def recommend(self, user_history, n=10):
+        """Return top-N popular items the user has not already interacted with.
+
+        Args:
+            user_history: List of ASINs the user has already interacted with.
+            n: Number of recommendations.
+
+        Returns:
+            List of up to n ASINs.
+        """
+        if self.ranked_items is None:
+            raise ValueError("Model is not trained. Call .fit() first.")
+        seen = set(user_history)
+        recs = [item for item in self.ranked_items if item not in seen]
+        return recs[:n]
+
+    def save(self, path):
+        """Serialize model to disk using joblib."""
+        joblib.dump(self, path)
+
+    @classmethod
+    def load(cls, path):
+        """Load a previously saved PopularityRecommender from disk."""
+        return joblib.load(path)
+
+
+# ---------------------------------------------------------------------------
+# TrendingRecommender
+# ---------------------------------------------------------------------------
+
+class TrendingRecommender:
+    """Recommends items whose interaction velocity increased recently.
+
+    Training pre-computes trend scores up to cutoff_time.
+    Inference is a simple list filter — no raw data access at request time.
+    """
+
+    def __init__(self, n_days=7):
+        self.n_days = n_days
+        self.ranked_items = None   # list of ASINs sorted by trend score (desc)
+        self.cutoff_time = None
+
+    def fit(self, df, cutoff_time):
+        """Pre-compute trend ranking up to cutoff_time.
+
+        Trend score = recent_count * log(1 + recent_count / (past_count + 1))
+
+        Args:
+            df: DataFrame with columns ['reviewerID', 'asin', 'unixReviewTime'].
+            cutoff_time: Unix timestamp; only interactions before this are used.
+
+        Returns:
+            self
+        """
+        self.cutoff_time = cutoff_time
+
+        cutoff_ts = pd.to_datetime(cutoff_time, unit='s')
+        recent_start = cutoff_ts - pd.Timedelta(days=self.n_days)
+
+        df_hist = df[df['unixReviewTime'] < cutoff_time].copy()
+        df_hist['dt'] = pd.to_datetime(df_hist['unixReviewTime'], unit='s')
+
+        recent_counts = df_hist[df_hist['dt'] >= recent_start]['asin'].value_counts()
+        past_counts = df_hist[df_hist['dt'] < recent_start]['asin'].value_counts()
+
+        trend_df = pd.DataFrame({'recent': recent_counts, 'past': past_counts}).fillna(0)
+        trend_df = trend_df[trend_df['past'] > 1]
+        trend_df['score'] = (
+            trend_df['recent'] * np.log1p(trend_df['recent'] / (trend_df['past'] + 1))
+        )
+        self.ranked_items = (
+            trend_df.sort_values('score', ascending=False).index.tolist()
+        )
+        return self
+
+    def recommend(self, user_history, n=10):
+        """Return top-N trending items the user has not already interacted with.
+
+        Args:
+            user_history: List of ASINs the user has already interacted with.
+            n: Number of recommendations.
+
+        Returns:
+            List of up to n ASINs.
+        """
+        if self.ranked_items is None:
+            raise ValueError("Model is not trained. Call .fit() first.")
+        seen = set(user_history)
+        recs = [item for item in self.ranked_items if item not in seen]
+        return recs[:n]
+
+    def save(self, path):
+        """Serialize model to disk using joblib."""
+        joblib.dump(self, path)
+
+    @classmethod
+    def load(cls, path):
+        """Load a previously saved TrendingRecommender from disk."""
+        return joblib.load(path)
+
+
+# ---------------------------------------------------------------------------
+# CooccurrenceRecommender
+# ---------------------------------------------------------------------------
+
+class CooccurrenceRecommender:
+    """Recommends items that co-occur with a user's history.
+
+    Training builds the item-item co-occurrence matrix once.
+    Inference is a fast sparse matrix-vector product — no raw data access.
+    """
+
+    def __init__(self):
+        self.C = None            # sparse item-item co-occurrence matrix (csr)
+        self.items = None        # ordered item index (pandas Index)
+        self.item_to_idx = None  # dict: asin -> matrix column index
+        self.cutoff_time = None
+
+    def fit(self, df, cutoff_time):
+        """Build item-item co-occurrence matrix up to cutoff_time.
+
+        Args:
+            df: DataFrame with columns ['reviewerID', 'asin', 'unixReviewTime'].
+            cutoff_time: Unix timestamp; only interactions before this are used.
+
+        Returns:
+            self
+        """
+        self.cutoff_time = cutoff_time
+
+        df_filtered = df.loc[df['unixReviewTime'] < cutoff_time, ['reviewerID', 'asin']]
+
+        user_cat = df_filtered['reviewerID'].astype('category')
+        item_cat = df_filtered['asin'].astype('category')
+
+        self.items = item_cat.cat.categories
+        self.item_to_idx = {item: idx for idx, item in enumerate(self.items)}
+
+        X = csr_matrix(
+            (np.ones(len(df_filtered)), (user_cat.cat.codes.values, item_cat.cat.codes.values)),
+            shape=(user_cat.cat.categories.size, self.items.size),
+        )
+        self.C = (X.T @ X).tocsr()
+        return self
+
+    def recommend(self, user_history, n=10):
+        """Return top-N co-occurrence-scored items not already in user history.
+
+        Args:
+            user_history: List of ASINs the user has already interacted with.
+            n: Number of recommendations.
+
+        Returns:
+            List of up to n ASINs.
+        """
+        if self.C is None:
+            raise ValueError("Model is not trained. Call .fit() first.")
+
+        user_indices = [
+            self.item_to_idx[item]
+            for item in user_history
+            if item in self.item_to_idx
+        ]
+        if not user_indices:
+            return []
+
+        user_vec = np.zeros(self.C.shape[0])
+        user_vec[user_indices] = 1.0
+
+        scores = np.asarray(user_vec @ self.C).flatten()
+        scores[user_indices] = -1.0
+
+        top_indices = np.argsort(scores)[-n:][::-1]
+        return [self.items[i] for i in top_indices if scores[i] > 0]
+
+    def save(self, path):
+        """Serialize model to disk using joblib."""
+        joblib.dump(self, path)
+
+    @classmethod
+    def load(cls, path):
+        """Load a previously saved CooccurrenceRecommender from disk."""
+        return joblib.load(path)
+
+
+# ---------------------------------------------------------------------------
+# Legacy standalone functions (deprecated)
+#
+# These thin wrappers preserve backward-compatibility with existing notebooks
+# and scripts that call the old function-based API.  They will be removed in
+# a future clean-up; prefer the class-based API above.
+# ---------------------------------------------------------------------------
 
 def get_topn_popular_items(df, user_id, timestamp, n):
-    """
-    Returns the top-N most popular items up to a given timestamp
-    that the user has NOT purchased yet.
+    warnings.warn(
+        "get_topn_popular_items is deprecated. Use PopularityRecommender.",
+        DeprecationWarning, stacklevel=2,
+    )
+    model = PopularityRecommender().fit(df, timestamp)
+    user_history = df.loc[
+        (df['reviewerID'] == user_id) & (df['unixReviewTime'] < timestamp), 'asin'
+    ].tolist()
+    return model.recommend(user_history, n=n)
 
-    Parameters:
-    - df: pandas DataFrame with columns ['reviewerID', 'asin', 'unixReviewTime']
-    - user_id: the ID of the user (corresponds to 'reviewerID')
-    - timestamp: cutoff time (recommend items purchased BEFORE this timestamp)
-    - n: number of items to recommend
-
-    Returns:
-    - list of top-N item_ids (ASINs)
-    """
-
-    # 1️⃣ Filter data up to the given timestamp using 'unixReviewTime'
-    df_up_to_t = df[df['unixReviewTime'] < timestamp]
-
-    # 2️⃣ Get items the user has already purchased using 'reviewerID' and 'asin'
-    user_purchased = set(df_up_to_t[df_up_to_t['reviewerID'] == user_id]['asin'])
-
-    # 3️⃣ Count popularity of each item (number of purchases) using 'asin'
-    item_counts = df_up_to_t.groupby('asin').size().sort_values(ascending=False)
-
-    # 4️⃣ Filter out items the user has already purchased
-    top_items = [item for item in item_counts.index if item not in user_purchased]
-
-    # 5️⃣ Return top-N
-    return top_items[:n]
 
 def get_items_purchased_after_cutoff(df, user_id, cutoff_date):
-    """
-    Returns a list of unique items (ASINs) purchased by a given user
-    after a specified cutoff date.
+    """Returns items interacted with by user_id after cutoff_date."""
+    return df.loc[
+        (df['reviewerID'] == user_id) & (df['unixReviewTime'] > cutoff_date), 'asin'
+    ].unique().tolist()
 
-    Args:
-        user_id (str): The ID of the user.
-        cutoff_date (pd.Timestamp): The date after which to consider purchases.
-        df (pd.DataFrame): The DataFrame containing 'reviewerID', 'asin', and 'unixReviewTime'.
 
-    Returns:
-        list: A list of unique ASINs purchased by the user after the cutoff date.
-    """
-    # Filter for the specific user and purchases after the cutoff date
-    purchases_after_cutoff = df[
-        (df['reviewerID'] == user_id) &
-        (df['unixReviewTime'] > cutoff_date)
-    ]
-
-    # Return unique ASINs from these purchases
-    return purchases_after_cutoff['asin'].unique().tolist()
-
-def get_topn_reviewed_items(df, user_id, timestamp, review_sample, n):
-    """
-    Returns the top-N highest reviewed items with review_sample threshold up to a given timestamp
-    that the user has NOT purchased yet.
-
-    Parameters:
-    - df: pandas DataFrame with columns ['reviewerID', 'asin', 'unixReviewTime']
-    - user_id: the ID of the user (corresponds to 'reviewerID')
-    - timestamp: cutoff time (recommend items purchased BEFORE this timestamp)
-    - review_sample: cutoff on number of reviews to consider for ranking the reviews
-    - n: number of items to recommend
-
-    Returns:
-    - list of top-N item_ids (ASINs)
-    """
-
-    # 1️⃣ Filter data up to the given timestamp using 'unixReviewTime'
-    df_up_to_t = df[df['unixReviewTime'] < timestamp]
-
-    # 2️⃣ Get items the user has already purchased using 'reviewerID' and 'asin'
-    user_purchased = set(df_up_to_t[df_up_to_t['reviewerID'] == user_id]['asin'])
-
-    # 3️⃣ Count popularity of each item (number of purchases) using 'asin'
-    avg_ratings = df_subset.groupby('asin').agg({'overall' : 'mean', 'unixReviewTime' : 'count'}).reset_index()
-    avg_ratings.columns = ['asin', 'avg_rating', 'num_ratings']
-    avg_ratings = avg_ratings[avg_ratings['num_ratings'] > review_sample].copy()
-    avg_ratings.sort_values(by = 'avg_rating', ascending = False, inplace = True)
-
-    # 4️⃣ Filter out items the user has already purchased
-    top_items = [item for item in list(avg_ratings['avg_rating']) if item not in user_purchased]
-
-    # 5️⃣ Return top-N
-    return top_items[:n]
-
-def get_topn_trending_items(df, user_id, timestamp, n, n_days = 7):
-    """
-    Returns the top-N trending items up to a given timestamp based on recent purchase trends.
-    Trending items are those that have seen a significant increase in purchases in the last 7 days.
-
-    Parameters:
-    - df: pandas DataFrame with columns ['reviewerID', 'asin', 'unixReviewTime']
-    - user_id: the ID of the user (corresponds to 'reviewerID')
-    - timestamp: cutoff time (recommend items purchased BEFORE this timestamp)
-    - n: number of items to recommend
-
-    Returns:
-    - list of top-N item_ids (ASINs)
-    """
-    # Ensure timestamp is pandas Timestamp
-    timestamp = pd.to_datetime(timestamp)
-
-    # Define recent window
-    recent_start = timestamp - pd.Timedelta(days=n_days)
-
-    # Only consider interactions BEFORE the timestamp
-    df = df[df["unixReviewTime"] < timestamp]
-
-    # Split into recent vs past
-    recent_df = df[df["unixReviewTime"] >= recent_start]
-    past_df = df[df["unixReviewTime"] < recent_start]
-
-    # Count interactions per item
-    recent_counts = recent_df["asin"].value_counts()
-    past_counts = past_df["asin"].value_counts()
-
-    # Combine counts
-    trend_df = pd.DataFrame({
-        "recent": recent_counts,
-        "past": past_counts
-    }).fillna(0)
-
-    # Apply sample size filter
-    trend_df = trend_df[trend_df["past"] > 1]
-
-    # Compute trend score
-    trend_df["score"] = (
-        trend_df["recent"] *
-        np.log1p(trend_df["recent"] / (trend_df["past"] + 1))
+def get_topn_trending_items(df, user_id, timestamp, n, n_days=7):
+    warnings.warn(
+        "get_topn_trending_items is deprecated. Use TrendingRecommender.",
+        DeprecationWarning, stacklevel=2,
     )
+    model = TrendingRecommender(n_days=n_days).fit(df, timestamp)
+    user_history = df.loc[
+        (df['reviewerID'] == user_id) & (df['unixReviewTime'] < timestamp), 'asin'
+    ].tolist()
+    return model.recommend(user_history, n=n)
 
-    # Remove items already purchased by user
-    user_items = df[df["reviewerID"] == user_id]["asin"].unique()
-    trend_df = trend_df.drop(index=user_items, errors="ignore")
-
-    # Return top N
-    return trend_df.sort_values("score", ascending=False).head(n).index.tolist()
-
-## **Create function to recommend items based on co occurrence**
-
-def compute_cooccurrence_before_time(df, cutoff_time):
-    """
-    Compute item–item co-occurrence matrix using implicit feedback.
-
-    Any interaction (regardless of Review value) is treated as 1.
-    Only interactions strictly before cutoff_time are used.
-
-    Parameters
-    ----------
-    df : pandas.DataFrame
-        Columns required:
-            - 'reviewerID'
-            - 'asin'
-            - 'unixReviewTime' (datetime)
-            - 'overall' (ignored for implicit modeling)
-
-    cutoff_time : datetime
-        Only interactions before this timestamp are used.
-
-    Returns
-    -------
-    C : scipy.sparse.csr_matrix
-        Sparse item–item co-occurrence matrix.
-
-    items : pandas.Index
-        Mapping of matrix indices to original item IDs.
-    """
-
-    # 1 Filter before cutoff
-    mask = df["unixReviewTime"] < cutoff_time
-    df_filtered = df.loc[mask, ["reviewerID", "asin"]]
-
-    # 2 Convert to categorical codes
-    user_cat = df_filtered["reviewerID"].astype("category")
-    item_cat = df_filtered["asin"].astype("category")
-
-    user_codes = user_cat.cat.codes.values
-    item_codes = item_cat.cat.codes.values
-
-    n_users = user_cat.cat.categories.size
-    n_items = item_cat.cat.categories.size
-
-    # 3 Build sparse user-item matrix
-    X = csr_matrix(
-        (np.ones(len(user_codes)), (user_codes, item_codes)),
-        shape=(n_users, n_items)
-    )
-
-    # 4 Compute co-occurrence
-    C = X.T @ X
-
-    return C, item_cat.cat.categories
 
 def cooccurrence_recommend_for_user_at_time(df, user_id, cutoff_time, n=5):
-    """
-    Recommend items for a given user using co-occurrence,
-    based only on interactions before cutoff_time.
-
-    Parameters
-    ----------
-    df : pandas.DataFrame
-        Must contain:
-            - 'reviewerID'
-            - 'asin'
-            - 'unixReviewTime' (datetime)
-
-    user_id : str or int
-        User identifier.
-
-    cutoff_time : datetime
-        Only interactions before this timestamp are used.
-
-    n : int
-        Number of recommendations to return.
-
-    Returns
-    -------
-    recommendations : list
-        List of recommended item IDs (asin).
-    """
-
-    # 1️⃣ Compute co-occurrence matrix before cutoff
-    C, items = compute_cooccurrence_before_time(df, cutoff_time)
-
-    # 2️⃣ Get user's history before cutoff
-    user_mask = (
-        (df["reviewerID"] == user_id) &
-        (df["unixReviewTime"] < cutoff_time)
+    warnings.warn(
+        "cooccurrence_recommend_for_user_at_time is deprecated. Use CooccurrenceRecommender.",
+        DeprecationWarning, stacklevel=2,
     )
+    model = CooccurrenceRecommender().fit(df, cutoff_time)
+    user_history = df.loc[
+        (df['reviewerID'] == user_id) & (df['unixReviewTime'] < cutoff_time), 'asin'
+    ].tolist()
+    return model.recommend(user_history, n=n)
 
-    user_items = df.loc[user_mask, "asin"].unique()
 
-    if len(user_items) == 0:
-        return []
-
-    # 3️⃣ Map item IDs to matrix indices
-    item_to_index = {item: idx for idx, item in enumerate(items)}
-
-    user_indices = [
-        item_to_index[item]
-        for item in user_items
-        if item in item_to_index
-    ]
-
-    if not user_indices:
-        return []
-
-    # 4️⃣ Build user interaction vector
-    user_vector = np.zeros(C.shape[0])
-    user_vector[user_indices] = 1
-
-    # 5️⃣ Compute scores
-    scores = user_vector @ C
-    scores = np.array(scores).flatten()
-
-    # 6️⃣ Remove already purchased items
-    scores[user_indices] = -1
-
-    # 7️⃣ Get top-n items
-    top_indices = np.argsort(scores)[-n:][::-1]
-
-    recommendations = [
-        items[i]
-        for i in top_indices
-        if scores[i] > 0
-    ]
-
-    return recommendations
-
+def compute_cooccurrence_before_time(df, cutoff_time):
+    """Legacy helper. Prefer CooccurrenceRecommender.fit() directly."""
+    warnings.warn(
+        "compute_cooccurrence_before_time is deprecated. Use CooccurrenceRecommender.",
+        DeprecationWarning, stacklevel=2,
+    )
+    model = CooccurrenceRecommender().fit(df, cutoff_time)
+    return model.C, model.items
