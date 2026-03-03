@@ -110,7 +110,7 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+\\s?\\d*\\/?\\d*)\\s?(?:inch|inchs|quot|\")",
+        "(\\d+\\s?\\d*\\/?\\d*)\\s?(?:inch|inchs|quot|\\\")",
         "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
         "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
         "(\\d+\\.?\\d*)\\s?qt"
@@ -429,7 +429,7 @@
       "type": "regex",
       "patterns": [
         "(\\d+\\.?\\d*)\\s?inch",
-        "(\\d+\\.?\\d*)\"",
+        "(\\d+\\.?\\d*)\\\"",
         "(\\d+\\.?\\d*)\\s?quot",
         "(\\d+\\-\\d\\/\\d)\\s?inch"
       ],
@@ -449,6 +449,15 @@
         "(\\d+)\\s?piece",
         "(\\d+)\\s?pc",
         "set (?:of )?(\\d+)"
+      ]
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "round",
+        "square",
+        "oval",
+        "rectangle"
       ]
     }
   },
@@ -566,7 +575,7 @@
       "type": "regex",
       "patterns": [
         "(\\d+\\.?\\d*)\\s?inch",
-        "(\\d+\\.?\\d*)\"",
+        "(\\d+\\.?\\d*)\\\"",
         "(\\d+\\.?\\d*)\\s?quot",
         "(\\d+\\-\\d\\/\\d)\\s?inch",
         "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
@@ -585,6 +594,14 @@
         "(\\d+)\\s?stage"
       ],
       "note": "Stage refers to sharpeners (e.g., 2-stage sharpener)"
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "round",
+        "square",
+        "rectangle"
+      ]
     }
   },
   "Dining & Entertaining": {
@@ -609,27 +626,41 @@
     "Product_Type": {
       "type": "dictionary",
       "values": [
-        "coffee mug",
-        "travel tumbler",
-        "wine glass",
-        "dinnerware set",
-        "flatware set",
+        "beer glass",
+        "bottle opener",
+        "bowl",
+        "butter dish",
+        "cake stand",
+        "cereal bowl",
+        "champagne flute",
+        "coaster",
         "coaster set",
-        "shot glass",
+        "cocktail shaker",
+        "coffee mug",
+        "corkscrew",
+        "cup",
+        "decanter",
+        "dinner plate",
+        "dinnerware set",
+        "flask",
+        "flatware set",
+        "goblet",
+        "gravy boat",
+        "ice bucket",
+        "moscow mule mug",
+        "mug",
         "pilsner glass",
         "pint glass",
-        "moscow mule mug",
-        "dinner plate",
-        "cereal bowl",
-        "serving tray",
-        "serving bowl",
-        "cake stand",
-        "butter dish",
         "pitcher",
+        "platter",
+        "salad bowl",
+        "serving bowl",
+        "serving tray",
+        "shot glass",
         "teapot",
-        "flask",
-        "bowl",
-        "mug"
+        "travel tumbler",
+        "tumbler",
+        "wine glass"
       ]
     },
     "Material": {
@@ -697,6 +728,16 @@
         "set (?:of )?(\\d+)"
       ],
       "note": "Service for X indicates place settings; piece count is total items"
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "round",
+        "square",
+        "oval",
+        "rectangle",
+        "oblong"
+      ]
     }
   },
   "Home Brewing & Wine Making": {
@@ -877,7 +918,7 @@
         "(\\d+\\/\\d+)\\s?npt",
         "(\\d+\\/\\d+)\\s?inch",
         "(\\d+\\/\\d+)\\s?quot",
-        "(\\d+\\/\\d+)\""
+        "(\\d+\\/\\d+)\\\""
       ],
       "note": "Catches 3/16, 5/16, 3/8, 1/2 hardware/tubing sizes and NPT thread sizes"
     },
@@ -979,11 +1020,12 @@
     "Shape": {
       "type": "dictionary",
       "values": [
-        "round",
-        "square",
-        "rectangular",
         "oblong",
-        "oval"
+        "oval",
+        "rectangle",
+        "rectangular",
+        "round",
+        "square"
       ]
     },
     "Features": {
@@ -1022,6 +1064,17 @@
         "(\\d+)\\s?piece"
       ],
       "note": "Common for napkins (Set of 4) and towels (Set of 2)"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "christmas",
+        "holiday",
+        "wedding",
+        "party",
+        "thanksgiving",
+        "easter"
+      ]
     }
   },
   "Kitchen Utensils & Gadgets": {
@@ -1046,49 +1099,64 @@
     "Product_Type": {
       "type": "dictionary",
       "values": [
-        "kitchen scale",
-        "kitchen timer",
-        "cooking thermometer",
-        "meat thermometer",
-        "garlic press",
-        "peeler",
-        "ice cream scoop",
+        "apple corer",
+        "avocado slicer",
+        "basting brush",
+        "bbq thermometer",
         "bottle opener",
         "bottle stopper",
+        "can opener",
+        "cheese grater",
+        "cocktail shaker",
+        "colander",
+        "cooking thermometer",
+        "corkscrew",
+        "cutting mat",
+        "dishwasher magnet",
+        "egg separator",
+        "food scale",
+        "french fry cutter",
+        "fridge magnet",
+        "fruit slicer",
+        "garlic press",
+        "herb grinder",
+        "ice ball mold",
+        "ice cream scoop",
+        "ice cube mold",
+        "ice cube tray",
+        "kitchen scale",
+        "kitchen timer",
+        "ladle",
+        "lemon squeezer",
+        "locker magnet",
+        "magnet",
+        "mandoline slicer",
+        "measuring cup",
+        "measuring cups",
+        "measuring spoon",
+        "measuring spoons",
+        "meat tenderizer",
+        "meat thermometer",
+        "mortar & pestle",
+        "napkin holder",
+        "napkin ring",
+        "peeler",
+        "pizza cutter",
+        "potato masher",
+        "refrigerator magnet",
         "salt & pepper shakers",
         "salt/pepper mill",
-        "measuring cups",
-        "measuring spoons",
-        "cheese grater",
         "spatula",
-        "tongs",
-        "colander",
-        "strainer",
-        "mortar & pestle",
-        "pizza cutter",
-        "cocktail shaker",
-        "ice cube tray",
-        "refrigerator magnet",
-        "locker magnet",
-        "dishwasher magnet",
-        "fridge magnet",
-        "magnet",
         "spice rack",
-        "trivet",
-        "watermelon slicer",
         "spiral slicer",
-        "mandoline slicer",
-        "french fry cutter",
-        "herb grinder",
-        "corkscrew",
-        "wine stopper",
+        "strainer",
+        "tongs",
+        "trivet",
+        "vegetable peeler",
+        "watermelon slicer",
         "whipped cream dispenser",
-        "ice ball mold",
-        "ice cube mold",
-        "measuring cup",
-        "measuring spoon",
-        "food scale",
-        "bbq thermometer"
+        "whisk",
+        "wine stopper"
       ]
     },
     "Sub_Type": {
@@ -1156,7 +1224,7 @@
       "type": "regex",
       "patterns": [
         "(\\d+\\.?\\d*)\\s?inch",
-        "(\\d+\\.?\\d*)\"",
+        "(\\d+\\.?\\d*)\\\"",
         "(\\d+\\.?\\d*)\\s?quot",
         "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
         "(\\d+)\\s?x\\s?(\\d+)",
@@ -1330,37 +1398,45 @@
     "Product_Type": {
       "type": "dictionary",
       "values": [
-        "microwave oven",
-        "toaster",
-        "toaster oven",
+        "air fryer",
         "blender",
-        "hand mixer",
-        "stand mixer",
+        "compact refrigerator",
+        "deep fryer",
+        "egg cooker",
+        "electric kettle",
+        "food dehydrator",
         "food processor",
+        "food slicer",
+        "grill",
+        "hand mixer",
+        "hot plate",
+        "ice cream maker",
+        "ice maker",
+        "immersion circulator",
+        "juicer",
+        "latte frother",
+        "meat grinder",
+        "meat slicer",
+        "microwave oven",
+        "milk foam maker",
+        "milk frother",
+        "panini press",
+        "popcorn machine",
+        "precision cooker",
+        "pressure cooker",
         "rice cooker",
         "slow cooker",
-        "pressure cooker",
-        "electric kettle",
-        "milk frother",
         "sous vide machine",
-        "waffle maker",
-        "deep fryer",
-        "air fryer",
-        "juicer",
-        "meat grinder",
-        "ice cream maker",
-        "wine cooler",
-        "compact refrigerator",
-        "vacuum sealer",
-        "food dehydrator",
-        "precision cooker",
-        "immersion circulator",
         "soy milk maker",
-        "milk foam maker",
-        "latte frother",
-        "popcorn machine",
-        "meat slicer",
-        "food slicer"
+        "stand mixer",
+        "steamer",
+        "toaster",
+        "toaster oven",
+        "vacuum sealer",
+        "waffle maker",
+        "warmer",
+        "water dispenser",
+        "wine cooler"
       ]
     },
     "Material": {
@@ -1453,20 +1529,38 @@
     "Product_Type": {
       "type": "dictionary",
       "values": [
-        "food storage container",
-        "lunch box",
         "bento box",
-        "tote bag",
-        "shopping bag",
-        "canister set",
-        "cookie jar",
-        "wine rack",
-        "shelf liner",
-        "dish rack",
-        "paper towel holder",
         "beverage insulator",
         "bread box",
-        "lazy susan"
+        "cabinet organizer",
+        "canister set",
+        "closet organizer",
+        "cookie jar",
+        "cooler",
+        "dish rack",
+        "dispenser",
+        "drawer organizer",
+        "food storage container",
+        "grocery bag",
+        "hamper",
+        "ice chest",
+        "laundry basket",
+        "lazy susan",
+        "lunch box",
+        "organizer",
+        "pantry organizer",
+        "paper towel holder",
+        "recycling bin",
+        "shelf liner",
+        "shelf organizer",
+        "shoe rack",
+        "shopping bag",
+        "snack container",
+        "spice rack",
+        "tote bag",
+        "trash can",
+        "tray",
+        "wine rack"
       ]
     },
     "Sub_Type": {
@@ -1744,7 +1838,7 @@
         "clear"
       ]
     },
-    "Features": {
+    "Filter_Rating": {
       "type": "regex",
       "patterns": [
         "(\\d+)\\s?micron",
@@ -1753,6 +1847,25 @@
         "(\\d+)\\s?gallon"
       ],
       "note": "Micron rating (1, 5, 10, 20). GPD = Gallons Per Day for RO membranes."
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "nsf certified",
+        "bpa free",
+        "lead free",
+        "reverse osmosis",
+        "activated carbon",
+        "sediment",
+        "alkaline",
+        "portable",
+        "countertop",
+        "under sink",
+        "faucet mount",
+        "whole house",
+        "refrigerator",
+        "replacement"
+      ]
     },
     "Dimensions": {
       "type": "regex",
@@ -1888,6 +2001,6186 @@
         "multi-pak"
       ],
       "note": "e.g., 3-in-1 chiller sticks (Chiller, Aerator, Pourer); bottle count for totes"
+    }
+  },
+  "Area Rugs, Runners & Pads": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "safavieh",
+        "nuloom",
+        "unique loom",
+        "mohawk home",
+        "oriental weavers",
+        "united weavers",
+        "home dynamix",
+        "loloi",
+        "couristan",
+        "society6",
+        "naturalarearugs",
+        "kapaqua",
+        "well woven"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "area rug",
+        "runner rug",
+        "stair runner",
+        "rug pad",
+        "floor mat",
+        "stair tread",
+        "accent rug",
+        "shag rug",
+        "braided rug",
+        "throw rug",
+        "carpet runner"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "wool",
+        "polypropylene",
+        "jute",
+        "cotton",
+        "rubber",
+        "natural fiber"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "blue",
+        "black",
+        "brown",
+        "beige",
+        "red",
+        "ivory",
+        "green",
+        "grey",
+        "gray",
+        "white",
+        "multi",
+        "cream",
+        "light blue",
+        "silver",
+        "gold"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "braided",
+        "custom cut",
+        "distressed",
+        "fade resistant",
+        "hand tufted",
+        "hand woven",
+        "handmade",
+        "indoor outdoor",
+        "non-skid",
+        "non-slip",
+        "plush",
+        "rubber backed",
+        "shaggy",
+        "soft",
+        "stain resistant",
+        "thick",
+        "vintage"
+      ]
+    },
+    "Shape_Style": {
+      "type": "dictionary",
+      "values": [
+        "modern",
+        "contemporary",
+        "traditional",
+        "oriental",
+        "floral",
+        "geometric",
+        "abstract",
+        "trellis",
+        "moroccan",
+        "solid",
+        "rectangle",
+        "round",
+        "oval",
+        "square"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?foot",
+        "(\\d+)\\s?feet",
+        "(\\d+)\\s?ft",
+        "(\\d+)'\\s?(\\d+)?\\\"?",
+        "(\\d+)\\s?x\\s?(\\d+)"
+      ],
+      "note": "Captures common rug dimensions in inches, feet, or 'x' format"
+    }
+  },
+  "Artificial Plants & Flowers": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "nearly natural",
+        "factory direct craft",
+        "direct craft"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "flower",
+        "plant",
+        "rose",
+        "bouquet",
+        "tree",
+        "lily",
+        "hydrangea",
+        "orchid",
+        "topiary",
+        "garland",
+        "vine",
+        "bush",
+        "palm tree",
+        "succulent",
+        "calla lily",
+        "ficus",
+        "boxwood",
+        "daisy",
+        "peony",
+        "lavender",
+        "ivy",
+        "grass",
+        "rose petal",
+        "boutonniere",
+        "spray"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "silk",
+        "plastic",
+        "latex",
+        "fabric"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "green",
+        "red",
+        "pink",
+        "purple",
+        "yellow",
+        "blue",
+        "orange",
+        "gold",
+        "black",
+        "cream",
+        "ivory",
+        "multicolor"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "real touch",
+        "artificial",
+        "fake",
+        "lifelike",
+        "hand painted",
+        "potted",
+        "hanging",
+        "indoor outdoor",
+        "long stem",
+        "uv resistant",
+        "no pot",
+        "stay-in-the-vase"
+      ]
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]ounce",
+        "(\\d+)\\s?oz",
+        "(\\d+)\\s?ml"
+      ],
+      "note": "Standard capacity formats; less common in this category compared to dimensions."
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?pack",
+        "pack (?:of )?(\\d+)",
+        "set (?:of )?(\\d+)",
+        "lot (?:of )?(\\d+)"
+      ],
+      "note": "Common values: 1, 2, 6, 12, 24, 100"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "wedding",
+        "christmas",
+        "birthday",
+        "party",
+        "bridal",
+        "garden"
+      ]
+    }
+  },
+  "Candles & Holders": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "yankee candle",
+        "goose creek",
+        "zest candle",
+        "dw home",
+        "woodwick",
+        "colonial candle",
+        "luminara",
+        "slatkin & co",
+        "northern light",
+        "mega candle"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "jar candle",
+        "pillar candle",
+        "votive candle",
+        "tea light",
+        "taper candle",
+        "candle holder",
+        "lantern",
+        "salt lamp",
+        "menorah",
+        "sconce",
+        "wax melt",
+        "tealight holder",
+        "votive holder",
+        "floating candle",
+        "birthday candle",
+        "unity candle",
+        "candle warmer",
+        "hurricane candle holder"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "soy wax",
+        "beeswax",
+        "paraffin",
+        "glass",
+        "metal",
+        "himalayan salt",
+        "wood",
+        "crystal",
+        "tin",
+        "ceramic"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "ivory",
+        "black",
+        "red",
+        "blue",
+        "pink",
+        "green",
+        "gold",
+        "silver"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "3 wick",
+        "battery operated",
+        "clean burning",
+        "decorative",
+        "double wick",
+        "eco friendly",
+        "flameless",
+        "flickering",
+        "hand poured",
+        "led",
+        "long burning",
+        "moving wick",
+        "natural",
+        "remote control",
+        "scented",
+        "timer",
+        "unscented"
+      ]
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)[\\s-]ounce",
+        "(\\d+(?:\\.\\d+)?)\\s?oz"
+      ],
+      "note": "Dominant values include 13oz, 14.5oz, 22oz"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)",
+        "pack (?:of )?(\\d+)",
+        "(\\d+)\\s?pack"
+      ],
+      "note": "Commonly used for tea lights and candle holder sets (e.g., Set of 3, 12 Pack)"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "wedding",
+        "christmas",
+        "halloween",
+        "birthday",
+        "holiday",
+        "easter",
+        "valentine",
+        "thanksgiving",
+        "baby shower",
+        "party"
+      ]
+    },
+    "Scent": {
+      "type": "dictionary",
+      "values": [
+        "vanilla",
+        "lavender",
+        "cinnamon",
+        "sage",
+        "rose",
+        "jasmine",
+        "sandalwood",
+        "peppermint",
+        "eucalyptus",
+        "lemon",
+        "ocean",
+        "pine",
+        "cedar",
+        "coconut",
+        "chamomile",
+        "patchouli",
+        "bergamot",
+        "citrus",
+        "fresh linen",
+        "clean cotton"
+      ]
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "round",
+        "square",
+        "pillar",
+        "taper",
+        "cylinder"
+      ]
+    }
+  },
+  "Clocks": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "3drose",
+        "cafepress",
+        "seiko",
+        "howard miller",
+        "la crosse technology",
+        "watchbuddy",
+        "bulova",
+        "westclox",
+        "equity",
+        "infinity instruments",
+        "deco 79",
+        "karlsson"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "wall clock",
+        "alarm clock",
+        "desk clock",
+        "table clock",
+        "cuckoo clock",
+        "mantel clock",
+        "pendulum clock",
+        "radio clock",
+        "projection clock",
+        "vinyl record clock",
+        "neon clock",
+        "atomic clock",
+        "travel alarm clock"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "wood",
+        "metal",
+        "glass",
+        "wooden",
+        "vinyl",
+        "plastic"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "blue",
+        "red",
+        "silver",
+        "gold",
+        "green",
+        "brown",
+        "neon",
+        "clear"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "analog",
+        "backlight",
+        "battery operated",
+        "calendar",
+        "decorative",
+        "digital display",
+        "dual alarm",
+        "glow in the dark",
+        "industrial",
+        "lcd",
+        "led",
+        "modern",
+        "non-ticking",
+        "quartz movement",
+        "retro",
+        "roman numeral",
+        "rustic",
+        "silent",
+        "snooze",
+        "temperature display",
+        "twin bell",
+        "vintage",
+        "whisper quiet"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]inch",
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?in",
+        "(\\d+)\\s?cm",
+        "(\\d+)\\s?x\\s?(\\d+)"
+      ],
+      "note": "Dominant values: 10 inch, 12 inch, 13 inch, 15 inch"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Standard clock units, typically 1pc unless sold in sets"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "retro",
+        "vintage",
+        "nautical",
+        "sports"
+      ]
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "round",
+        "square",
+        "rectangle",
+        "octagon"
+      ]
+    }
+  },
+  "Draft Stoppers": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "evelots"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "draft stopper",
+        "door draft stopper",
+        "draft dodger",
+        "draft guard",
+        "draft blocker",
+        "doorstop",
+        "draught excluder",
+        "window draft stopper"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "buckwheat hull",
+        "balsam",
+        "fleece",
+        "buckwheat",
+        "pine"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "brown",
+        "blue",
+        "red",
+        "gray",
+        "black",
+        "green",
+        "navy",
+        "slate",
+        "white",
+        "grey",
+        "beige",
+        "chocolate",
+        "platinum",
+        "gold"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "filled",
+        "fragrant",
+        "natural",
+        "unfilled",
+        "unscented",
+        "heavy duty",
+        "energy saving",
+        "decorative",
+        "hand painted",
+        "double wall"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(?:32|36|38)\\s?inch"
+      ],
+      "note": "Common lengths include 32, 36, and 38 inches"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?pack",
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?pc"
+      ],
+      "note": "Captures multi-pack draft stopper units"
+    }
+  },
+  "Gift Baskets": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "c r gibson",
+        "majestic giftware",
+        "caspari",
+        "hortense b hewitt",
+        "lightahead",
+        "vlonfine",
+        "betterdecor",
+        "hooami",
+        "beilom",
+        "topgo"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "gift bag",
+        "gift basket",
+        "drawstring pouch",
+        "jewelry pouch",
+        "tote bag",
+        "shopping bag",
+        "gift box",
+        "greeting card",
+        "matted poetry",
+        "kitchen towel",
+        "rolling pin",
+        "apron",
+        "medallion",
+        "charm"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "organza",
+        "paper",
+        "glass",
+        "crystal",
+        "fabric",
+        "pvc",
+        "sheer organza"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "blue",
+        "white",
+        "red",
+        "black",
+        "green",
+        "pink",
+        "purple",
+        "yellow",
+        "silver",
+        "gold",
+        "dark blue",
+        "midnight black",
+        "multicolor"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "drawstring",
+        "matted",
+        "hand painted",
+        "hanging",
+        "glitter",
+        "single matted",
+        "double sided"
+      ]
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?oz",
+        "(\\d+)\\s?ml"
+      ],
+      "note": "Commonly used for wine or liquid gifts included in sets"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?pcs",
+        "set (?:of )?(\\d+)",
+        "pack (?:of )?(\\d+)"
+      ],
+      "note": "Dominant values: 12pc, 20pc, 100pcs"
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)\\s?inch",
+        "(\\d+(?:\\.\\d+)?)\\s?x\\s?(\\d+(?:\\.\\d+)?)"
+      ],
+      "note": "Dominant values: 8x10, 3x4 inch, 4x6"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "wedding",
+        "christmas",
+        "birthday",
+        "baby shower",
+        "party"
+      ]
+    }
+  },
+  "Home Decor Accents": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "hallmark",
+        "kurt adler",
+        "department 56",
+        "jim shore",
+        "enesco",
+        "disney",
+        "lemax",
+        "swarovski",
+        "3drose",
+        "cafepress",
+        "p graham dunn",
+        "pavilion gift company",
+        "sjt enterprise",
+        "stickerpirate",
+        "design toscano",
+        "deco 79"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "ornament",
+        "figurine",
+        "tin sign",
+        "street sign",
+        "wall art",
+        "statue",
+        "sculpture",
+        "plaque",
+        "box sign",
+        "music box",
+        "trinket box",
+        "jewelry box",
+        "snow globe",
+        "wreath",
+        "cremation urn",
+        "cardboard cutout",
+        "art tile",
+        "display stand"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "metal",
+        "wood",
+        "glass",
+        "porcelain",
+        "ceramic",
+        "resin",
+        "crystal",
+        "tin",
+        "aluminum",
+        "plastic",
+        "stone resin"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "black",
+        "red",
+        "blue",
+        "silver",
+        "gold",
+        "green",
+        "brown",
+        "multicolor"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "hand painted",
+        "hand carved",
+        "hand blown",
+        "blown glass",
+        "shatterproof",
+        "vintage look",
+        "hanging",
+        "indoor outdoor",
+        "keepsake",
+        "collectible",
+        "miniature"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)\\s?quot",
+        "(\\d+(?:\\.\\d+)?)\\s?inch",
+        "(\\d+(?:\\.\\d+)?)\\s?in",
+        "(\\d+(?:\\.\\d+)?)\\s?tall",
+        "(\\d+(?:\\.\\d+)?)\\s?wide",
+        "(\\d+(?:\\.\\d+)?)\\s?x\\s?(\\d+(?:\\.\\d+)?)",
+        "(\\d+)\\s?x\\s?(\\d+)in"
+      ],
+      "note": "Commonly covers height in inches (quot) and sign dimensions like 12x18."
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "set (?:of )?(\\d+)",
+        "set (\\d+)",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?piece"
+      ]
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "wedding",
+        "christmas",
+        "halloween",
+        "birthday",
+        "holiday",
+        "easter",
+        "valentine",
+        "thanksgiving",
+        "baby shower",
+        "party"
+      ]
+    }
+  },
+  "Home Fragrance": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "scentsy",
+        "hem",
+        "satya",
+        "sai baba",
+        "yankee",
+        "wildberry",
+        "nippon kodo",
+        "gonesh",
+        "shoyeido",
+        "hosley",
+        "lampe berger",
+        "slatkin",
+        "maroma",
+        "poo pourri"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "incense stick",
+        "reed diffuser",
+        "incense burner",
+        "wax melt",
+        "room spray",
+        "incense cone",
+        "wax cube",
+        "essential oil",
+        "air freshener",
+        "oil warmer",
+        "candle tart",
+        "fragrance oil",
+        "sachet",
+        "potpourri",
+        "smudge stick",
+        "drawer liner",
+        "incense powder",
+        "fragrance refill",
+        "wallflower"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "soy wax",
+        "wax",
+        "ceramic",
+        "wood",
+        "resin",
+        "glass"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "black",
+        "clear",
+        "gold",
+        "silver"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "scented",
+        "hand poured",
+        "wickless",
+        "aromatherapy",
+        "natural",
+        "premium",
+        "electric",
+        "strongly scented",
+        "vegan",
+        "concentrated"
+      ]
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)[\\s-]ounce",
+        "(\\d+(?:\\.\\d+)?)\\s?oz",
+        "(\\d+(?:\\.\\d+)?)\\s?ml",
+        "(\\d+(?:\\.\\d+)?)\\s?fl\\.?\\s?oz",
+        "(\\d+)\\s?gram"
+      ],
+      "note": "Common values include 0.33oz, 2oz, 4oz, 8oz, and 3.2 fl oz for wax melts."
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?pack",
+        "(\\d+)\\s?count",
+        "(\\d+)\\s?stick",
+        "(\\d+)\\s?cone",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)",
+        "box (?:of )?(\\d+)"
+      ],
+      "note": "Common counts include 10, 20, 100, and 120 sticks per pack."
+    },
+    "Scent": {
+      "type": "dictionary",
+      "values": [
+        "vanilla",
+        "lavender",
+        "cinnamon",
+        "sage",
+        "rose",
+        "jasmine",
+        "sandalwood",
+        "peppermint",
+        "eucalyptus",
+        "lemon",
+        "ocean",
+        "pine",
+        "cedar",
+        "coconut",
+        "chamomile",
+        "patchouli",
+        "bergamot",
+        "citrus",
+        "fresh linen",
+        "clean cotton",
+        "nag champa",
+        "frankincense",
+        "myrrh",
+        "dragon blood",
+        "musk",
+        "amber"
+      ]
+    }
+  },
+  "Indoor Fountains & Accessories": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "hypnotic gems",
+        "fantasia",
+        "crystal age",
+        "sunnydaze",
+        "rock paradise",
+        "crystal ally"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "water fountain",
+        "tabletop fountain",
+        "indoor fountain",
+        "fountain pump",
+        "tumbled stone",
+        "palm stone",
+        "worry stone",
+        "crystal pyramid",
+        "crystal wand",
+        "crystal sphere",
+        "crystal point",
+        "crystal cluster",
+        "healing crystal",
+        "gemstone specimen"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "stone",
+        "crystal",
+        "quartz",
+        "amethyst",
+        "rose quartz",
+        "agate",
+        "jasper",
+        "citrine",
+        "glass",
+        "mineral",
+        "gemstone"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "blue",
+        "black",
+        "clear",
+        "green",
+        "rose",
+        "red",
+        "purple",
+        "yellow"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "led light",
+        "reiki healing",
+        "metaphysical",
+        "natural polished",
+        "raw natural",
+        "hand carved",
+        "wire wrapping",
+        "wholesale lot",
+        "aa grade",
+        "chakra balanced"
+      ]
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?lb",
+        "(\\d+)\\s?pound",
+        "(\\d+)\\s?oz",
+        "(\\d+)[\\s-]ounce"
+      ],
+      "note": "Dominant values: 1lb, 2lb, 5lb"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?piece",
+        "set (?:of )?(\\d+)",
+        "lot (?:of )?(\\d+)"
+      ],
+      "note": "Common for stone sets and wholesale lots"
+    }
+  },
+  "Kids' Room Decor": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "disney",
+        "roommates",
+        "fathead",
+        "sweet jojo designs",
+        "mybecca",
+        "la rug",
+        "hello kitty",
+        "olive kids"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "wall decal",
+        "wall sticker",
+        "night light",
+        "table lamp",
+        "area rug",
+        "growth chart",
+        "switch plate",
+        "drawer pull",
+        "drawer knob",
+        "alarm clock",
+        "window cling",
+        "curtain panel",
+        "picture frame",
+        "desk lamp",
+        "play mat",
+        "carpet",
+        "lamp shade",
+        "cabinet knob"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "vinyl",
+        "ceramic",
+        "crystal",
+        "glass",
+        "wooden",
+        "gel",
+        "led"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "blue",
+        "pink",
+        "white",
+        "black",
+        "green",
+        "red",
+        "colorful",
+        "multicolor"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "peel and stick",
+        "glow in the dark",
+        "color changing",
+        "giant",
+        "non skid",
+        "3d",
+        "die cut",
+        "removable",
+        "self-adhesive"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)'\\s?x\\s?(\\d+)'"
+      ],
+      "note": "Common formats include inch measurements (quot) and rug dimensions (3x5, 5x7)"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?pack",
+        "(\\d+)\\s?sheet"
+      ],
+      "note": "Captures multi-packs of knobs, decals, or sticker sheets"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "disney",
+        "princess",
+        "frozen",
+        "superhero"
+      ]
+    }
+  },
+  "Mirrors": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "uttermost",
+        "howard elliott",
+        "deco 79",
+        "rayne",
+        "head west",
+        "decor wonderland",
+        "safavieh",
+        "cooper classic",
+        "yosemite",
+        "hickory manor house",
+        "gatco",
+        "quoizel",
+        "hitchcock butterfield",
+        "imax"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "wall mirror",
+        "vanity mirror",
+        "floor mirror",
+        "makeup mirror",
+        "cheval mirror",
+        "porthole mirror",
+        "compact mirror",
+        "purse mirror",
+        "bathroom mirror",
+        "table mirror",
+        "door mirror",
+        "cosmetic mirror",
+        "accent mirror",
+        "sunburst mirror"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "wood",
+        "metal",
+        "glass",
+        "bronze",
+        "chrome",
+        "nickel",
+        "acrylic",
+        "brass",
+        "stainless steel",
+        "satin nickel",
+        "brushed nickel",
+        "oil rubbed bronze"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "silver",
+        "black",
+        "white",
+        "gold",
+        "brown",
+        "espresso",
+        "cherry",
+        "blue",
+        "antique gold",
+        "antique silver"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "antique",
+        "beveled",
+        "custom framed",
+        "decorative",
+        "distressed",
+        "framed",
+        "frameless",
+        "full length",
+        "hand painted",
+        "led",
+        "lighted",
+        "magnification",
+        "modern",
+        "mounted",
+        "rustic",
+        "shatterproof",
+        "swivel",
+        "vintage"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)[\\s-]in"
+      ],
+      "note": "Common sizes include 24, 30, 32, and 36 inches."
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc"
+      ],
+      "note": "Commonly found in mirror sets (e.g., set of 3)."
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "round",
+        "square",
+        "oval",
+        "rectangle",
+        "arched",
+        "sunburst"
+      ]
+    }
+  },
+  "Oil Lamps & Accessories": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "vermont lantern",
+        "lampe berger",
+        "aladdin",
+        "lamplight",
+        "stealstreet",
+        "artcollectibles india"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "oil lamp",
+        "oil warmer",
+        "oil burner",
+        "lantern",
+        "diya",
+        "fragrance lamp",
+        "tart burner",
+        "night light",
+        "candle holder",
+        "hurricane lamp",
+        "mantle lamp",
+        "replacement wick"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "brass",
+        "glass",
+        "ceramic",
+        "metal",
+        "stainless steel",
+        "clay",
+        "earthen",
+        "cotton"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "blue",
+        "green",
+        "black",
+        "red",
+        "purple",
+        "clear",
+        "silver",
+        "antique brass",
+        "gold"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "electric",
+        "handmade",
+        "decorative",
+        "touch sensitive",
+        "dimmer switch",
+        "aromatherapy",
+        "nautical",
+        "vintage",
+        "liquid paraffin",
+        "hurricane",
+        "plug in"
+      ]
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?oz",
+        "(\\d+)\\s?ml",
+        "(\\d+\\.?\\d*)\\s?ounce"
+      ],
+      "note": "Dominant values found: 500ml, 16.9oz"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "set (?:of )?(\\d+)",
+        "pack (?:of )?(\\d+)",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?piece"
+      ],
+      "note": "Common counts: set of 2, set of 4"
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+\\.?\\d*)\\s?inch",
+        "(\\d+\\.?\\d*)\\s?quot",
+        "(\\d+\\.?\\d*)\\s?tall"
+      ],
+      "note": "Captures height and diameter in inches or quotations"
+    }
+  },
+  "Photo Albums & Accessories": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "pioneer",
+        "fujifilm",
+        "fuji",
+        "pinnacle",
+        "disney",
+        "kleer-vu",
+        "kvd",
+        "c r gibson",
+        "ultra pro",
+        "ivy lane design"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "photo album",
+        "memory book",
+        "scrapbook",
+        "3-ring binder",
+        "binder",
+        "brag book",
+        "page protector",
+        "refill page",
+        "pocket photo album",
+        "frame",
+        "name card holder"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "leather",
+        "leatherette",
+        "faux leather",
+        "bonded leather",
+        "fabric",
+        "paper",
+        "ceramic"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "blue",
+        "brown",
+        "red",
+        "pink",
+        "silver",
+        "ivory",
+        "gold",
+        "burgundy",
+        "green"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "magnetic",
+        "embossed",
+        "handmade",
+        "sewn",
+        "deluxe",
+        "postbound",
+        "acid free",
+        "memo area",
+        "window cover"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)\\s?inch",
+        "(\\d+(?:\\.\\d+)?)\\s?quot",
+        "(\\d+(?:\\.\\d+)?)\\s?x\\s?(\\d+(?:\\.\\d+)?)",
+        "(\\d)x(\\d)"
+      ],
+      "note": "Common sizes: 4x6, 5x7, 8x10, 12x12"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "hold (\\d+)",
+        "(\\d+)\\s?photo",
+        "(\\d+)\\s?pocket",
+        "(\\d+)\\s?page",
+        "(\\d+)\\s?capacity"
+      ],
+      "note": "Dominant values: 100, 200, 300 photos; 64, 36 pockets"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "wedding",
+        "baby",
+        "graduation"
+      ]
+    }
+  },
+  "Picture Frames": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "arttoframes",
+        "malden",
+        "lawrence",
+        "prinz",
+        "craig",
+        "fetco",
+        "golden state art",
+        "quadro"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "picture frame",
+        "photo frame",
+        "collage frame",
+        "poster frame",
+        "shadow box",
+        "diploma frame",
+        "document frame",
+        "art frame"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "wood",
+        "solid wood",
+        "metal",
+        "glass",
+        "acrylic",
+        "satin",
+        "silver plated",
+        "foam board"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "silver",
+        "gold",
+        "walnut",
+        "brown",
+        "espresso",
+        "red",
+        "blue",
+        "bronze",
+        "natural",
+        "clear"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "double mat",
+        "matted",
+        "distressed",
+        "engraved",
+        "wall hanging",
+        "hanging hardware included",
+        "smooth",
+        "wood grain",
+        "uv acrylic",
+        "landscape",
+        "portrait",
+        "vertical",
+        "horizontal",
+        "multimat",
+        "custom"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)\\s?x\\s?(\\d+(?:\\.\\d+)?)",
+        "(\\d+(?:\\.\\d+)?)[\\s-]inch",
+        "(\\d+(?:\\.\\d+)?)\\s?quot"
+      ],
+      "note": "Common sizes include 4x6, 5x7, 8x10, 11x14"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "set (?:of )?(\\d+)",
+        "(\\d+)[\\s-]piece",
+        "(\\d+)[\\s-]pc",
+        "(\\d+)[\\s-]opening"
+      ],
+      "note": "Captures both multi-frame sets and multi-opening collage frames"
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "rectangle",
+        "square",
+        "round",
+        "oval"
+      ]
+    }
+  },
+  "Slipcovers": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "surefit",
+        "ikea",
+        "madison",
+        "ektorp"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "futon cover",
+        "sofa slipcover",
+        "chair slipcover",
+        "loveseat slipcover",
+        "recliner slipcover",
+        "furniture protector",
+        "wing chair slipcover",
+        "mattress cover",
+        "chair sash",
+        "couch cover",
+        "banquet chair cover",
+        "dining chair cover",
+        "folding chair cover"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "microfiber",
+        "suede",
+        "polyester",
+        "spandex",
+        "linen",
+        "satin",
+        "jersey",
+        "twill",
+        "jacquard",
+        "organza",
+        "cotton duck",
+        "pique"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "chocolate",
+        "brown",
+        "blue",
+        "black",
+        "white",
+        "sage",
+        "red",
+        "burgundy",
+        "green",
+        "beige",
+        "gray",
+        "taupe",
+        "navy",
+        "tan",
+        "ivory"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "stretch",
+        "quilted",
+        "reversible",
+        "solid",
+        "form fit",
+        "elastic strap",
+        "box cushion",
+        "hand painted",
+        "special treatment"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]inch",
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?x\\s?(\\d+)"
+      ]
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Common values include 1 piece, 2 piece, and 3 pc sets"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "wedding",
+        "party"
+      ]
+    }
+  },
+  "Tapestries": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "society6",
+        "ambesonne",
+        "amitus export",
+        "sunshine joy",
+        "handicrunch",
+        "popular handicraft"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "wall hanging",
+        "tapestry",
+        "bedspread",
+        "beach throw",
+        "beach sheet",
+        "yoga mat",
+        "tablecloth",
+        "curtain",
+        "noren",
+        "blanket",
+        "beach towel",
+        "picnic mat",
+        "bed cover"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "fabric",
+        "cloth"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "blue",
+        "white",
+        "black",
+        "green",
+        "red",
+        "purple",
+        "multi",
+        "multicolor"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "bohemian",
+        "celtic",
+        "elephant",
+        "ethnic",
+        "floral",
+        "hand painted",
+        "handmade",
+        "hippie",
+        "indian",
+        "jacquard",
+        "large",
+        "lightweight",
+        "mandala",
+        "ombre",
+        "peacock",
+        "psychedelic",
+        "sun moon",
+        "tie dye",
+        "traditional",
+        "tree of life",
+        "woven"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)x(\\d+)"
+      ],
+      "note": "Common sizes include 60x90, 51x60, and 80x100 inches"
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "twin",
+        "queen",
+        "full"
+      ]
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc"
+      ]
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "bohemian",
+        "hippie",
+        "dorm"
+      ]
+    }
+  },
+  "Vase Fillers": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "jellybeadz",
+        "sandsational",
+        "koyal wholesale",
+        "gemnique",
+        "cys",
+        "super z outlet",
+        "creative stuff"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "vase filler",
+        "table scatter",
+        "ice rock",
+        "glass gem",
+        "water bead",
+        "water gel",
+        "decorative sand",
+        "unity sand",
+        "pearl",
+        "bead",
+        "gem stone",
+        "pebble",
+        "marble",
+        "confetti",
+        "ice cube"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "glass",
+        "acrylic",
+        "crystal",
+        "stone",
+        "plastic",
+        "gel",
+        "sand",
+        "porcelain"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "clear",
+        "white",
+        "blue",
+        "green",
+        "red",
+        "pink",
+        "black",
+        "purple",
+        "gold",
+        "silver",
+        "multicolor",
+        "translucent",
+        "transparent"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "floating",
+        "no hole",
+        "jumbo",
+        "assorted size",
+        "flat",
+        "sparkle",
+        "hand painted",
+        "water storing",
+        "fake",
+        "eye catching"
+      ]
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)[\\s-]ounce",
+        "(\\d+(?:\\.\\d+)?)\\s?oz",
+        "(\\d+(?:\\.\\d+)?)\\s?ml",
+        "(\\d+(?:\\.\\d+)?)\\s?gallon"
+      ],
+      "note": "Dominant values: 8oz, 22oz"
+    },
+    "Weight": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)[\\s-]pound",
+        "(\\d+(?:\\.\\d+)?)\\s?lb",
+        "(\\d+)\\s?gram"
+      ]
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?piece",
+        "set (?:of )?(\\d+)",
+        "pack (?:of )?(\\d+)"
+      ]
+    }
+  },
+  "Vases": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "hosley",
+        "imax",
+        "waterford",
+        "syndicate",
+        "lenox",
+        "chive",
+        "wgv",
+        "luna bazaar",
+        "jozefina atelier",
+        "royal import",
+        "murano"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "flower vase",
+        "bud vase",
+        "floor vase",
+        "cylinder vase",
+        "square vase",
+        "trumpet vase",
+        "ikebana vase",
+        "eiffel tower vase",
+        "boot vase",
+        "centerpiece",
+        "planter",
+        "terrarium",
+        "candle holder"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "glass",
+        "ceramic",
+        "crystal",
+        "metal",
+        "porcelain",
+        "wood",
+        "mango wood",
+        "bamboo",
+        "mercury glass"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "clear",
+        "white",
+        "blue",
+        "green",
+        "red",
+        "black",
+        "gold",
+        "silver",
+        "brown",
+        "purple"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "art style",
+        "blown glass",
+        "contemporary",
+        "decorative",
+        "farmhouse",
+        "hand blown",
+        "hand painted",
+        "hanging",
+        "large",
+        "medium",
+        "modern",
+        "recycled",
+        "rustic",
+        "short",
+        "small",
+        "tall",
+        "vintage"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?(?:tall|high|h|w)",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)[\\s-]in"
+      ],
+      "note": "Standard measurements for height and width in inches"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?pack"
+      ],
+      "note": "Commonly sold in sets of 2, 3, or bulk packs for events"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "wedding",
+        "party",
+        "christmas"
+      ]
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "round",
+        "square",
+        "cylinder",
+        "trumpet",
+        "bottle"
+      ]
+    }
+  },
+  "Window Stickers & Films": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "solyx",
+        "coavas",
+        "vvivid",
+        "artscape",
+        "windowpix",
+        "bloss"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "window film",
+        "static cling",
+        "window decal",
+        "window sticker",
+        "privacy film",
+        "frosted film",
+        "stained glass film",
+        "mirror film"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "vinyl",
+        "glass",
+        "gel"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "clear",
+        "blue",
+        "black",
+        "silver",
+        "red",
+        "multicolor"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "static cling",
+        "privacy",
+        "decorative",
+        "stained glass",
+        "frosted",
+        "etched",
+        "3d effect",
+        "uv filtering",
+        "heat control",
+        "energy saving",
+        "non-adhesive",
+        "self-adhesive",
+        "no glue",
+        "reusable",
+        "one way mirror"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)\\s?quot",
+        "(\\d+(?:\\.\\d+)?)\\s?inch",
+        "(\\d+(?:\\.\\d+)?)\\s?ft",
+        "(\\d+(?:\\.\\d+)?)\\s?foot",
+        "(\\d+)\\s?cm",
+        "(\\d+(?:\\.\\d+)?)\\s?[xX]\\s?(\\d+(?:\\.\\d+)?)",
+        "(\\d+(?:\\.\\d+)?)-by-(\\d+(?:\\.\\d+)?)"
+      ],
+      "note": "Captures width, height, and length in inches, feet, or centimeters"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?roll",
+        "(\\d+)\\s?sheet",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Captures the number of items, rolls, or sheets included"
+    }
+  },
+  "Window Treatment Hardware": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "desyne",
+        "beme international",
+        "umbra",
+        "urbanest",
+        "kenney",
+        "achim",
+        "elecharm",
+        "graber",
+        "source global"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "curtain rod",
+        "drapery rod",
+        "tieback",
+        "holdback",
+        "traverse rod",
+        "finial",
+        "bracket",
+        "clip ring",
+        "curtain clip",
+        "curtain ring",
+        "tassel",
+        "hook",
+        "drape holder",
+        "blind",
+        "tension rod"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "metal",
+        "brass",
+        "bronze",
+        "nickel",
+        "iron",
+        "steel",
+        "wood",
+        "crystal",
+        "rope",
+        "wrought iron"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "gold",
+        "silver",
+        "pewter",
+        "antique brass",
+        "satin nickel",
+        "oil rubbed bronze"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "adjustable",
+        "double",
+        "decorative",
+        "telescoping",
+        "magnetic",
+        "traverse",
+        "heavy duty",
+        "single",
+        "two tone"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?in",
+        "(\\d+)[\\s-]?(\\d+)\\s?inch",
+        "(\\d+)\\/(\\d+)\\s?inch",
+        "diameter (?:of )?(\\d+(?:\\.\\d+)?)"
+      ],
+      "note": "Commonly captures rod length (e.g., 28-48, 66-120) and rod diameter (e.g., 3/4 inch, 1 inch)"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)",
+        "pack (?:of )?(\\d+)",
+        "(\\d+)\\s?pair"
+      ],
+      "note": "Captures quantity of hardware items or pairs of tiebacks"
+    }
+  },
+  "Window Treatments": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "achim",
+        "duck river textile",
+        "editex",
+        "twopages",
+        "luxurydiscounts",
+        "thermalogic",
+        "half price drape",
+        "regal home",
+        "royal hotel"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "curtain",
+        "panel",
+        "valance",
+        "drape",
+        "blind",
+        "shade",
+        "rod",
+        "tier",
+        "scarf",
+        "drapery",
+        "swag",
+        "mini blind"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "silk",
+        "voile",
+        "linen",
+        "cotton",
+        "wood",
+        "glass",
+        "jacquard",
+        "fabric",
+        "vinyl",
+        "faux silk",
+        "faux wood"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "blue",
+        "black",
+        "green",
+        "red",
+        "brown",
+        "beige",
+        "gold",
+        "ivory",
+        "silver",
+        "grey",
+        "pink",
+        "burgundy",
+        "bronze"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "grommet",
+        "sheer",
+        "blackout",
+        "solid",
+        "rod pocket",
+        "thermal",
+        "lined",
+        "floral",
+        "insulated",
+        "print",
+        "embroidered",
+        "tab top",
+        "darkening",
+        "fully stitched",
+        "foam lined",
+        "light filtering",
+        "heavy thick"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?w\\s?x\\s?(\\d+)\\s?l",
+        "(\\d+)\\s?long",
+        "(\\d+)\\s?wide"
+      ],
+      "note": "Common values: 84, 63, 52, 72, 54, 96, 108"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "set\\s?(?:of\\s?)?(\\d+)",
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?panel",
+        "pair"
+      ],
+      "note": "Pair indicates a 2 piece set"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "christmas",
+        "holiday"
+      ]
+    }
+  },
+  "Air Mattresses & Accessories": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "aerobed",
+        "intex",
+        "coleman",
+        "bestway",
+        "serta",
+        "insta-bed",
+        "aircloud",
+        "fox air",
+        "disney"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "air mattress",
+        "air bed",
+        "airbed",
+        "inflatable bed",
+        "inflatable lounger",
+        "mattress topper",
+        "air pump",
+        "inflator",
+        "bean bag",
+        "sofa",
+        "couch",
+        "chair",
+        "boat"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "memory foam",
+        "foam",
+        "nylon",
+        "fabric",
+        "plush",
+        "gel memory foam"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "blue",
+        "black",
+        "white",
+        "vanilla",
+        "french vanilla"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "built-in pump",
+        "electric pump",
+        "raised",
+        "elevated",
+        "pillow rest",
+        "pillow top",
+        "flocked",
+        "double high",
+        "never flat",
+        "adjustable",
+        "portable",
+        "remote control",
+        "high rise",
+        "dual",
+        "external pump",
+        "ac pump",
+        "foot pump"
+      ]
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "queen",
+        "twin",
+        "twin xl",
+        "full",
+        "king",
+        "single high"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]inch",
+        "(\\d+)\\s?quot",
+        "(\\d+)\\\""
+      ],
+      "note": "Common height/thickness: 14 inch, 18 inch"
+    }
+  },
+  "Bed Canopies & Drapes": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "octorose",
+        "nicamaka",
+        "uozzi",
+        "gurteen",
+        "instyle"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "bed canopy",
+        "mosquito net",
+        "mosquito netting",
+        "bed curtain",
+        "play tent",
+        "fly screen",
+        "bed cover"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "lace",
+        "netting",
+        "fabric",
+        "sequin",
+        "eyelet"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "pink",
+        "purple",
+        "blue",
+        "black",
+        "green",
+        "violet",
+        "beige",
+        "teal",
+        "ivory",
+        "brown",
+        "yellow",
+        "red"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "4 corner",
+        "corner post",
+        "dome",
+        "round hoop",
+        "princess style",
+        "functional",
+        "insect protection",
+        "butterfly decoration",
+        "luxury",
+        "elegant",
+        "romantic",
+        "hanging",
+        "single door",
+        "double door"
+      ]
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "twin",
+        "twin xl",
+        "full",
+        "queen",
+        "king",
+        "california king",
+        "crib",
+        "toddler",
+        "single",
+        "double"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?inch",
+        "(\\d+)\"\\s?x\\s?(\\d+)\"",
+        "(\\d+)\\s?cm",
+        "(\\d+)'\\s?x\\s?(\\d+)'"
+      ],
+      "note": "Captures height, width, and length measurements"
+    }
+  },
+  "Bed Pillows & Positioners": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "pacific coast",
+        "majestic home goods"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "bed pillow",
+        "neck pillow",
+        "travel pillow",
+        "body pillow",
+        "support pillow",
+        "contour pillow",
+        "cervical pillow",
+        "lumbar pillow",
+        "reading pillow",
+        "cushion",
+        "pillow case",
+        "eye mask",
+        "cervical collar"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "memory foam",
+        "foam",
+        "cotton",
+        "bamboo",
+        "gel",
+        "feather",
+        "goose down",
+        "latex",
+        "microbead",
+        "velour",
+        "shredded memory foam"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "blue",
+        "black",
+        "pink",
+        "gray"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "adjustable",
+        "cooling",
+        "down alternative",
+        "dust mite resistant",
+        "ergonomic",
+        "extra firm",
+        "firm",
+        "hypoallergenic",
+        "inflatable",
+        "luxury",
+        "medium",
+        "orthopedic",
+        "plush",
+        "removable cover",
+        "soft",
+        "stay cool",
+        "u shaped",
+        "washable cover"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?rdqu?o",
+        "(\\d+)\\s?x\\s?(\\d+)"
+      ]
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "standard",
+        "queen",
+        "king",
+        "jumbo",
+        "one size"
+      ]
+    },
+    "Thread_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]thread[\\s-]count",
+        "(\\d+)\\s?tc"
+      ],
+      "note": "Common values include 300 thread count"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?pack",
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?pc"
+      ],
+      "note": "Dominant values: 2 pack, set of 2"
+    }
+  },
+  "Bed Runners & Scarves": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "kess inhouse",
+        "iovect",
+        "alook",
+        "atool",
+        "tirio",
+        "istoyo",
+        "comoxi",
+        "carollynn tice",
+        "cuddledown",
+        "monika strigel",
+        "sylvia cook",
+        "sunbeam"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "bed runner",
+        "bed scarf",
+        "bedding accessory",
+        "blanket"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "velvet",
+        "plush",
+        "suede",
+        "glass"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "blue",
+        "black",
+        "white",
+        "green",
+        "red",
+        "teal",
+        "yellow",
+        "gray",
+        "grey",
+        "brown",
+        "aqua",
+        "orange",
+        "silver",
+        "tan",
+        "coral",
+        "ivory",
+        "burnt orange"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "luxury",
+        "hotel quality",
+        "channeled",
+        "electric",
+        "heated",
+        "etched",
+        "mosaic",
+        "decorative",
+        "hand painted"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?in(?:ch)?",
+        "(\\d+)\\s?cm",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(king|queen|full|twin|twin xl)"
+      ],
+      "note": "Common values include 34 quot, 86 quot, 87 quot, and 220cm"
+    },
+    "Thread_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?thread\\s?count",
+        "(\\d+)\\s?tc"
+      ],
+      "note": "Example: 400 thread count"
+    }
+  },
+  "Bed Skirts": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "hothaat",
+        "marrikas",
+        "budgetlinen",
+        "ralph lauren"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "bed skirt",
+        "bedskirt",
+        "dust ruffle"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "egyptian cotton",
+        "microfiber",
+        "linen",
+        "fabric"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "black",
+        "blue",
+        "ivory",
+        "grey",
+        "navy",
+        "gold",
+        "chocolate",
+        "green",
+        "taupe",
+        "red",
+        "sage",
+        "pink",
+        "brown",
+        "burgundy",
+        "purple",
+        "beige"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "solid",
+        "ruffle",
+        "pleated",
+        "tailored",
+        "stripe",
+        "split corner",
+        "box pleated",
+        "wrap around",
+        "wrinkle resistant",
+        "fade resistant",
+        "easy care",
+        "gathered",
+        "center pleat",
+        "quadruple pleated"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]inch(?:\\sdrop)?",
+        "(\\d+)[\\s-]quot(?:\\sdrop)?",
+        "drop length (\\d+)",
+        "(\\d+)\" drop"
+      ],
+      "note": "Common values include 12, 14, 15, 18, and 21 inch drops."
+    },
+    "Thread_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?thread(?:\\scount)?",
+        "(\\d+)\\s?tc"
+      ],
+      "note": "Dominant values: 300, 400, 500, 1500"
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "twin",
+        "twin xl",
+        "full",
+        "queen",
+        "king",
+        "california king"
+      ]
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?pcs"
+      ],
+      "note": "Usually 1 piece for standalone bed skirts."
+    }
+  },
+  "Bedding Accessories": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "richards homewares",
+        "mk collection",
+        "huayang",
+        "istoyo",
+        "greenco",
+        "saguaro",
+        "nyche design"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "bed riser",
+        "furniture riser",
+        "sheet strap",
+        "sheet fastener",
+        "sheet gripper",
+        "sheet suspender",
+        "bed lifter",
+        "mosquito net",
+        "bed canopy",
+        "duvet donut",
+        "bed bridge",
+        "bed connector",
+        "mattress cover",
+        "bedside organizer",
+        "bed skirt",
+        "caddy"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "wood",
+        "plastic",
+        "metal",
+        "fabric",
+        "elastic",
+        "rubber"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "black",
+        "blue"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "adjustable",
+        "heavy duty",
+        "fitted",
+        "crisscross",
+        "wrap around",
+        "screw-in",
+        "self-securing",
+        "high low",
+        "double wall"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?quot",
+        "(\\d+)\" ",
+        "(\\d+)\\s?h"
+      ]
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "twin",
+        "full",
+        "queen",
+        "king"
+      ]
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]piece",
+        "(\\d+)[\\s-]pc",
+        "set (?:of )?(\\d+)",
+        "(\\d+)[\\s-]pack",
+        "x(\\d+)"
+      ],
+      "note": "Common counts: 2, 4, 8, 10"
+    }
+  },
+  "Bedding Sets & Collections": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "kinglinen",
+        "sander home",
+        "dan river",
+        "egylinens",
+        "cathay home fashion"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "sheet set",
+        "comforter set",
+        "quilt set",
+        "bed-in-a-bag",
+        "bedspread",
+        "coverlet set",
+        "duvet cover",
+        "daybed set",
+        "pillow sham",
+        "ensemble"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "egyptian cotton",
+        "microfiber",
+        "jacquard",
+        "sateen",
+        "long staple cotton"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "blue",
+        "black",
+        "white",
+        "gray",
+        "brown",
+        "purple",
+        "green",
+        "chocolate",
+        "pink",
+        "red",
+        "ivory",
+        "burgundy",
+        "taupe",
+        "beige",
+        "sage",
+        "gold",
+        "yellow"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "reversible",
+        "embroidered",
+        "floral",
+        "zebra print",
+        "stripe",
+        "solid",
+        "single-ply",
+        "luxury",
+        "hotel"
+      ]
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "queen",
+        "king",
+        "twin",
+        "twin xl",
+        "full",
+        "california king",
+        "split king",
+        "daybed"
+      ]
+    },
+    "Thread_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]?tc",
+        "(\\d+)\\s?thread\\s?count"
+      ],
+      "note": "Dominant values: 500tc, 600tc"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?pcs",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Total number of items in the bedding collection"
+    }
+  },
+  "Bedspreads, Coverlets & Sets": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "stylemaster",
+        "madison park",
+        "lamont home",
+        "mk collection",
+        "peking handicraft",
+        "chesapeake merchandising",
+        "everrouge",
+        "mission del rey",
+        "majiija"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "bedspread",
+        "coverlet",
+        "quilt",
+        "blanket",
+        "comforter",
+        "throw",
+        "sham",
+        "sheet",
+        "tapestry",
+        "kantha",
+        "matelasse"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "chenille",
+        "microfiber",
+        "linen",
+        "twill",
+        "ribcord"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "blue",
+        "white",
+        "green",
+        "brown",
+        "black",
+        "beige",
+        "taupe",
+        "red",
+        "purple",
+        "grey",
+        "gray",
+        "ivory",
+        "sage",
+        "burgundy",
+        "navy",
+        "pink",
+        "yellow",
+        "coral"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "reversible",
+        "quilted",
+        "floral",
+        "solid",
+        "embossed",
+        "embroidered",
+        "patchwork",
+        "woven",
+        "oversized",
+        "hand painted",
+        "block print",
+        "mandala",
+        "heirloom",
+        "luxury"
+      ]
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "king",
+        "queen",
+        "full",
+        "twin",
+        "twin xl",
+        "california king",
+        "full queen"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot\\s?x\\s?(\\d+)\\s?quot",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?inch"
+      ],
+      "note": "Dominant values: 108x88, 106x118, 90x90"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Common counts: 2pc, 3pc, 4pc, 5pc, 6pc"
+    }
+  },
+  "Blankets & Throws": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "sunbeam",
+        "pendleton",
+        "solaron",
+        "vellux",
+        "martex",
+        "vera bradley",
+        "ralph lauren",
+        "deny design",
+        "society6",
+        "cafepress",
+        "simply home",
+        "pure country weaver"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "blanket",
+        "throw",
+        "throw blanket",
+        "tapestry throw",
+        "stadium blanket",
+        "travel blanket",
+        "afghan throw",
+        "heated blanket",
+        "electric blanket",
+        "mink blanket",
+        "fleece throw",
+        "fleece blanket"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "fleece",
+        "cotton",
+        "mink",
+        "fur",
+        "sherpa",
+        "faux fur",
+        "wool",
+        "microplush",
+        "microfiber",
+        "velvet",
+        "coral fleece",
+        "polar fleece",
+        "raschel",
+        "micro raschel",
+        "flannel",
+        "knit"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "blue",
+        "white",
+        "black",
+        "brown",
+        "red",
+        "pink",
+        "green",
+        "grey",
+        "gray",
+        "ivory",
+        "coral",
+        "navy",
+        "chocolate",
+        "royal"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "cozy",
+        "electric",
+        "fringe",
+        "heated",
+        "indoor outdoor",
+        "leopard",
+        "lightweight",
+        "luxury",
+        "oversized",
+        "plaid",
+        "plush",
+        "reversible",
+        "soft",
+        "solid",
+        "stripe",
+        "super soft",
+        "ultra soft",
+        "warm",
+        "washable",
+        "woven",
+        "zebra"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?in",
+        "(\\d+)\\s?x\\s?(\\d+)"
+      ]
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "twin",
+        "full",
+        "queen",
+        "king",
+        "stadium"
+      ]
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Standard blankets are usually sold as single pieces unless specified as a set."
+    }
+  },
+  "Comforters & Sets": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "madison park",
+        "kinglinen",
+        "chic home",
+        "chezmoi",
+        "lush decor",
+        "vcny",
+        "ralph lauren",
+        "tommy"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "comforter set",
+        "bed-in-a-bag",
+        "mini set",
+        "duvet cover",
+        "quilt",
+        "bedding set",
+        "comforter"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "microfiber",
+        "suede",
+        "jacquard",
+        "faux silk",
+        "satin",
+        "chenille",
+        "egyptian cotton",
+        "linen"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "blue",
+        "white",
+        "brown",
+        "purple",
+        "grey",
+        "gray",
+        "red",
+        "pink",
+        "beige",
+        "burgundy",
+        "taupe",
+        "navy",
+        "ivory",
+        "sage",
+        "gold",
+        "chocolate",
+        "aqua"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "all season",
+        "alternative",
+        "down alternative",
+        "embroidered",
+        "flocking",
+        "floral",
+        "goose alternative",
+        "hand painted",
+        "hypoallergenic",
+        "lightweight",
+        "luxury",
+        "patchwork",
+        "pinch pleat",
+        "plush",
+        "reversible",
+        "ruffled",
+        "soft",
+        "solid",
+        "stripe",
+        "zebra"
+      ]
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "california king",
+        "king",
+        "queen",
+        "full queen",
+        "full",
+        "twin xl",
+        "twin",
+        "extra long"
+      ]
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?pcs",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Dominant values: 3pc, 4pc, 5pc, 7pc, 8pc, 10pc, 12pc"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "modern",
+        "floral",
+        "geometric",
+        "embroidery"
+      ]
+    }
+  },
+  "Decorative Pillows, Inserts & Covers": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "jinstyles",
+        "safavieh",
+        "society6",
+        "wonder4",
+        "createforlife",
+        "decorbox"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "throw pillow",
+        "pillow cover",
+        "cushion cover",
+        "pillow case",
+        "pillowcase",
+        "pillow sham",
+        "pillow insert",
+        "cushion case",
+        "accent pillow",
+        "pillow shell"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "linen",
+        "polyester",
+        "silk",
+        "canvas",
+        "burlap",
+        "cotton blend"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "blue",
+        "black",
+        "red",
+        "green",
+        "pink",
+        "brown",
+        "yellow",
+        "orange",
+        "gray",
+        "grey",
+        "gold",
+        "beige"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "custom",
+        "decorative",
+        "double sided",
+        "embroidered",
+        "floral",
+        "hand painted",
+        "hidden zipper",
+        "indoor",
+        "one side",
+        "outdoor",
+        "personalized",
+        "printed",
+        "retro",
+        "soft",
+        "solid",
+        "stripe",
+        "two side",
+        "vintage",
+        "washable",
+        "zippered"
+      ]
+    },
+    "Shape_Style": {
+      "type": "dictionary",
+      "values": [
+        "square",
+        "rectangular",
+        "rectangle",
+        "standard",
+        "twin",
+        "queen"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)x(\\d+)cm",
+        "(\\d+)\\s?cm"
+      ],
+      "note": "Common sizes: 18x18, 20x30, 16x16, 45x45cm"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?piece",
+        "pack (?:of )?(\\d+)"
+      ],
+      "note": "Common values: set of 2, set of 4"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "christmas",
+        "halloween",
+        "valentine",
+        "holiday",
+        "love"
+      ]
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "square",
+        "rectangle",
+        "round",
+        "lumbar",
+        "bolster"
+      ]
+    }
+  },
+  "Duvets, Covers & Sets": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "ikea",
+        "deny design",
+        "kess inhouse",
+        "marrikas",
+        "society6",
+        "dolce mela",
+        "royal hotel"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "duvet cover",
+        "duvet set",
+        "bedding set",
+        "comforter",
+        "quilt cover",
+        "sheet set",
+        "pillow sham",
+        "pillowcase",
+        "duvet insert",
+        "flat sheet",
+        "bed bag"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "egyptian cotton",
+        "microfiber",
+        "linen",
+        "sateen",
+        "silk",
+        "flannel",
+        "brushed twill",
+        "goose down"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "blue",
+        "black",
+        "grey",
+        "gray",
+        "red",
+        "green",
+        "pink",
+        "ivory",
+        "navy",
+        "brown",
+        "taupe",
+        "beige",
+        "purple"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "alternative",
+        "breathable",
+        "damask",
+        "floral",
+        "hotel quality",
+        "hypoallergenic",
+        "italian finish",
+        "lightweight",
+        "luxury",
+        "paisley",
+        "printed",
+        "reversible",
+        "single ply",
+        "soft",
+        "solid",
+        "stripe",
+        "striped",
+        "ultra soft",
+        "wrinkle free",
+        "zipper closure"
+      ]
+    },
+    "Thread_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?thread\\s?count",
+        "(\\d+)\\s?tc",
+        "(\\d+)\\s?count"
+      ],
+      "note": "Common values: 300, 600, 800, 1000, 1200, 1500"
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "california king",
+        "king",
+        "queen",
+        "full queen",
+        "full",
+        "twin xl",
+        "twin",
+        "single"
+      ]
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?pcs",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Dominant values: 3pc, 4pc, 7pc"
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)[\\s-]inch",
+        "(\\d+)\\s?quot"
+      ],
+      "note": "Commonly refers to inch measurements like 88x88 or 68x88"
+    }
+  },
+  "Kids' Bedding": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "disney",
+        "marvel",
+        "pixar",
+        "star wars",
+        "sweet jojo designs",
+        "hello kitty",
+        "olive kids",
+        "dora the explorer",
+        "nickelodeon"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "sheet set",
+        "comforter",
+        "blanket",
+        "bedding set",
+        "duvet cover",
+        "throw blanket",
+        "pillowcase",
+        "quilt",
+        "sham",
+        "sleeping bag",
+        "bed in a bag",
+        "fitted sheet",
+        "pillow",
+        "cushion"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "microfiber",
+        "fleece",
+        "plush",
+        "raschel",
+        "flannel",
+        "silk touch"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "pink",
+        "blue",
+        "white",
+        "purple",
+        "green",
+        "black",
+        "red",
+        "multi color"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "cozy",
+        "decorative",
+        "fade resistant",
+        "floral",
+        "hand painted",
+        "mermaid tail",
+        "polka dot",
+        "reversible",
+        "soft",
+        "standard",
+        "super soft",
+        "washable"
+      ]
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "twin",
+        "twin xl",
+        "full",
+        "queen",
+        "king",
+        "toddler"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?x\\s?(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\""
+      ],
+      "note": "Common sizes include 46x60, 50x60, 62x90"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Commonly 3pc, 4pc, 5pc, or 8pc sets"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "princess",
+        "frozen",
+        "disney",
+        "cartoon",
+        "cars",
+        "minnie"
+      ]
+    }
+  },
+  "Mattress Pads & Protectors": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "cloud9",
+        "sunbeam",
+        "beautyrest",
+        "luna",
+        "allerzip",
+        "snugsoft"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "mattress pad",
+        "mattress protector",
+        "mattress cover",
+        "mattress topper",
+        "mattress encasement",
+        "box spring encasement",
+        "mattress bag",
+        "shikibuton"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "memory foam",
+        "cotton",
+        "vinyl",
+        "visco elastic",
+        "bamboo",
+        "wool",
+        "terry",
+        "gel",
+        "fabric"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "bed bug proof",
+        "breathable",
+        "cooling",
+        "deep pocket",
+        "dust mite allergen proof",
+        "electric",
+        "fitted",
+        "heated",
+        "hypoallergenic",
+        "quilted",
+        "waterproof",
+        "zippered"
+      ]
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "twin",
+        "twin xl",
+        "full",
+        "queen",
+        "king",
+        "california king"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]inch",
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?thread\\s?count"
+      ],
+      "note": "Captures thickness (e.g., 2 inch), dimensions (e.g., 60x80), and thread count"
+    }
+  },
+  "Mattress Toppers": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "serta",
+        "beautyrest",
+        "isocore",
+        "sleep innovations",
+        "slumber solutions",
+        "dreamfoam bedding",
+        "sleepbetter",
+        "dreamdna"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "mattress topper",
+        "mattress pad",
+        "featherbed",
+        "fiberbed",
+        "overlay",
+        "contour pillow"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "memory foam",
+        "gel memory foam",
+        "visco elastic",
+        "latex",
+        "natural latex",
+        "talalay latex",
+        "feather",
+        "goose down",
+        "cotton",
+        "wool",
+        "fiber",
+        "polyester alternative"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "blue",
+        "ivory"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "baffled box",
+        "breathable",
+        "cooling",
+        "gel infused",
+        "high density",
+        "hypoallergenic",
+        "memory foam",
+        "plush",
+        "pressure point relief",
+        "reversible",
+        "sculpted",
+        "ventilated",
+        "waterproof",
+        "zippered cover"
+      ]
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "twin",
+        "twin xl",
+        "full",
+        "queen",
+        "king",
+        "california king"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)\\s?inch",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?in",
+        "(\\d+(?:\\.\\d+)?)\"",
+        "(\\d+)\\s?x\\s?(\\d+)"
+      ],
+      "note": "Dominant values: 2 inch, 3 inch, 4 inch"
+    },
+    "Density_Weight": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)[\\s-]?pound",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?lb"
+      ],
+      "note": "Refers to foam density (e.g., 4 pound density)"
+    }
+  },
+  "Quilts & Sets": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "greenland home",
+        "laura ashley",
+        "tommy bahama",
+        "vhc brand",
+        "lush decor",
+        "avondale manor",
+        "dada bedding",
+        "pegasus home fashion",
+        "pem america",
+        "american hometex",
+        "bedsure",
+        "levtex"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "quilt",
+        "bedspread",
+        "coverlet",
+        "blanket",
+        "sham",
+        "pillow sham",
+        "throw",
+        "quilted throw",
+        "comforter"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "microfiber",
+        "textile"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "blue",
+        "white",
+        "green",
+        "red",
+        "pink",
+        "black",
+        "purple",
+        "grey",
+        "brown",
+        "multicolor",
+        "beige",
+        "gray",
+        "ivory",
+        "navy",
+        "coral",
+        "yellow"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "ajrakh",
+        "block print",
+        "bohemian",
+        "embroidered",
+        "floral",
+        "handmade",
+        "hypoallergenic",
+        "kantha",
+        "lightweight",
+        "paisley",
+        "patchwork",
+        "printed",
+        "ralli",
+        "reversible",
+        "soft",
+        "solid",
+        "tribal",
+        "vermicelli-quilted",
+        "vintage",
+        "washable"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?x\\s?(\\d+)"
+      ]
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "twin",
+        "full",
+        "queen",
+        "king",
+        "california king"
+      ]
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?sham"
+      ],
+      "note": "Standard set sizes are 2-piece and 3-piece."
+    }
+  },
+  "Sheets & Pillowcases": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "ralph lauren",
+        "clara clark",
+        "marrikas",
+        "oosilk"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "bed sheet",
+        "fitted sheet",
+        "flat sheet",
+        "pillowcase",
+        "pillow cover",
+        "sham",
+        "euro sham",
+        "pillow protector",
+        "waterbed sheet"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "egyptian cotton",
+        "microfiber",
+        "sateen",
+        "flannel",
+        "bamboo",
+        "rayon",
+        "silk",
+        "mulberry silk",
+        "linen",
+        "damask"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "blue",
+        "ivory",
+        "black",
+        "sage",
+        "navy",
+        "taupe",
+        "grey",
+        "gray",
+        "green",
+        "burgundy",
+        "pink",
+        "chocolate",
+        "red",
+        "light blue",
+        "navy blue"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "attached",
+        "brushed",
+        "brushed microfiber",
+        "deep pocket",
+        "extra deep",
+        "fade resistant",
+        "hotel quality",
+        "hypoallergenic",
+        "luxury",
+        "silky",
+        "single-ply",
+        "soft",
+        "solid",
+        "striped",
+        "super soft",
+        "ultra soft",
+        "unattached",
+        "wrinkle free",
+        "wrinkle resistant"
+      ]
+    },
+    "Thread_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?thread\\s?count",
+        "(\\d+)\\s?tc",
+        "(\\d+)\\s?series"
+      ],
+      "note": "Dominant values: 300, 400, 600, 800, 1000, 1200, 1500, 1800"
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "king",
+        "queen",
+        "twin",
+        "twin xl",
+        "full",
+        "california king",
+        "standard",
+        "euro"
+      ]
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?pillow\\s?case"
+      ],
+      "note": "Total count of items in the sheet or bedding set"
+    },
+    "Pocket_Depth": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?inch(?:\\sdeep)?",
+        "(\\d+)\"\\s?deep",
+        "deep\\s?pocket\\s?(\\d+)"
+      ],
+      "note": "Measurement of fitted sheet corner depth"
+    }
+  },
+  "Paintings": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "overstockart",
+        "wieco art",
+        "noah art",
+        "artwall",
+        "artland",
+        "muzagroo",
+        "ode-rin"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "oil painting",
+        "canvas print",
+        "wall art",
+        "artwork",
+        "poster",
+        "reproduction",
+        "landscape painting",
+        "abstract painting",
+        "picture"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "canvas",
+        "wood",
+        "acrylic",
+        "oil"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "red",
+        "white",
+        "gold",
+        "black",
+        "blue",
+        "colorful",
+        "multicolor"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "3 panel",
+        "5 panel",
+        "abstract",
+        "contemporary",
+        "floral",
+        "framed",
+        "gallery wrapped",
+        "hand-painted",
+        "handmade",
+        "large",
+        "modern",
+        "ready to hang",
+        "stretched",
+        "unframed",
+        "unstretched"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?cm",
+        "(\\d+)\\s?[xX]\\s?(\\d+)"
+      ],
+      "note": "Common sizes include 24 inch, 24x24, and 12 inch"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?panel",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Dominant values: 3 piece, 5 piece, 4 piece"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "modern",
+        "abstract",
+        "landscape",
+        "floral"
+      ]
+    }
+  },
+  "Photographs": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "historicalfindings",
+        "wwe"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "photo",
+        "photograph",
+        "print",
+        "portrait",
+        "picture",
+        "image",
+        "collage",
+        "art print",
+        "press kit",
+        "backdrop",
+        "poem",
+        "quote",
+        "prayer"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "silver halide",
+        "paper",
+        "canvas",
+        "muslin",
+        "cloth",
+        "titanium cloth"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "color",
+        "black",
+        "white",
+        "silver",
+        "b&w",
+        "multicolor"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "autograph",
+        "black and white",
+        "digital",
+        "double matted",
+        "framed",
+        "glossy",
+        "landscape",
+        "matte finish",
+        "matted",
+        "nature",
+        "personalized",
+        "rare",
+        "ready to frame",
+        "signed",
+        "vintage"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)\\s?x\\s?(\\d+(?:\\.\\d+)?)",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?inch",
+        "(\\d+(?:\\.\\d+)?)\\s?ft",
+        "(\\d+)x(\\d+)"
+      ],
+      "note": "Common sizes: 8x10, 11x14, 16x20, 5x6 ft"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc"
+      ],
+      "note": "Captures quantity of photographs or items in a collection"
+    }
+  },
+  "Posters & Prints": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "pyramid america",
+        "icanvasart",
+        "poster stop online",
+        "cgc"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "art print",
+        "movie poster",
+        "canvas print",
+        "wall scroll",
+        "tin sign",
+        "painting",
+        "photo poster",
+        "travel poster",
+        "music poster",
+        "vintage poster",
+        "motivational poster",
+        "mini poster",
+        "map",
+        "artwork"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "canvas",
+        "fabric",
+        "silk",
+        "cloth",
+        "paper",
+        "wood",
+        "metal",
+        "tin"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "blue",
+        "red",
+        "multicolor"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "framed",
+        "gallery wrapped",
+        "giclee",
+        "hand painted",
+        "modern",
+        "original",
+        "premium",
+        "ready to frame",
+        "ready to hang",
+        "reproduction",
+        "retro",
+        "stretched",
+        "thick-wrap",
+        "unframed",
+        "vintage"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?cm",
+        "(\\d+)x(\\d+)",
+        "(\\d+)\\s?in"
+      ],
+      "note": "Common sizes include 24x36, 11x17, 8x10, 27x40"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?panel"
+      ],
+      "note": "Captures total number of units or panels in an art set"
+    },
+    "Theme": {
+      "type": "dictionary",
+      "values": [
+        "anime",
+        "vintage",
+        "retro",
+        "movie",
+        "music"
+      ]
+    }
+  },
+  "Accent Furniture": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "baxton studio",
+        "legacy decor",
+        "safavieh",
+        "ore international",
+        "deco 79",
+        "jennifer taylor",
+        "ashley furniture",
+        "vintiquewise",
+        "surya",
+        "heather ann creation"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "storage ottoman",
+        "room divider",
+        "storage cabinet",
+        "shoji screen",
+        "ottoman bench",
+        "curio cabinet",
+        "pouf",
+        "storage chest",
+        "storage trunk",
+        "footstool",
+        "accent table",
+        "coffee table",
+        "display cabinet",
+        "wall cabinet",
+        "cocktail ottoman",
+        "cube ottoman",
+        "privacy screen",
+        "folding screen"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "leather",
+        "faux leather",
+        "wood",
+        "canvas",
+        "bamboo",
+        "linen",
+        "glass",
+        "bonded leather",
+        "solid wood",
+        "fabric"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "brown",
+        "white",
+        "dark brown",
+        "espresso",
+        "cherry",
+        "natural",
+        "red",
+        "blue",
+        "beige",
+        "grey",
+        "ivory"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "antique",
+        "button tufted",
+        "contemporary",
+        "double sided",
+        "farmhouse",
+        "folding",
+        "handmade",
+        "industrial",
+        "lift top",
+        "modern",
+        "oriental style",
+        "round",
+        "rustic",
+        "square",
+        "storage",
+        "stuffed",
+        "tufted",
+        "unstuffed",
+        "upholstered",
+        "vintage"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?ft",
+        "(\\d+)\\s?feet",
+        "(\\d+)\\s?w\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)"
+      ],
+      "note": "Captures inches (quot), feet, and multi-dimensional layout strings"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]panel",
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?piece"
+      ],
+      "note": "In this category, panel count is the primary indicator of size for dividers"
+    }
+  },
+  "Bathroom Furniture": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "zenna home",
+        "zenith",
+        "silkroad exclusive",
+        "sauder",
+        "manhattan comfort",
+        "crosley",
+        "4d concept",
+        "decenthome",
+        "king brand",
+        "zpc"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "cabinet",
+        "vanity",
+        "shelf",
+        "etagere",
+        "storage tower",
+        "storage unit",
+        "organizer rack",
+        "medicine cabinet",
+        "wall cabinet",
+        "spacesaver",
+        "sink",
+        "hamper",
+        "accent table"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "wood",
+        "metal",
+        "bamboo",
+        "travertine",
+        "marble",
+        "glass",
+        "linen"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "espresso",
+        "cherry",
+        "black",
+        "bronze",
+        "chrome",
+        "cinnamon",
+        "cream",
+        "antique",
+        "dark"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "anti-rust",
+        "contemporary",
+        "double door",
+        "double sink",
+        "freestanding",
+        "hand painted",
+        "led lighted",
+        "mirrored",
+        "modern",
+        "oil rubbed",
+        "rustic",
+        "soft",
+        "space saver",
+        "vintage"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)[\\s-]inch",
+        "(\\d+(?:\\.\\d+)?)\\s?quot",
+        "(\\d+(?:\\.\\d+)?)\\s?h",
+        "(\\d+(?:\\.\\d+)?)\\s?w",
+        "(\\d+(?:\\.\\d+)?)\\s?l",
+        "(\\d+(?:\\.\\d+)?)\\s?x\\s?(\\d+(?:\\.\\d+)?)"
+      ],
+      "note": "Captures height, width, and depth in inches or quotients"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]piece",
+        "(\\d+)[\\s-]pc",
+        "(\\d+)[\\s-]shelf",
+        "(\\d+)[\\s-]tier",
+        "(\\d+)[\\s-]door"
+      ],
+      "note": "Commonly refers to shelf counts, tiers, or door configurations"
+    }
+  },
+  "Bedroom Furniture": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "south shore",
+        "coaster",
+        "hillsdale",
+        "baxton studio",
+        "ashley",
+        "signature design",
+        "hillsdale furniture",
+        "atlantic furniture",
+        "roundhill furniture",
+        "bedz king",
+        "discovery world",
+        "serta",
+        "simmons",
+        "sealy",
+        "serta perfect sleeper",
+        "beautyrest"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "bed",
+        "mattress",
+        "headboard",
+        "dresser",
+        "nightstand",
+        "chest",
+        "vanity",
+        "bunk bed",
+        "platform bed",
+        "daybed",
+        "trundle",
+        "loft bed",
+        "sleigh bed",
+        "panel bed",
+        "storage bed",
+        "bed frame",
+        "box spring",
+        "foundation",
+        "mirror",
+        "stool"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "memory foam",
+        "metal",
+        "wood",
+        "solid wood",
+        "leather",
+        "faux leather",
+        "fabric",
+        "linen",
+        "gel memory foam",
+        "visco elastic",
+        "upholstered"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "black",
+        "brown",
+        "cherry",
+        "espresso",
+        "dark brown",
+        "oak",
+        "walnut",
+        "grey",
+        "natural"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "adjustable",
+        "antique",
+        "certipur us certified",
+        "contemporary",
+        "double",
+        "euro top",
+        "firm",
+        "luxury firm",
+        "mission",
+        "modern",
+        "no assembly required",
+        "pillow top",
+        "plush",
+        "rustic",
+        "slat",
+        "stairway",
+        "storage",
+        "tufted",
+        "upholstered",
+        "vintage"
+      ]
+    },
+    "Size": {
+      "type": "dictionary",
+      "values": [
+        "twin",
+        "twin xl",
+        "full",
+        "queen",
+        "king",
+        "california king",
+        "eastern king",
+        "cal king"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?w\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?x\\s?(\\d+)"
+      ],
+      "note": "Common values include 8 inch, 10 inch, 12 inch mattress heights"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?drawer",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Captures both total set pieces and specific drawer counts for storage items"
+    }
+  },
+  "Entryway Furniture": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "baxton studio",
+        "safavieh",
+        "monarch specialty",
+        "linon",
+        "homepop",
+        "frenchi home",
+        "simpli home",
+        "convenience concepts",
+        "deco 79",
+        "safco"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "storage bench",
+        "coat rack",
+        "hall tree",
+        "shoe rack",
+        "shoe bench",
+        "hat rack",
+        "umbrella stand",
+        "storage ottoman",
+        "shoe cabinet",
+        "garment rack",
+        "costumer",
+        "entryway bench",
+        "wall mounted coat rack",
+        "scarf rack",
+        "bench"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "wood",
+        "metal",
+        "solid wood",
+        "faux leather",
+        "leather",
+        "fabric",
+        "linen",
+        "steel",
+        "stainless steel",
+        "chrome",
+        "bamboo",
+        "marble"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "brown",
+        "espresso",
+        "walnut",
+        "cherry",
+        "oak",
+        "grey",
+        "gray",
+        "beige",
+        "silver",
+        "red",
+        "natural",
+        "dark brown"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "button tufted",
+        "farmhouse",
+        "folding",
+        "hinged lid",
+        "industrial",
+        "lift top",
+        "modern",
+        "nailhead trim",
+        "rustic",
+        "tufted",
+        "upholstered",
+        "wall mounted",
+        "with cushion",
+        "with drawers",
+        "with hooks",
+        "with mirror"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?w\\s?x\\s?(\\d+)\\s?h",
+        "(\\d+)\\s?x\\s?(\\d+)\\s?quot"
+      ],
+      "note": "Common dimensions found in entryway units for width, height, and depth"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?tier",
+        "(\\d+)\\s?hook",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Tiers and hooks are primary capacity indicators for entryway racks and trees"
+    }
+  },
+  "Game & Recreation Room Furniture": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "flash furniture",
+        "baxton studio",
+        "american heritage",
+        "winsome wood",
+        "holland bar stool",
+        "telescope casual",
+        "hillsdale",
+        "safavieh",
+        "armen living",
+        "national public seating"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "bar stool",
+        "counter stool",
+        "barstool",
+        "bean bag chair",
+        "folding chair",
+        "gaming chair",
+        "director chair",
+        "pub table",
+        "bar table",
+        "folding table",
+        "wine cabinet",
+        "serving cart",
+        "office chair",
+        "ottoman",
+        "tray table",
+        "banquet table"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "wood",
+        "metal",
+        "leather",
+        "faux leather",
+        "vinyl",
+        "pu leather",
+        "steel",
+        "stainless steel",
+        "chrome",
+        "fabric",
+        "plastic"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "brown",
+        "dark brown",
+        "espresso",
+        "cherry",
+        "walnut",
+        "oak",
+        "gray",
+        "grey",
+        "red",
+        "blue",
+        "green",
+        "natural"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "adjustable height",
+        "backless",
+        "contemporary",
+        "ergonomic",
+        "folding",
+        "gas lift",
+        "hydraulic lift",
+        "industrial",
+        "modern",
+        "padded",
+        "portable",
+        "stackable",
+        "swivel",
+        "upholstered",
+        "vintage"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?in",
+        "(\\d+)\\s?h",
+        "(\\d+)\\s?w\\s?x\\s?(\\d+)"
+      ],
+      "note": "Common values include 24-inch, 26-inch, 29-inch, and 30-inch heights"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:for )?(\\d+)",
+        "set (?:two|four)"
+      ],
+      "note": "Commonly sold in sets of 2 or 4"
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "round",
+        "square",
+        "rectangle"
+      ]
+    }
+  },
+  "Home Office Furniture": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "flash furniture",
+        "bush business furniture",
+        "sauder",
+        "hon",
+        "herman miller",
+        "safco",
+        "south shore",
+        "baxton studio",
+        "monarch specialties",
+        "kathy ireland",
+        "bestar",
+        "coaster"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "computer desk",
+        "office chair",
+        "task chair",
+        "bookcase",
+        "writing desk",
+        "executive chair",
+        "file cabinet",
+        "swivel chair",
+        "corner desk",
+        "bookshelf",
+        "hutch",
+        "workstation",
+        "lateral file",
+        "manager chair",
+        "secretary desk",
+        "pedestal desk",
+        "l shaped desk",
+        "credenza"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "leather",
+        "mesh",
+        "wood",
+        "metal",
+        "fabric",
+        "glass",
+        "pu leather",
+        "faux leather",
+        "chrome",
+        "oak",
+        "cherry",
+        "walnut",
+        "mahogany"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "espresso",
+        "brown",
+        "cherry",
+        "oak",
+        "walnut",
+        "gray",
+        "grey",
+        "blue",
+        "silver",
+        "natural",
+        "dark brown",
+        "mahogany"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "adjustable",
+        "contemporary",
+        "ergonomic",
+        "fully assembled",
+        "high-back",
+        "keyboard tray",
+        "l-shaped",
+        "lumbar support",
+        "mid-back",
+        "mobile",
+        "modern",
+        "open shelf",
+        "pedestal",
+        "swivel",
+        "synchro tilt",
+        "tilt"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?in",
+        "(\\d+)\\s?w\\s?x\\s?(\\d+)\\s?h",
+        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)"
+      ],
+      "note": "Common values include 36, 48, 72 inches"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?shelf",
+        "(\\d+)\\s?drawer",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Common counts: 2-drawer, 3-shelf, 5-shelf"
+    }
+  },
+  "Kids' Furniture": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "disney",
+        "kidkraft",
+        "guidecraft",
+        "delta",
+        "flash furniture",
+        "south shore",
+        "newco",
+        "mickey mouse",
+        "hello kitty",
+        "teamson kids",
+        "lipper international",
+        "step2",
+        "little tikes",
+        "ace baby",
+        "american furniture alliance"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "chair",
+        "table",
+        "stool",
+        "step stool",
+        "bean bag chair",
+        "bed",
+        "toddler bed",
+        "bunk bed",
+        "twin bed",
+        "desk",
+        "sofa",
+        "recliner",
+        "rocking chair",
+        "toy box",
+        "toy organizer",
+        "bookcase",
+        "storage bin",
+        "storage unit",
+        "shelf",
+        "ottoman",
+        "bench",
+        "activity table",
+        "saucer chair",
+        "chest",
+        "headboard",
+        "nightstand"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "wood",
+        "wooden",
+        "plastic",
+        "fabric",
+        "upholstered",
+        "metal",
+        "vinyl",
+        "foam"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "pink",
+        "blue",
+        "black",
+        "red",
+        "green",
+        "espresso",
+        "natural",
+        "brown",
+        "purple",
+        "grey",
+        "multicolor"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "adjustable",
+        "collapsible",
+        "colorful",
+        "cup holder",
+        "flip open",
+        "folding",
+        "hand painted",
+        "high back",
+        "inflatable",
+        "lead free",
+        "modern",
+        "non-toxic",
+        "personalized",
+        "safe",
+        "storage",
+        "sturdy",
+        "washable cover",
+        "water resistant"
+      ]
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]ounce",
+        "(\\d+)\\s?oz",
+        "(\\d+)\\s?lb",
+        "(\\d+)\\s?pound"
+      ],
+      "note": "Commonly refers to weight capacity in kids furniture or fill volume for bean bags"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)",
+        "(\\d+)[\\s-]piece set"
+      ],
+      "note": "Common counts: 2 piece, 3 piece, 5 piece sets"
+    }
+  },
+  "Kitchen & Dining Room Furniture": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "east west",
+        "baxton studio",
+        "signature design",
+        "ashley furniture",
+        "coaster home",
+        "safavieh",
+        "modway",
+        "acme",
+        "steve silver",
+        "target marketing system",
+        "international concept",
+        "flash furniture"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "dining chair",
+        "dining table",
+        "side chair",
+        "arm chair",
+        "parson chair",
+        "buffet",
+        "kitchen cart",
+        "bench",
+        "stool",
+        "dinette",
+        "kitchen island",
+        "sideboard",
+        "baker rack",
+        "server",
+        "accent chair"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "solid wood",
+        "metal",
+        "leather",
+        "faux leather",
+        "fabric",
+        "glass",
+        "marble",
+        "faux marble",
+        "chrome",
+        "steel",
+        "stainless steel",
+        "plastic"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "white",
+        "brown",
+        "dark brown",
+        "cherry",
+        "oak",
+        "espresso",
+        "walnut",
+        "cappuccino",
+        "grey",
+        "beige",
+        "silver",
+        "red",
+        "natural",
+        "clear"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "antique",
+        "contemporary",
+        "counter height",
+        "drop leaf",
+        "farmhouse",
+        "glass top",
+        "hand painted",
+        "industrial",
+        "marble top",
+        "mid century modern",
+        "modern",
+        "pedestal",
+        "rustic",
+        "storage",
+        "upholstered"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?in",
+        "(\\d+)\\\"\\s?[wxhl]",
+        "(\\d+)\\s?x\\s?(\\d+)"
+      ],
+      "note": "Common heights include 30 inch (standard) and 36 inch (counter height)"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?chair"
+      ],
+      "note": "Common counts: 2 piece (chairs), 3 piece (bistro), 5 piece (standard set), 7 piece (large set)"
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "round",
+        "square",
+        "rectangle",
+        "oval"
+      ]
+    }
+  },
+  "Living Room Furniture": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "ashley",
+        "safavieh",
+        "baxton studio",
+        "coaster",
+        "monarch specialty",
+        "flash furniture",
+        "convenience concepts",
+        "steve silver",
+        "southern enterprises",
+        "design toscano",
+        "sanus",
+        "omnimount"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "tv stand",
+        "end table",
+        "coffee table",
+        "console table",
+        "accent chair",
+        "side table",
+        "sectional sofa",
+        "sofa table",
+        "cocktail table",
+        "club chair",
+        "futon",
+        "tv console",
+        "arm chair",
+        "speaker stand",
+        "sofa bed",
+        "entertainment center",
+        "rocker recliner",
+        "nesting table",
+        "lounge chair",
+        "chaise lounge",
+        "sofa sleeper",
+        "ottoman",
+        "loveseat",
+        "recliner",
+        "tv cart"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "leather",
+        "wood",
+        "glass",
+        "fabric",
+        "metal",
+        "microfiber",
+        "bonded leather",
+        "faux leather",
+        "upholstered",
+        "linen",
+        "tempered glass",
+        "solid wood",
+        "faux marble"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "brown",
+        "white",
+        "dark brown",
+        "cherry",
+        "oak",
+        "espresso",
+        "walnut",
+        "grey",
+        "red",
+        "silver",
+        "chocolate",
+        "blue",
+        "gray",
+        "natural",
+        "ivory"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "accent",
+        "antique",
+        "contemporary",
+        "corner",
+        "drawer",
+        "flat panel",
+        "foldable",
+        "mid century",
+        "mid-century modern",
+        "modern",
+        "power lift",
+        "reclining",
+        "reversible",
+        "round",
+        "rustic",
+        "solid",
+        "storage",
+        "swivel",
+        "tufted",
+        "vintage"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]inch",
+        "(\\d+)[\\s-]quot",
+        "(\\d+)\\s?in",
+        "(\\d+)\\s?w\\s?x\\s?(\\d+)\\s?h",
+        "(\\d+)\\s?l\\s?x\\s?(\\d+)\\s?w"
+      ],
+      "note": "Common screen sizes: 50, 60; common table heights/widths in inches"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]piece",
+        "(\\d+)[\\s-]pc",
+        "set (?:of )?(\\d+)",
+        "pair (?:of )?(\\d+)?"
+      ],
+      "note": "Captures multi-item sets like 3-piece table sets or pairs of speaker stands"
+    }
+  },
+  "Replacement Parts": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "okin",
+        "limoss",
+        "ashley",
+        "profurnitureparts",
+        "bingltd",
+        "xiong chao",
+        "fab glass"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "table top",
+        "sofa leg",
+        "recliner handle",
+        "release handle",
+        "recliner cable",
+        "power supply",
+        "transformer",
+        "hand control",
+        "foam cushion",
+        "bed frame glide",
+        "furniture connector",
+        "bracket",
+        "motor",
+        "lever",
+        "spring",
+        "swivel plate",
+        "upholstery foam"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "tempered glass",
+        "hardwood",
+        "wood",
+        "metal",
+        "plastic",
+        "foam",
+        "stainless steel"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "black",
+        "clear",
+        "walnut",
+        "mahogany",
+        "dark walnut",
+        "polished"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "beveled edge",
+        "flat polished edge",
+        "pencil edge",
+        "tapered",
+        "square tapered",
+        "electric",
+        "power",
+        "universal",
+        "exposed",
+        "flapper style",
+        "medium firm"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)[\\s-]?inch",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?quot",
+        "(\\d+(?:\\.\\d+)?)\\s?w\\s?x\\s?(\\d+(?:\\.\\d+)?)",
+        "(\\d+(?:\\.\\d+)?)\\s?mm"
+      ],
+      "note": "Common sizes include 24 quot, 36 quot, 42 quot, and thickness measurements like 1/2 quot or 3/8 quot"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "(\\d+)\\s?pack"
+      ],
+      "note": "Dominant values: Set of 2, Set of 4"
+    }
+  },
+  "Bath Rugs": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "castle hill",
+        "caroline treasure",
+        "luxbon",
+        "mohawk",
+        "kess inhouse",
+        "creative bath",
+        "drhob",
+        "saffron fabs"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "bath mat",
+        "bath rug",
+        "contour rug",
+        "toilet lid cover",
+        "area rug",
+        "floor mat",
+        "carpet",
+        "runner"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "memory foam",
+        "cotton",
+        "microfiber",
+        "chenille",
+        "latex",
+        "rubber",
+        "woven"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "blue",
+        "white",
+        "multicolor",
+        "black",
+        "green",
+        "brown",
+        "pink",
+        "gray",
+        "grey",
+        "purple",
+        "red",
+        "sage",
+        "beige",
+        "ivory"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "absorbent",
+        "double sided",
+        "flexible",
+        "machine washable",
+        "non-skid",
+        "non-slip",
+        "plush",
+        "quick dry",
+        "reversible",
+        "shaggy",
+        "smooth",
+        "soft",
+        "spray latex backing",
+        "tufted"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot\\s?x\\s?(\\d+)\\s?quot",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?quot"
+      ],
+      "note": "Common sizes include 17x24, 20x30, 21x34, and 24x40 inches"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Standard sets typically range from 2 to 3 pieces"
+    },
+    "Shape": {
+      "type": "dictionary",
+      "values": [
+        "round",
+        "rectangle",
+        "contour",
+        "oval"
+      ]
+    }
+  },
+  "Bathroom Accessories": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "cafepress",
+        "interdesign",
+        "ambesonne",
+        "carnation"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "shower curtain",
+        "soap dish",
+        "soap dispenser",
+        "toothbrush holder",
+        "tissue box cover",
+        "shower caddy",
+        "bath mat",
+        "toilet brush",
+        "lotion dispenser",
+        "medicine cabinet",
+        "curtain liner",
+        "curtain hook",
+        "curtain ring",
+        "curtain rod",
+        "towel rack",
+        "cosmetic organizer",
+        "toilet seat",
+        "canister",
+        "cup"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "polyester",
+        "fabric",
+        "stainless steel",
+        "chrome",
+        "acrylic",
+        "plastic",
+        "metal",
+        "bronze",
+        "peva",
+        "vinyl",
+        "brass"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "blue",
+        "black",
+        "clear",
+        "green",
+        "red",
+        "pink",
+        "brown",
+        "bronze"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "automatic",
+        "custom",
+        "decorative",
+        "hand painted",
+        "heavy duty",
+        "mildew resistant",
+        "modern",
+        "oil rubbed",
+        "polished",
+        "rustic",
+        "suction cup",
+        "tension",
+        "vintage",
+        "wall mounted",
+        "waterproof"
+      ]
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]ounce",
+        "(\\d+)\\s?oz",
+        "(\\d+)\\s?ml"
+      ],
+      "note": "Standard dispenser capacities usually range from 8oz to 16oz"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)"
+      ],
+      "note": "Commonly seen as 4 piece bathroom sets or set of 12 hooks"
+    }
+  },
+  "Towels": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "disney",
+        "avanti",
+        "kay dee",
+        "cafepress",
+        "caspari",
+        "cacala",
+        "kaufman",
+        "linenme",
+        "society6"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "bath towel",
+        "beach towel",
+        "hand towel",
+        "washcloth",
+        "wash cloth",
+        "bath sheet",
+        "fingertip towel",
+        "guest towel",
+        "kitchen towel",
+        "tea towel",
+        "flour sack towel",
+        "hooded towel",
+        "pool towel",
+        "gym towel",
+        "yoga towel",
+        "pestemal",
+        "peshtemal",
+        "fouta",
+        "wrap",
+        "blanket"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "egyptian cotton",
+        "turkish cotton",
+        "ringspun cotton",
+        "combed cotton",
+        "microfiber",
+        "bamboo",
+        "linen",
+        "terry",
+        "velour",
+        "jacquard"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "white",
+        "blue",
+        "black",
+        "pink",
+        "green",
+        "red",
+        "grey",
+        "brown",
+        "yellow",
+        "navy",
+        "purple",
+        "ivory"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "absorbent",
+        "embroidered",
+        "fiber reactive",
+        "hand painted",
+        "hotel quality",
+        "luxury",
+        "oversized",
+        "plush",
+        "printed",
+        "quick dry",
+        "round",
+        "soft",
+        "stripe",
+        "two tone"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?quot",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)x(\\d+)"
+      ],
+      "note": "Common dimensions: 30x60, 28x58, 27x52"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?pack",
+        "(\\d+)\\s?pk"
+      ],
+      "note": "Captures total number of items in the towel set or pack"
+    }
+  },
+  "Kids' Bath": {
+    "Brand": {
+      "type": "dictionary",
+      "values": [
+        "disney",
+        "marvel",
+        "nickelodeon",
+        "minnie mouse",
+        "mickey mouse",
+        "hello kitty",
+        "frozen",
+        "star wars",
+        "paw patrol",
+        "minions",
+        "jojo designs"
+      ]
+    },
+    "Product_Type": {
+      "type": "dictionary",
+      "values": [
+        "shower curtain",
+        "hooded towel",
+        "bath towel",
+        "beach towel",
+        "bath mat",
+        "toothbrush holder",
+        "toothpaste dispenser",
+        "curtain hook",
+        "towel wrap",
+        "poncho",
+        "washcloth",
+        "bath rug",
+        "bath toy organizer",
+        "soap dispenser",
+        "rinse cup",
+        "tissue box cover"
+      ]
+    },
+    "Material": {
+      "type": "dictionary",
+      "values": [
+        "cotton",
+        "polyester",
+        "fabric",
+        "memory foam",
+        "resin"
+      ]
+    },
+    "Color": {
+      "type": "dictionary",
+      "values": [
+        "blue",
+        "white",
+        "pink",
+        "red",
+        "green",
+        "colorful",
+        "multicolor"
+      ]
+    },
+    "Features": {
+      "type": "dictionary",
+      "values": [
+        "waterproof",
+        "non-slip",
+        "hooded",
+        "suction cup",
+        "machine washable",
+        "automatic",
+        "double sized",
+        "hand painted",
+        "anti-slip"
+      ]
+    },
+    "Capacity_Volume": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)[\\s-]ounce",
+        "(\\d+)\\s?oz",
+        "(\\d+)\\s?ml"
+      ],
+      "note": "Standard volume patterns for liquid bath products"
+    },
+    "Piece_Count": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pc",
+        "set (?:of )?(\\d+)",
+        "(\\d+)[\\s-]pack"
+      ],
+      "note": "Commonly found in towel sets and curtain hook packs"
     }
   }
 }
