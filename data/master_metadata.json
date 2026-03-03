@@ -15,7 +15,21 @@
         "ck product",
         "villeroy & boch",
         "coppergifts",
-        "first impression"
+        "first impression",
+        "ateco",
+        "meri meri",
+        "matfer bourgeat",
+        "pampered chef",
+        "chicago metallic",
+        "american metalcraft",
+        "kaiser bakeware",
+        "fmm sugarcraft",
+        "update international",
+        "pme",
+        "oxo",
+        "spinningleaf",
+        "marvelous mold",
+        "pyrex"
       ]
     },
     "Product_Type": {
@@ -47,7 +61,44 @@
         "ramekin",
         "piping tip",
         "pastry bag",
-        "stencil"
+        "stencil",
+        "mixing bowl",
+        "batter bowl",
+        "cookie press",
+        "culinary torch",
+        "butane torch",
+        "blow torch",
+        "cooking torch",
+        "chef torch",
+        "cake pop mold",
+        "plunger cutter",
+        "patchwork cutter",
+        "crust cutter",
+        "fry cutter",
+        "flour sifter",
+        "pastry brush",
+        "cooling rack",
+        "baking sheet",
+        "cookie sheet",
+        "pie pan",
+        "pie dish",
+        "pizza stone",
+        "cupcake pan",
+        "cupcake liner",
+        "cupcake box",
+        "egg decorating kit",
+        "decorating kit",
+        "decorating tool",
+        "icing piping bag",
+        "piping bag nozzle",
+        "pastry tube",
+        "cake tester",
+        "cotton candy machine",
+        "butter dish",
+        "biscuit cutter",
+        "dough cutter",
+        "sandwich cookie mold",
+        "lollipop mold"
       ]
     },
     "Material": {
@@ -72,7 +123,9 @@
         "glass",
         "ceramic",
         "porcelain",
-        "borosilicate"
+        "borosilicate",
+        "stone",
+        "cotton"
       ]
     },
     "Color": {
@@ -82,7 +135,11 @@
         "black",
         "red",
         "blue",
-        "pink"
+        "pink",
+        "green",
+        "silver",
+        "brown",
+        "clear"
       ]
     },
     "Shape": {
@@ -95,7 +152,11 @@
         "dress",
         "mini",
         "large",
-        "small"
+        "small",
+        "rectangular",
+        "star",
+        "leaf",
+        "ring"
       ]
     },
     "Features": {
@@ -104,7 +165,19 @@
         "non-stick",
         "durable",
         "economical",
-        "hard candy"
+        "hard candy",
+        "nonstick",
+        "professional",
+        "adjustable flame",
+        "safety lock",
+        "hand held",
+        "food grade",
+        "diy",
+        "decorating",
+        "baking",
+        "culinary",
+        "premium",
+        "heavy duty"
       ]
     },
     "Dimensions": {
@@ -113,7 +186,10 @@
         "(\\d+\\s?\\d*\\/?\\d*)\\s?(?:inch|inchs|quot|\\\")",
         "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
         "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
-        "(\\d+\\.?\\d*)\\s?qt"
+        "(\\d+\\.?\\d*)\\s?qt",
+        "(\\d+\\.?\\d*)\\s?quart",
+        "(\\d+\\.?\\d*)\\s?oz",
+        "(\\d+\\.?\\d*)\\s?count"
       ],
       "note": "Captures fractions like 9 1/2 and standard inch units"
     },
@@ -123,7 +199,8 @@
         "(\\d+)\\s?piece",
         "(\\d+)\\s?pc",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?pack"
+        "(\\d+)\\s?pack",
+        "(\\d+)\\s?count"
       ]
     },
     "Theme": {
@@ -133,7 +210,13 @@
         "wedding",
         "birthday",
         "baby shower",
-        "halloween"
+        "halloween",
+        "cake decorating",
+        "fondant cake",
+        "polish pottery",
+        "cotton candy",
+        "creme brulee",
+        "french"
       ]
     }
   },
@@ -620,7 +703,23 @@
         "certified international",
         "tree-free greetings",
         "polish pottery",
-        "tupperware"
+        "tupperware",
+        "oneida",
+        "pfaltzgraff",
+        "lenox",
+        "royal albert",
+        "spode",
+        "arthur court",
+        "portmeirion",
+        "mud pie",
+        "wilton",
+        "boston warehouse",
+        "creative converting",
+        "caspari",
+        "hortense b hewitt",
+        "c r gibson",
+        "kate spade",
+        "sur la table"
       ]
     },
     "Product_Type": {
@@ -660,7 +759,60 @@
         "teapot",
         "travel tumbler",
         "tumbler",
-        "wine glass"
+        "wine glass",
+        "salad plate",
+        "dessert plate",
+        "luncheon plate",
+        "bread plate",
+        "butter plate",
+        "napkin",
+        "cocktail napkin",
+        "beverage napkin",
+        "luncheon napkin",
+        "napkin pack",
+        "beverage dispenser",
+        "cake plate",
+        "pedestal cake plate",
+        "cupcake stand",
+        "server set",
+        "serving set",
+        "salad server",
+        "serving spoon",
+        "knife server",
+        "cake knife",
+        "cake server",
+        "dinner fork",
+        "fork",
+        "spoon",
+        "teaspoon",
+        "chopstick",
+        "beer stein",
+        "wine bottle holder",
+        "bottle holder",
+        "bottle stopper",
+        "wine chiller",
+        "wine cooler",
+        "wine charm",
+        "wine bag",
+        "wine bottle cover",
+        "sugar bowl",
+        "creamer",
+        "sugar creamer set",
+        "candy dish",
+        "chip dip tray",
+        "dip bowl",
+        "food tray",
+        "rectangular tray",
+        "bread basket",
+        "fruit basket",
+        "jar",
+        "pot",
+        "box",
+        "case",
+        "drink marker",
+        "trivet",
+        "toothpick",
+        "paper napkin"
       ]
     },
     "Material": {
@@ -676,7 +828,14 @@
         "glass",
         "cork",
         "bamboo",
-        "wood"
+        "wood",
+        "melamine",
+        "plastic",
+        "metal",
+        "aluminum",
+        "sandstone",
+        "cotton",
+        "paper"
       ]
     },
     "Color": {
@@ -694,7 +853,8 @@
         "purple",
         "clear",
         "multicolor",
-        "ivory"
+        "ivory",
+        "brown"
       ]
     },
     "Features": {
@@ -707,7 +867,24 @@
         "hand painted",
         "stemless",
         "absorbent",
-        "full-sized handle"
+        "full-sized handle",
+        "vintage",
+        "mini",
+        "large",
+        "small",
+        "rectangular",
+        "round",
+        "square",
+        "oval",
+        "with lid",
+        "with handle",
+        "tiered",
+        "3 tier",
+        "pedestal",
+        "collectible",
+        "holiday",
+        "christmas",
+        "wedding"
       ]
     },
     "Capacity_Volume": {
@@ -715,7 +892,9 @@
       "patterns": [
         "(\\d+)[\\s-]ounce",
         "(\\d+)\\s?oz",
-        "(\\d+)\\s?ml"
+        "(\\d+)\\s?ml",
+        "(\\d+)\\s?liter",
+        "(\\d+)\\s?l"
       ],
       "note": "Dominant values: 11oz, 15oz, 16oz, 20oz, 24oz"
     },
@@ -725,7 +904,13 @@
         "(\\d+)\\s?piece",
         "(\\d+)\\s?pc",
         "service (?:for )?(\\d+)",
-        "set (?:of )?(\\d+)"
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?pack",
+        "pack of (\\d+)",
+        "(\\d+)\\s?count",
+        "case (?:of )?(\\d+)",
+        "(\\d+)\\s?per case",
+        "(\\d+)\\s?dozen"
       ],
       "note": "Service for X indicates place settings; piece count is total items"
     },
@@ -736,7 +921,19 @@
         "square",
         "oval",
         "rectangle",
-        "oblong"
+        "oblong",
+        "rectangular"
+      ]
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+(?:\\.\\d+)?)\\s?inch",
+        "(\\d+(?:\\.\\d+)?)\\s?in",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)x(\\d+)",
+        "(\\d+)[- ]?(\\d+)?\\s?inch"
       ]
     }
   },
@@ -1093,7 +1290,24 @@
         "kegco",
         "paderno world cuisine",
         "magneato",
-        "cafepress"
+        "cafepress",
+        "oxo",
+        "oxo good grip",
+        "ussentials",
+        "norpro",
+        "chef n",
+        "pampered chef",
+        "william bound",
+        "progressive international",
+        "prepworks progressive",
+        "boston warehouse",
+        "cole mason",
+        "le creuset",
+        "taylor precision",
+        "c r gibson",
+        "pedrini",
+        "sur la table",
+        "grassland road"
       ]
     },
     "Product_Type": {
@@ -1156,7 +1370,49 @@
         "watermelon slicer",
         "whipped cream dispenser",
         "whisk",
-        "wine stopper"
+        "wine stopper",
+        "pepper grinder",
+        "salt mill",
+        "pepper mill",
+        "shaker set",
+        "spoon rest",
+        "utensil set",
+        "ice bucket",
+        "dish drying mat",
+        "oil bottle",
+        "beer bottle opener",
+        "wall mounted bottle opener",
+        "magnetic bottle opener",
+        "jar opener",
+        "egg slicer",
+        "pasta maker",
+        "pasta machine",
+        "food chopper",
+        "meat grinder",
+        "nut cracker",
+        "salad spinner",
+        "wine aerator",
+        "foil cutter",
+        "bottle holder",
+        "recipe box",
+        "recipe card set",
+        "paper towel holder",
+        "vacuum stopper",
+        "ice pop mold",
+        "melon baller",
+        "citrus juicer",
+        "oven thermometer",
+        "freezer thermometer",
+        "deep fry thermometer",
+        "salad dressing shaker",
+        "pasta drying rack",
+        "cheese slicer",
+        "cheese spreader",
+        "vegetable brush",
+        "turner",
+        "funnel",
+        "scoop",
+        "grinder set"
       ]
     },
     "Sub_Type": {
@@ -1173,7 +1429,21 @@
         "pocket size",
         "clip",
         "long probe",
-        "multifunction"
+        "multifunction",
+        "heavy duty",
+        "premium",
+        "mini",
+        "rectangle",
+        "round",
+        "brushed",
+        "mounted",
+        "electric",
+        "mechanical",
+        "battery operated",
+        "handheld",
+        "portable",
+        "adjustable",
+        "refillable"
       ]
     },
     "Material": {
@@ -1192,7 +1462,16 @@
         "glass",
         "wood",
         "high quality resin",
-        "vinyl"
+        "vinyl",
+        "plastic",
+        "metal",
+        "steel",
+        "stainless steel blade",
+        "brushed stainless steel",
+        "acrylic",
+        "granite",
+        "stoneware",
+        "zinc"
       ]
     },
     "Color": {
@@ -1205,7 +1484,12 @@
         "green",
         "yellow",
         "silver",
-        "stainless"
+        "stainless",
+        "clear",
+        "pink",
+        "orange",
+        "multicolor",
+        "chrome"
       ]
     },
     "Features": {
@@ -1217,7 +1501,26 @@
         "ball maker",
         "pop mold",
         "paw shaped",
-        "movie poster design"
+        "movie poster design",
+        "magnetic",
+        "heavy duty",
+        "premium quality",
+        "stainless steel",
+        "non slip grip",
+        "ergonomic handle",
+        "wall mount",
+        "bpa free",
+        "good grip",
+        "non-slip",
+        "indoor outdoor",
+        "hand painted",
+        "assorted color",
+        "random color",
+        "n2o compatible",
+        "vacuum seal",
+        "multi function",
+        "5-in-1",
+        "reusable"
       ]
     },
     "Dimensions": {
@@ -1230,9 +1533,18 @@
         "(\\d+)\\s?x\\s?(\\d+)",
         "(\\d+)\\s?quot\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
         "(\\d+)\\s?quot\\s?x(\\d+)",
-        "(\\d+)\\s?x\\s?(\\d+)\\s?inch"
+        "(\\d+)\\s?x\\s?(\\d+)\\s?inch",
+        "(\\d+\\.?\\d*)\\s?in",
+        "(\\d+\\.?\\d*)\\s?oz",
+        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
+        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)\\s?inch",
+        "(\\d+)\\s?mm",
+        "(\\d+)\\s?cm",
+        "(\\d+)\\s?ml",
+        "(\\d+)\\s?liter",
+        "(\\d+)\\s?l"
       ],
-      "note": "Tool length (e.g., 12-inch tongs) and magnet dimensions (e.g., 2x3)"
+      "note": "Tool length (e.g., 12-inch tongs), magnet dimensions (e.g., 2x3), and capacity (e.g., 16 oz)"
     },
     "Piece_Count": {
       "type": "regex",
@@ -1240,7 +1552,11 @@
         "(\\d+)\\s?piece",
         "(\\d+)\\s?pc",
         "(\\d+)\\s?pack",
-        "set (?:of )?(\\d+)"
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?pieces",
+        "(\\d+)\\s?count",
+        "(\\d+)[- ]?pack",
+        "(\\d+)\\s?set"
       ]
     }
   },
@@ -2747,7 +3063,32 @@
         "sjt enterprise",
         "stickerpirate",
         "design toscano",
-        "deco 79"
+        "deco 79",
+        "precious moments",
+        "heartwood creek",
+        "primitive kathy",
+        "continental art center",
+        "possible dreams",
+        "trail of painted ponies",
+        "dept 56",
+        "boyds",
+        "willow tree",
+        "lori mitchell",
+        "advanced graphic",
+        "regal art",
+        "mark robert",
+        "bradford exchange",
+        "byers choice",
+        "creative co-op",
+        "hong tze",
+        "royal doulton",
+        "grassland road",
+        "joseph studio",
+        "mud pie",
+        "oriental furniture",
+        "plymor",
+        "wee forest folk",
+        "cat meow village"
       ]
     },
     "Product_Type": {
@@ -2770,7 +3111,49 @@
         "cremation urn",
         "cardboard cutout",
         "art tile",
-        "display stand"
+        "display stand",
+        "wall decor",
+        "wall hanging",
+        "novelty sign",
+        "ball ornament",
+        "tree ornament",
+        "angel figurine",
+        "porcelain figurine",
+        "parking sign",
+        "wooden sign",
+        "decorative sign",
+        "welcome sign",
+        "wall sign",
+        "collector plate",
+        "wall shelf",
+        "corner shelf",
+        "display case",
+        "storage box",
+        "treasure box",
+        "book box",
+        "bookend",
+        "bookends",
+        "magazine rack",
+        "rack",
+        "bowl",
+        "plate",
+        "ashtray",
+        "fan",
+        "folding fan",
+        "hand fan",
+        "perfume bottle",
+        "dream catcher",
+        "water globe",
+        "musical water globe",
+        "holy water font",
+        "cardboard standup",
+        "standee cutout",
+        "wall cross",
+        "cross",
+        "door sign",
+        "garden statue",
+        "pedestal stand",
+        "car charm"
       ]
     },
     "Material": {
@@ -2786,7 +3169,21 @@
         "tin",
         "aluminum",
         "plastic",
-        "stone resin"
+        "stone resin",
+        "wooden",
+        "blown glass",
+        "cast iron",
+        "iron",
+        "stainless steel",
+        "steel",
+        "solid brass",
+        "brass",
+        "clear acrylic",
+        "acrylic",
+        "stone",
+        "copper",
+        "hammered copper",
+        "rosewood"
       ]
     },
     "Color": {
@@ -2800,7 +3197,9 @@
         "gold",
         "green",
         "brown",
-        "multicolor"
+        "multicolor",
+        "pink",
+        "clear"
       ]
     },
     "Features": {
@@ -2816,7 +3215,24 @@
         "indoor outdoor",
         "keepsake",
         "collectible",
-        "miniature"
+        "miniature",
+        "vintage",
+        "handmade",
+        "made in usa",
+        "24k gold plated",
+        "lighted",
+        "personalized",
+        "life size",
+        "limited edition",
+        "solar powered",
+        "peel and stick",
+        "floating shelf",
+        "wall mount",
+        "tabletop",
+        "decorative finish",
+        "antique finish",
+        "musical",
+        "illuminated"
       ]
     },
     "Dimensions": {
@@ -2828,7 +3244,15 @@
         "(\\d+(?:\\.\\d+)?)\\s?tall",
         "(\\d+(?:\\.\\d+)?)\\s?wide",
         "(\\d+(?:\\.\\d+)?)\\s?x\\s?(\\d+(?:\\.\\d+)?)",
-        "(\\d+)\\s?x\\s?(\\d+)in"
+        "(\\d+)\\s?x\\s?(\\d+)in",
+        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?in\\s?x\\s?(\\d+)\\s?in",
+        "(\\d+)\\s?x\\s?(\\d+)in",
+        "(\\d{1,2})\\s?x\\s?(\\d{1,2})",
+        "(\\d+)\\s?cm",
+        "(\\d+)\\s?mm",
+        "(\\d+)\\s?ft",
+        "(\\d+)\\s?feet"
       ],
       "note": "Commonly covers height in inches (quot) and sign dimensions like 12x18."
     },
@@ -2838,7 +3262,11 @@
         "set (?:of )?(\\d+)",
         "set (\\d+)",
         "(\\d+)\\s?pc",
-        "(\\d+)\\s?piece"
+        "(\\d+)\\s?piece",
+        "(\\d+)\\s?pieces",
+        "ornament set (\\d+)",
+        "(\\d+)[- ]?pack",
+        "pack of (\\d+)"
       ]
     },
     "Theme": {
@@ -2853,7 +3281,31 @@
         "valentine",
         "thanksgiving",
         "baby shower",
-        "party"
+        "party",
+        "santa",
+        "angel",
+        "snowman",
+        "snowflake",
+        "tree",
+        "cross",
+        "heart",
+        "dog",
+        "cat",
+        "village",
+        "feng shui",
+        "nautical",
+        "dragon",
+        "flower",
+        "fairy",
+        "bear",
+        "teddy bear",
+        "guardian angel",
+        "st patrick day",
+        "military",
+        "car",
+        "country",
+        "religious",
+        "sunflower"
       ]
     }
   },
@@ -3089,7 +3541,7 @@
       "note": "Common for stone sets and wholesale lots"
     }
   },
-  "Kids' Room Decor": {
+  "Kids' Room Dcor": {
     "Brand": {
       "type": "dictionary",
       "values": [
@@ -6467,7 +6919,11 @@
         "pyramid america",
         "icanvasart",
         "poster stop online",
-        "cgc"
+        "cgc",
+        "historicalfindings",
+        "trend international",
+        "gb eye",
+        "posterservice"
       ]
     },
     "Product_Type": {
@@ -6486,7 +6942,25 @@
         "motivational poster",
         "mini poster",
         "map",
-        "artwork"
+        "artwork",
+        "poster print",
+        "art poster",
+        "wall poster",
+        "wall print",
+        "poster set",
+        "classroom poster",
+        "concert poster",
+        "promo poster",
+        "tv poster",
+        "video game poster",
+        "calendar",
+        "wall calendar",
+        "poster flag",
+        "wall decal",
+        "door poster",
+        "laminated poster",
+        "parchment poster",
+        "photography poster"
       ]
     },
     "Material": {
@@ -6499,7 +6973,11 @@
         "paper",
         "wood",
         "metal",
-        "tin"
+        "tin",
+        "vinyl",
+        "laminated",
+        "cotton",
+        "parchment"
       ]
     },
     "Color": {
@@ -6509,7 +6987,8 @@
         "white",
         "blue",
         "red",
-        "multicolor"
+        "multicolor",
+        "pink"
       ]
     },
     "Features": {
@@ -6529,7 +7008,22 @@
         "stretched",
         "thick-wrap",
         "unframed",
-        "vintage"
+        "vintage",
+        "glossy",
+        "giant",
+        "huge",
+        "large",
+        "high quality",
+        "limited edition",
+        "rare",
+        "laminated",
+        "decorative",
+        "fine art",
+        "official",
+        "peel and stick",
+        "peel stick",
+        "3d",
+        "printed"
       ]
     },
     "Dimensions": {
@@ -6540,7 +7034,14 @@
         "(\\d+)\\s?inch",
         "(\\d+)\\s?cm",
         "(\\d+)x(\\d+)",
-        "(\\d+)\\s?in"
+        "(\\d+)\\s?in",
+        "(\\d+)\\s?x\\s?(\\d+)\\s?inch",
+        "(\\d+)\\s?ft\\s?x\\s?(\\d+)\\s?ft",
+        "(\\d+)ft\\s?x\\s?(\\d+)ft",
+        "a1",
+        "a2",
+        "a3",
+        "a4"
       ],
       "note": "Common sizes include 24x36, 11x17, 8x10, 27x40"
     },
@@ -6550,7 +7051,8 @@
         "(\\d+)\\s?piece",
         "(\\d+)\\s?pc",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?panel"
+        "(\\d+)\\s?panel",
+        "(\\d+)\\s?pack"
       ],
       "note": "Captures total number of units or panels in an art set"
     },
@@ -6561,7 +7063,29 @@
         "vintage",
         "retro",
         "movie",
-        "music"
+        "music",
+        "concert",
+        "tv",
+        "video game",
+        "disney",
+        "marilyn monroe",
+        "star wars",
+        "star trek",
+        "world war",
+        "american",
+        "christmas",
+        "classroom",
+        "school",
+        "math",
+        "science",
+        "animal",
+        "dog",
+        "family",
+        "love",
+        "quote",
+        "flag",
+        "kpop",
+        "boy band"
       ]
     }
   },
@@ -7879,7 +8403,13 @@
         "cafepress",
         "interdesign",
         "ambesonne",
-        "carnation"
+        "carnation",
+        "nu steel",
+        "creative bath",
+        "oxo",
+        "better living",
+        "zenna home",
+        "zenith"
       ]
     },
     "Product_Type": {
@@ -7903,7 +8433,45 @@
         "cosmetic organizer",
         "toilet seat",
         "canister",
-        "cup"
+        "cup",
+        "tissue holder",
+        "tissue box holder",
+        "toilet paper holder",
+        "paper towel holder",
+        "soap pump",
+        "lotion pump",
+        "pump dispenser",
+        "bowl brush",
+        "brush holder",
+        "vanity mirror",
+        "lighted mirror",
+        "led mirror",
+        "towel bar",
+        "towel stand",
+        "towel warmer",
+        "bathtub caddy",
+        "bathtub tray",
+        "drain stopper",
+        "drain cover",
+        "shower hook",
+        "shower rod",
+        "shower squeegee",
+        "hair dryer holder",
+        "makeup organizer",
+        "vanity tray",
+        "cotton ball holder",
+        "cotton swab holder",
+        "storage box",
+        "floor mat",
+        "tub mat",
+        "soap holder",
+        "soap saver",
+        "toilet plunger",
+        "toilet lid cover",
+        "basket",
+        "shelf",
+        "rack",
+        "tumbler"
       ]
     },
     "Material": {
@@ -7919,7 +8487,17 @@
         "bronze",
         "peva",
         "vinyl",
-        "brass"
+        "brass",
+        "nickel",
+        "satin nickel",
+        "brushed nickel",
+        "steel",
+        "wood",
+        "bamboo",
+        "glass",
+        "ceramic",
+        "cotton",
+        "teak"
       ]
     },
     "Color": {
@@ -7933,7 +8511,11 @@
         "red",
         "pink",
         "brown",
-        "bronze"
+        "bronze",
+        "silver",
+        "gold",
+        "purple",
+        "natural"
       ]
     },
     "Features": {
@@ -7953,7 +8535,21 @@
         "tension",
         "vintage",
         "wall mounted",
-        "waterproof"
+        "waterproof",
+        "non slip",
+        "non-slip",
+        "free standing",
+        "led",
+        "lighted",
+        "touch button",
+        "magnetic",
+        "adjustable",
+        "elongated",
+        "round",
+        "corner",
+        "spa",
+        "brushed finish",
+        "satin finish"
       ]
     },
     "Capacity_Volume": {
@@ -7962,7 +8558,9 @@
         "(\\d+)[\\s-]ounce",
         "(\\d+)\\s?oz",
         "(\\d+)\\s?ml",
-        "(\\d+)\\s?gram"
+        "(\\d+)\\s?gram",
+        "(\\d+)\\s?liter",
+        "(\\d+)\\s?l"
       ],
       "note": "Standard dispenser capacities usually range from 8oz to 16oz"
     },
@@ -7971,9 +8569,23 @@
       "patterns": [
         "(\\d+)\\s?piece",
         "(\\d+)\\s?pc",
-        "set (?:of )?(\\d+)"
+        "set (?:of )?(\\d+)",
+        "(\\d+)\\s?pack",
+        "pack of (\\d+)"
       ],
       "note": "Commonly seen as 4 piece bathroom sets or set of 12 hooks"
+    },
+    "Dimensions": {
+      "type": "regex",
+      "patterns": [
+        "(\\d+)\\s?x\\s?(\\d+)\\s?inch",
+        "(\\d+)\\s?inch",
+        "(\\d+)\\s?in\\b",
+        "(\\d+)\\s?\\\"",
+        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)\\s?w\\s?x\\s?(\\d+)\\s?h"
+      ],
+      "note": "Captures common bathroom accessory dimensions such as 24 inch towel bars or 72x72 shower curtains"
     }
   },
   "Towels": {
