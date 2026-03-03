@@ -2728,7 +2728,7 @@
       ]
     }
   },
-  "Home Decor Accents": {
+  "Home Dcor Accents": {
     "Brand": {
       "type": "dictionary",
       "values": [
@@ -7961,7 +7961,8 @@
       "patterns": [
         "(\\d+)[\\s-]ounce",
         "(\\d+)\\s?oz",
-        "(\\d+)\\s?ml"
+        "(\\d+)\\s?ml",
+        "(\\d+)\\s?gram"
       ],
       "note": "Standard dispenser capacities usually range from 8oz to 16oz"
     },
