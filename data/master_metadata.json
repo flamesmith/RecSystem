@@ -125,7 +125,31 @@
         "porcelain",
         "borosilicate",
         "stone",
-        "cotton"
+        "cotton",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -139,7 +163,10 @@
         "green",
         "silver",
         "brown",
-        "clear"
+        "clear",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Shape": {
@@ -183,24 +210,24 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+\\s?\\d*\\/?\\d*)\\s?(?:inch|inchs|quot|\\\")",
-        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
-        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
-        "(\\d+\\.?\\d*)\\s?qt",
-        "(\\d+\\.?\\d*)\\s?quart",
-        "(\\d+\\.?\\d*)\\s?oz",
-        "(\\d+\\.?\\d*)\\s?count"
+        "(\\d+[\\s-]?\\d*\\/?\\d*)[\\s-]?(?:inch|inchs|quot|\\\")",
+        "(\\d+\\.?\\d*)[\\s-]?x[\\s-]?(\\d+\\.?\\d*)[\\s-]?x[\\s-]?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)[\\s-]?x[\\s-]?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)[\\s-]?qt",
+        "(\\d+\\.?\\d*)[\\s-]?quart",
+        "(\\d+\\.?\\d*)[\\s-]?oz",
+        "(\\d+\\.?\\d*)[\\s-]?count"
       ],
       "note": "Captures fractions like 9 1/2 and standard inch units"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?pack",
-        "(\\d+)\\s?count"
+        "(\\d+)[\\s-]?pack",
+        "(\\d+)[\\s-]?count"
       ]
     },
     "Theme": {
@@ -304,10 +331,10 @@
     "Capacity": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?cup",
-        "(\\d+)\\s?oz",
-        "(\\d+\\.?\\d*)\\s?[Ll]iter",
-        "(\\d+\\.?\\d*)\\s?[Ll]"
+        "(\\d+)[\\s-]?cup",
+        "(\\d+)[\\s-]?oz",
+        "(\\d+\\.?\\d*)[\\s-]?[Ll]iter",
+        "(\\d+\\.?\\d*)[\\s-]?[Ll]"
       ]
     },
     "Material": {
@@ -326,7 +353,30 @@
         "glass",
         "silicone",
         "chrome",
-        "double wall"
+        "double wall",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -337,7 +387,10 @@
         "silver",
         "blue",
         "red",
-        "brushed"
+        "brushed",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -359,23 +412,23 @@
       "type": "regex",
       "patterns": [
         "(\\d+)[\\s-]cup",
-        "(\\d+)\\s?cup"
+        "(\\d+)[\\s-]?cup"
       ],
       "note": "Commonly 1, 4, 8, 10, or 12 cups"
     },
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?oz",
-        "(\\d+)\\s?ounce",
-        "(\\d+)\\s?liter",
-        "(\\d+)\\s?l"
+        "(\\d+)[\\s-]?oz",
+        "(\\d+)[\\s-]?ounce",
+        "(\\d+)[\\s-]?liter",
+        "(\\d+)[\\s-]?l"
       ]
     },
     "Bar_Pressure": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?bar"
+        "(\\d+)[\\s-]?bar"
       ],
       "note": "Espresso machine pressure rating, commonly 15 bar"
     }
@@ -450,7 +503,31 @@
         "ceramic",
         "porcelain",
         "silicone",
-        "glass"
+        "glass",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -465,7 +542,10 @@
         "silver",
         "cherry",
         "flame",
-        "marseille"
+        "marseille",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Sub_Type": {
@@ -511,26 +591,26 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+\\.?\\d*)\\s?inch",
+        "(\\d+\\.?\\d*)[\\s-]?inch",
         "(\\d+\\.?\\d*)\\\"",
-        "(\\d+\\.?\\d*)\\s?quot",
-        "(\\d+\\-\\d\\/\\d)\\s?inch"
+        "(\\d+\\.?\\d*)[\\s-]?quot",
+        "(\\d+\\-\\d\\/\\d)[\\s-]?inch"
       ],
       "note": "Catches 8, 10, 12 inch and fractions like 9-1/2 inch"
     },
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+\\.?\\d*)\\s?quart",
-        "(\\d+\\.?\\d*)\\s?qt",
-        "(\\d+\\.?\\d*)\\s?-quart"
+        "(\\d+\\.?\\d*)[\\s-]?quart",
+        "(\\d+\\.?\\d*)[\\s-]?qt",
+        "(\\d+\\.?\\d*)[\\s-]?-quart"
       ]
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)"
       ]
     },
@@ -626,7 +706,27 @@
         "plastic",
         "polypropylene",
         "end grain",
-        "edge grain"
+        "edge grain",
+        "oak",
+        "pine",
+        "birch",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -635,7 +735,10 @@
         "black",
         "red",
         "white",
-        "natural"
+        "natural",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -657,24 +760,24 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+\\.?\\d*)\\s?inch",
+        "(\\d+\\.?\\d*)[\\s-]?inch",
         "(\\d+\\.?\\d*)\\\"",
-        "(\\d+\\.?\\d*)\\s?quot",
-        "(\\d+\\-\\d\\/\\d)\\s?inch",
-        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
-        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
-        "(\\d+\\.?\\d*)\\s?quot\\s?x\\s?(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
-        "(\\d+\\.?\\d*)\\s?quot\\s?x\\s?(\\d+\\.?\\d*)"
+        "(\\d+\\.?\\d*)[\\s-]?quot",
+        "(\\d+\\-\\d\\/\\d)[\\s-]?inch",
+        "(\\d+\\.?\\d*)[\\s-]?x[\\s-]?(\\d+\\.?\\d*)[\\s-]?x[\\s-]?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)[\\s-]?x[\\s-]?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)[\\s-]?quot[\\s-]?x[\\s-]?(\\d+\\.?\\d*)[\\s-]?x[\\s-]?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)[\\s-]?quot[\\s-]?x[\\s-]?(\\d+\\.?\\d*)"
       ],
       "note": "Blade length (3.5 Paring, 7 Santoku, 8 Chef) and board dimensions"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?stage"
+        "(\\d+)[\\s-]?stage"
       ],
       "note": "Stage refers to sharpeners (e.g., 2-stage sharpener)"
     },
@@ -835,7 +938,30 @@
         "aluminum",
         "sandstone",
         "cotton",
-        "paper"
+        "paper",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -854,7 +980,10 @@
         "clear",
         "multicolor",
         "ivory",
-        "brown"
+        "brown",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -891,26 +1020,26 @@
       "type": "regex",
       "patterns": [
         "(\\d+)[\\s-]ounce",
-        "(\\d+)\\s?oz",
-        "(\\d+)\\s?ml",
-        "(\\d+)\\s?liter",
-        "(\\d+)\\s?l"
+        "(\\d+)[\\s-]?oz",
+        "(\\d+)[\\s-]?ml",
+        "(\\d+)[\\s-]?liter",
+        "(\\d+)[\\s-]?l"
       ],
       "note": "Dominant values: 11oz, 15oz, 16oz, 20oz, 24oz"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "service (?:for )?(\\d+)",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?pack",
+        "(\\d+)[\\s-]?pack",
         "pack of (\\d+)",
-        "(\\d+)\\s?count",
+        "(\\d+)[\\s-]?count",
         "case (?:of )?(\\d+)",
-        "(\\d+)\\s?per case",
-        "(\\d+)\\s?dozen"
+        "(\\d+)[\\s-]?per case",
+        "(\\d+)[\\s-]?dozen"
       ],
       "note": "Service for X indicates place settings; piece count is total items"
     },
@@ -928,12 +1057,12 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+(?:\\.\\d+)?)\\s?inch",
-        "(\\d+(?:\\.\\d+)?)\\s?in",
-        "(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?inch",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?in",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?x[\\s-]?(\\d+)",
         "(\\d+)x(\\d+)",
-        "(\\d+)[- ]?(\\d+)?\\s?inch"
+        "(\\d+)[- ]?(\\d+)?[\\s-]?inch"
       ]
     }
   },
@@ -1062,7 +1191,28 @@
         "hdpe",
         "pvc",
         "vinyl",
-        "plastic"
+        "plastic",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -1070,7 +1220,10 @@
       "values": [
         "black",
         "silver",
-        "chrome"
+        "chrome",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -1100,21 +1253,21 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?gallon",
-        "(\\d+)\\s?gal",
-        "(\\d+)\\s?liter",
-        "(\\d+)\\s?oz",
-        "(\\d+)\\s?ml",
-        "(\\d+)\\s?lb"
+        "(\\d+)[\\s-]?gallon",
+        "(\\d+)[\\s-]?gal",
+        "(\\d+)[\\s-]?liter",
+        "(\\d+)[\\s-]?oz",
+        "(\\d+)[\\s-]?ml",
+        "(\\d+)[\\s-]?lb"
       ],
       "note": "Common: 1 gal, 5 gal, 64 oz (Growler), 5 lb (CO2 Tank)"
     },
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+\\/\\d+)\\s?npt",
-        "(\\d+\\/\\d+)\\s?inch",
-        "(\\d+\\/\\d+)\\s?quot",
+        "(\\d+\\/\\d+)[\\s-]?npt",
+        "(\\d+\\/\\d+)[\\s-]?inch",
+        "(\\d+\\/\\d+)[\\s-]?quot",
         "(\\d+\\/\\d+)\\\""
       ],
       "note": "Catches 3/16, 5/16, 3/8, 1/2 hardware/tubing sizes and NPT thread sizes"
@@ -1122,11 +1275,11 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?pack",
-        "(\\d+)\\s?count",
-        "(\\d+)\\s?ct",
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?pack",
+        "(\\d+)[\\s-]?count",
+        "(\\d+)[\\s-]?ct",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)"
       ]
     }
@@ -1191,7 +1344,31 @@
         "sequin",
         "lace",
         "silicone",
-        "woven vinyl"
+        "woven vinyl",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -1211,7 +1388,10 @@
         "beige",
         "cream",
         "navy",
-        "burgundy"
+        "burgundy",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Shape": {
@@ -1241,14 +1421,14 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?quot\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?quot\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?inch\\s?round",
-        "(\\d+)\\s?quot\\s?round",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?quot"
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?quot[\\s-]?x[\\s-]?(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?quot[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?inch[\\s-]?round",
+        "(\\d+)[\\s-]?quot[\\s-]?round",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?quot"
       ],
       "note": "Common tablecloth sizes: 60x84, 60x102, 70 round, 52x70"
     },
@@ -1256,9 +1436,9 @@
       "type": "regex",
       "patterns": [
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?pack",
-        "(\\d+)\\s?piece"
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?pack",
+        "(\\d+)[\\s-]?piece"
       ],
       "note": "Common for napkins (Set of 4) and towels (Set of 2)"
     },
@@ -1471,7 +1651,29 @@
         "acrylic",
         "granite",
         "stoneware",
-        "zinc"
+        "zinc",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -1489,7 +1691,10 @@
         "pink",
         "orange",
         "multicolor",
-        "chrome"
+        "chrome",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -1526,37 +1731,37 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+\\.?\\d*)\\s?inch",
+        "(\\d+\\.?\\d*)[\\s-]?inch",
         "(\\d+\\.?\\d*)\\\"",
-        "(\\d+\\.?\\d*)\\s?quot",
-        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?quot\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?quot\\s?x(\\d+)",
-        "(\\d+)\\s?x\\s?(\\d+)\\s?inch",
-        "(\\d+\\.?\\d*)\\s?in",
-        "(\\d+\\.?\\d*)\\s?oz",
-        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
-        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)\\s?inch",
-        "(\\d+)\\s?mm",
-        "(\\d+)\\s?cm",
-        "(\\d+)\\s?ml",
-        "(\\d+)\\s?liter",
-        "(\\d+)\\s?l"
+        "(\\d+\\.?\\d*)[\\s-]?quot",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?quot[\\s-]?x[\\s-]?(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?quot[\\s-]?x(\\d+)",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?inch",
+        "(\\d+\\.?\\d*)[\\s-]?in",
+        "(\\d+\\.?\\d*)[\\s-]?oz",
+        "(\\d+\\.?\\d*)[\\s-]?x[\\s-]?(\\d+\\.?\\d*)",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?mm",
+        "(\\d+)[\\s-]?cm",
+        "(\\d+)[\\s-]?ml",
+        "(\\d+)[\\s-]?liter",
+        "(\\d+)[\\s-]?l"
       ],
       "note": "Tool length (e.g., 12-inch tongs), magnet dimensions (e.g., 2x3), and capacity (e.g., 16 oz)"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?pack",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?pack",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?pieces",
-        "(\\d+)\\s?count",
+        "(\\d+)[\\s-]?pieces",
+        "(\\d+)[\\s-]?count",
         "(\\d+)[- ]?pack",
-        "(\\d+)\\s?set"
+        "(\\d+)[\\s-]?set"
       ]
     }
   },
@@ -1645,7 +1850,31 @@
         "silicone",
         "charcoal",
         "vinyl",
-        "plastic"
+        "plastic",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -1653,7 +1882,10 @@
       "values": [
         "black",
         "white",
-        "clear"
+        "clear",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -1669,11 +1901,11 @@
       "type": "regex",
       "patterns": [
         "(\\d+)mm",
-        "(\\d+\\.?\\d*)\\s?inch",
-        "(\\d+\\s\\d\\/\\d)\\s?inch",
-        "(\\d+\\/\\d+)\\s?inch",
-        "(\\d+\\s\\d\\/\\d)\\s?quot",
-        "(\\d+\\/\\d+)\\s?quot"
+        "(\\d+\\.?\\d*)[\\s-]?inch",
+        "(\\d+\\s\\d\\/\\d)[\\s-]?inch",
+        "(\\d+\\/\\d+)[\\s-]?inch",
+        "(\\d+\\s\\d\\/\\d)[\\s-]?quot",
+        "(\\d+\\/\\d+)[\\s-]?quot"
       ],
       "note": "Dominant in microwave plates: 245mm, 255mm, 270mm, 285mm, 318mm. Fractional sizes: 1/2, 1/4, 3/4"
     },
@@ -1760,7 +1992,31 @@
       "values": [
         "stainless steel",
         "stainless",
-        "brushed stainless"
+        "brushed stainless",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -1772,7 +2028,10 @@
         "silver",
         "stainless",
         "black stainless steel",
-        "blue"
+        "blue",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -1801,7 +2060,7 @@
     "Power_Rating": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?watt",
+        "(\\d+)[\\s-]?watt",
         "(\\d+)w"
       ],
       "note": "Common: 1000W (Microwave/Sous Vide), 1300 Watt (Ovens)"
@@ -1809,19 +2068,19 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+\\.?\\d*)\\s?cu\\s?ft",
-        "(\\d+\\.?\\d*)\\s?cubic\\s?foot",
-        "(\\d+)\\s?quart",
-        "(\\d+)\\s?cup",
-        "(\\d+)\\s?slice",
-        "(\\d+)\\s?bottle"
+        "(\\d+\\.?\\d*)[\\s-]?cu[\\s-]?ft",
+        "(\\d+\\.?\\d*)[\\s-]?cubic[\\s-]?foot",
+        "(\\d+)[\\s-]?quart",
+        "(\\d+)[\\s-]?cup",
+        "(\\d+)[\\s-]?slice",
+        "(\\d+)[\\s-]?bottle"
       ],
       "note": "Microwaves (cu ft), Slow Cookers (quart), Toasters (slice), Wine Coolers (bottle)"
     },
     "Voltage": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?volt",
+        "(\\d+)[\\s-]?volt",
         "(\\d+)v"
       ],
       "note": "Common: 110V (standard US), 220V (international/specialty)"
@@ -1905,7 +2164,31 @@
         "burlap",
         "metal",
         "tin",
-        "wood"
+        "wood",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -1918,7 +2201,10 @@
         "green",
         "pink",
         "purple",
-        "clear"
+        "clear",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -1937,21 +2223,21 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?quot"
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?quot"
       ],
       "note": "Common for shelf liners (18 inch x 6 quot) and totes"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?pack",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?pack",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?oz"
+        "(\\d+)[\\s-]?oz"
       ],
       "note": "Canister sets often come in 3-piece; Coolies in multi-packs"
     },
@@ -2022,7 +2308,31 @@
         "glass",
         "bpa-free plastic",
         "silicone",
-        "plastic"
+        "plastic",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -2037,7 +2347,10 @@
         "pink",
         "purple",
         "multicolor",
-        "clear"
+        "clear",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -2062,9 +2375,9 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?oz",
-        "(\\d+)\\s?ounce",
-        "(\\d+)\\s?fl oz",
+        "(\\d+)[\\s-]?oz",
+        "(\\d+)[\\s-]?ounce",
+        "(\\d+)[\\s-]?fl oz",
         "(\\d+)oz"
       ],
       "note": "Dominant sizes: 14oz, 16oz, 20oz, 30oz"
@@ -2142,7 +2455,31 @@
         "activated carbon",
         "stainless steel",
         "stainless",
-        "plastic"
+        "plastic",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -2151,16 +2488,19 @@
         "white",
         "black",
         "blue",
-        "clear"
+        "clear",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Filter_Rating": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?micron",
-        "(\\d+)\\s?mic",
-        "(\\d+)\\s?gpd",
-        "(\\d+)\\s?gallon"
+        "(\\d+)[\\s-]?micron",
+        "(\\d+)[\\s-]?mic",
+        "(\\d+)[\\s-]?gpd",
+        "(\\d+)[\\s-]?gallon"
       ],
       "note": "Micron rating (1, 5, 10, 20). GPD = Gallons Per Day for RO membranes."
     },
@@ -2186,28 +2526,28 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
-        "(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
-        "(\\d+\\.?\\d*)\\s?quot\\s?x\\s?(\\d+\\.?\\d*)\\s?x\\s?(\\d+\\.?\\d*)",
-        "(\\d+\\.?\\d*)\\s?quot\\s?x\\s?(\\d+\\.?\\d*)",
-        "(\\d+\\.?\\d*)\\s?inch",
-        "(\\d+\\.?\\d*)\\s?quot"
+        "(\\d+\\.?\\d*)[\\s-]?x[\\s-]?(\\d+\\.?\\d*)[\\s-]?x[\\s-]?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)[\\s-]?x[\\s-]?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)[\\s-]?quot[\\s-]?x[\\s-]?(\\d+\\.?\\d*)[\\s-]?x[\\s-]?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)[\\s-]?quot[\\s-]?x[\\s-]?(\\d+\\.?\\d*)",
+        "(\\d+\\.?\\d*)[\\s-]?inch",
+        "(\\d+\\.?\\d*)[\\s-]?quot"
       ],
       "note": "Industry standards: 10x2.5 (Standard), 20x4.5 (Big Blue)"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?pack",
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?pack",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)"
       ]
     },
     "Stage_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?stage",
+        "(\\d+)[\\s-]?stage",
         "(\\d+)-stage"
       ],
       "note": "Common: 3-stage, 5-stage, 6-stage RO systems"
@@ -2272,7 +2612,31 @@
         "plastic",
         "satin",
         "cork",
-        "metal"
+        "metal",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -2280,7 +2644,10 @@
       "values": [
         "black",
         "silver",
-        "red"
+        "red",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -2362,7 +2729,31 @@
         "jute",
         "cotton",
         "rubber",
-        "natural fiber"
+        "natural fiber",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -2382,7 +2773,10 @@
         "cream",
         "light blue",
         "silver",
-        "gold"
+        "gold",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -2429,13 +2823,13 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?foot",
-        "(\\d+)\\s?feet",
-        "(\\d+)\\s?ft",
-        "(\\d+)'\\s?(\\d+)?\\\"?",
-        "(\\d+)\\s?x\\s?(\\d+)"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?foot",
+        "(\\d+)[\\s-]?feet",
+        "(\\d+)[\\s-]?ft",
+        "(\\d+)'[\\s-]?(\\d+)?\\\"?",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)"
       ],
       "note": "Captures common rug dimensions in inches, feet, or 'x' format"
     }
@@ -2485,7 +2879,31 @@
         "silk",
         "plastic",
         "latex",
-        "fabric"
+        "fabric",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -2503,7 +2921,10 @@
         "black",
         "cream",
         "ivory",
-        "multicolor"
+        "multicolor",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -2527,17 +2948,17 @@
       "type": "regex",
       "patterns": [
         "(\\d+)[\\s-]ounce",
-        "(\\d+)\\s?oz",
-        "(\\d+)\\s?ml"
+        "(\\d+)[\\s-]?oz",
+        "(\\d+)[\\s-]?ml"
       ],
       "note": "Standard capacity formats; less common in this category compared to dimensions."
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?pack",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?pack",
         "pack (?:of )?(\\d+)",
         "set (?:of )?(\\d+)",
         "lot (?:of )?(\\d+)"
@@ -2607,7 +3028,31 @@
         "wood",
         "crystal",
         "tin",
-        "ceramic"
+        "ceramic",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -2621,7 +3066,10 @@
         "pink",
         "green",
         "gold",
-        "silver"
+        "silver",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -2650,18 +3098,18 @@
       "type": "regex",
       "patterns": [
         "(\\d+(?:\\.\\d+)?)[\\s-]ounce",
-        "(\\d+(?:\\.\\d+)?)\\s?oz"
+        "(\\d+(?:\\.\\d+)?)[\\s-]?oz"
       ],
       "note": "Dominant values include 13oz, 14.5oz, 22oz"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)",
         "pack (?:of )?(\\d+)",
-        "(\\d+)\\s?pack"
+        "(\\d+)[\\s-]?pack"
       ],
       "note": "Commonly used for tea lights and candle holder sets (e.g., Set of 3, 12 Pack)"
     },
@@ -2760,7 +3208,30 @@
         "glass",
         "wooden",
         "vinyl",
-        "plastic"
+        "plastic",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -2775,7 +3246,10 @@
         "green",
         "brown",
         "neon",
-        "clear"
+        "clear",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -2810,18 +3284,18 @@
       "type": "regex",
       "patterns": [
         "(\\d+)[\\s-]inch",
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?in",
-        "(\\d+)\\s?cm",
-        "(\\d+)\\s?x\\s?(\\d+)"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?in",
+        "(\\d+)[\\s-]?cm",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)"
       ],
       "note": "Dominant values: 10 inch, 12 inch, 13 inch, 15 inch"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)"
       ],
       "note": "Standard clock units, typically 1pc unless sold in sets"
@@ -2872,7 +3346,30 @@
         "balsam",
         "fleece",
         "buckwheat",
-        "pine"
+        "pine",
+        "oak",
+        "walnut",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -2891,7 +3388,10 @@
         "beige",
         "chocolate",
         "platinum",
-        "gold"
+        "gold",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -2912,19 +3412,19 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?x\\s?(\\d+)",
-        "(?:32|36|38)\\s?inch"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(?:32|36|38)[\\s-]?inch"
       ],
       "note": "Common lengths include 32, 36, and 38 inches"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?pack",
+        "(\\d+)[\\s-]?pack",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?pc"
+        "(\\d+)[\\s-]?pc"
       ],
       "note": "Captures multi-pack draft stopper units"
     }
@@ -2973,7 +3473,31 @@
         "crystal",
         "fabric",
         "pvc",
-        "sheer organza"
+        "sheer organza",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -2991,7 +3515,10 @@
         "gold",
         "dark blue",
         "midnight black",
-        "multicolor"
+        "multicolor",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -3009,17 +3536,17 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?oz",
-        "(\\d+)\\s?ml"
+        "(\\d+)[\\s-]?oz",
+        "(\\d+)[\\s-]?ml"
       ],
       "note": "Commonly used for wine or liquid gifts included in sets"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?pcs",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?pcs",
         "set (?:of )?(\\d+)",
         "pack (?:of )?(\\d+)"
       ],
@@ -3028,8 +3555,8 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+(?:\\.\\d+)?)\\s?inch",
-        "(\\d+(?:\\.\\d+)?)\\s?x\\s?(\\d+(?:\\.\\d+)?)"
+        "(\\d+(?:\\.\\d+)?)[\\s-]?inch",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?x[\\s-]?(\\d+(?:\\.\\d+)?)"
       ],
       "note": "Dominant values: 8x10, 3x4 inch, 4x6"
     },
@@ -3183,7 +3710,29 @@
         "stone",
         "copper",
         "hammered copper",
-        "rosewood"
+        "rosewood",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -3199,7 +3748,10 @@
         "brown",
         "multicolor",
         "pink",
-        "clear"
+        "clear",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -3238,21 +3790,21 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+(?:\\.\\d+)?)\\s?quot",
-        "(\\d+(?:\\.\\d+)?)\\s?inch",
-        "(\\d+(?:\\.\\d+)?)\\s?in",
-        "(\\d+(?:\\.\\d+)?)\\s?tall",
-        "(\\d+(?:\\.\\d+)?)\\s?wide",
-        "(\\d+(?:\\.\\d+)?)\\s?x\\s?(\\d+(?:\\.\\d+)?)",
-        "(\\d+)\\s?x\\s?(\\d+)in",
-        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?in\\s?x\\s?(\\d+)\\s?in",
-        "(\\d+)\\s?x\\s?(\\d+)in",
-        "(\\d{1,2})\\s?x\\s?(\\d{1,2})",
-        "(\\d+)\\s?cm",
-        "(\\d+)\\s?mm",
-        "(\\d+)\\s?ft",
-        "(\\d+)\\s?feet"
+        "(\\d+(?:\\.\\d+)?)[\\s-]?quot",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?inch",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?in",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?tall",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?wide",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?x[\\s-]?(\\d+(?:\\.\\d+)?)",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)in",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?in[\\s-]?x[\\s-]?(\\d+)[\\s-]?in",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)in",
+        "(\\d{1,2})[\\s-]?x[\\s-]?(\\d{1,2})",
+        "(\\d+)[\\s-]?cm",
+        "(\\d+)[\\s-]?mm",
+        "(\\d+)[\\s-]?ft",
+        "(\\d+)[\\s-]?feet"
       ],
       "note": "Commonly covers height in inches (quot) and sign dimensions like 12x18."
     },
@@ -3261,9 +3813,9 @@
       "patterns": [
         "set (?:of )?(\\d+)",
         "set (\\d+)",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pieces",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pieces",
         "ornament set (\\d+)",
         "(\\d+)[- ]?pack",
         "pack of (\\d+)"
@@ -3361,7 +3913,31 @@
         "ceramic",
         "wood",
         "resin",
-        "glass"
+        "glass",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -3371,7 +3947,10 @@
         "black",
         "clear",
         "gold",
-        "silver"
+        "silver",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -3393,21 +3972,21 @@
       "type": "regex",
       "patterns": [
         "(\\d+(?:\\.\\d+)?)[\\s-]ounce",
-        "(\\d+(?:\\.\\d+)?)\\s?oz",
-        "(\\d+(?:\\.\\d+)?)\\s?ml",
-        "(\\d+(?:\\.\\d+)?)\\s?fl\\.?\\s?oz",
-        "(\\d+)\\s?gram"
+        "(\\d+(?:\\.\\d+)?)[\\s-]?oz",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?ml",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?fl\\.?[\\s-]?oz",
+        "(\\d+)[\\s-]?gram"
       ],
       "note": "Common values include 0.33oz, 2oz, 4oz, 8oz, and 3.2 fl oz for wax melts."
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?pack",
-        "(\\d+)\\s?count",
-        "(\\d+)\\s?stick",
-        "(\\d+)\\s?cone",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?pack",
+        "(\\d+)[\\s-]?count",
+        "(\\d+)[\\s-]?stick",
+        "(\\d+)[\\s-]?cone",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)",
         "box (?:of )?(\\d+)"
       ],
@@ -3489,7 +4068,31 @@
         "citrine",
         "glass",
         "mineral",
-        "gemstone"
+        "gemstone",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -3502,7 +4105,10 @@
         "rose",
         "red",
         "purple",
-        "yellow"
+        "yellow",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -3523,9 +4129,9 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?lb",
-        "(\\d+)\\s?pound",
-        "(\\d+)\\s?oz",
+        "(\\d+)[\\s-]?lb",
+        "(\\d+)[\\s-]?pound",
+        "(\\d+)[\\s-]?oz",
         "(\\d+)[\\s-]ounce"
       ],
       "note": "Dominant values: 1lb, 2lb, 5lb"
@@ -3533,8 +4139,8 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?piece",
         "set (?:of )?(\\d+)",
         "lot (?:of )?(\\d+)"
       ],
@@ -3587,7 +4193,30 @@
         "glass",
         "wooden",
         "gel",
-        "led"
+        "led",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -3600,7 +4229,10 @@
         "green",
         "red",
         "colorful",
-        "multicolor"
+        "multicolor",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -3620,10 +4252,10 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)'\\s?x\\s?(\\d+)'"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)'[\\s-]?x[\\s-]?(\\d+)'"
       ],
       "note": "Common formats include inch measurements (quot) and rug dimensions (3x5, 5x7)"
     },
@@ -3631,10 +4263,10 @@
       "type": "regex",
       "patterns": [
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?pack",
-        "(\\d+)\\s?sheet"
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?pack",
+        "(\\d+)[\\s-]?sheet"
       ],
       "note": "Captures multi-packs of knobs, decals, or sticker sheets"
     },
@@ -3701,7 +4333,31 @@
         "stainless steel",
         "satin nickel",
         "brushed nickel",
-        "oil rubbed bronze"
+        "oil rubbed bronze",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -3716,7 +4372,10 @@
         "cherry",
         "blue",
         "antique gold",
-        "antique silver"
+        "antique silver",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -3745,9 +4404,9 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
         "(\\d+)[\\s-]in"
       ],
       "note": "Common sizes include 24, 30, 32, and 36 inches."
@@ -3756,8 +4415,8 @@
       "type": "regex",
       "patterns": [
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc"
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc"
       ],
       "note": "Commonly found in mirror sets (e.g., set of 3)."
     },
@@ -3812,7 +4471,31 @@
         "stainless steel",
         "clay",
         "earthen",
-        "cotton"
+        "cotton",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -3827,7 +4510,10 @@
         "clear",
         "silver",
         "antique brass",
-        "gold"
+        "gold",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -3849,9 +4535,9 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?oz",
-        "(\\d+)\\s?ml",
-        "(\\d+\\.?\\d*)\\s?ounce"
+        "(\\d+)[\\s-]?oz",
+        "(\\d+)[\\s-]?ml",
+        "(\\d+\\.?\\d*)[\\s-]?ounce"
       ],
       "note": "Dominant values found: 500ml, 16.9oz"
     },
@@ -3860,17 +4546,17 @@
       "patterns": [
         "set (?:of )?(\\d+)",
         "pack (?:of )?(\\d+)",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?piece"
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?piece"
       ],
       "note": "Common counts: set of 2, set of 4"
     },
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+\\.?\\d*)\\s?inch",
-        "(\\d+\\.?\\d*)\\s?quot",
-        "(\\d+\\.?\\d*)\\s?tall"
+        "(\\d+\\.?\\d*)[\\s-]?inch",
+        "(\\d+\\.?\\d*)[\\s-]?quot",
+        "(\\d+\\.?\\d*)[\\s-]?tall"
       ],
       "note": "Captures height and diameter in inches or quotations"
     }
@@ -3916,7 +4602,31 @@
         "bonded leather",
         "fabric",
         "paper",
-        "ceramic"
+        "ceramic",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -3932,7 +4642,10 @@
         "ivory",
         "gold",
         "burgundy",
-        "green"
+        "green",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -3952,9 +4665,9 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+(?:\\.\\d+)?)\\s?inch",
-        "(\\d+(?:\\.\\d+)?)\\s?quot",
-        "(\\d+(?:\\.\\d+)?)\\s?x\\s?(\\d+(?:\\.\\d+)?)",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?inch",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?quot",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?x[\\s-]?(\\d+(?:\\.\\d+)?)",
         "(\\d)x(\\d)"
       ],
       "note": "Common sizes: 4x6, 5x7, 8x10, 12x12"
@@ -3963,10 +4676,10 @@
       "type": "regex",
       "patterns": [
         "hold (\\d+)",
-        "(\\d+)\\s?photo",
-        "(\\d+)\\s?pocket",
-        "(\\d+)\\s?page",
-        "(\\d+)\\s?capacity"
+        "(\\d+)[\\s-]?photo",
+        "(\\d+)[\\s-]?pocket",
+        "(\\d+)[\\s-]?page",
+        "(\\d+)[\\s-]?capacity"
       ],
       "note": "Dominant values: 100, 200, 300 photos; 64, 36 pockets"
     },
@@ -4016,7 +4729,31 @@
         "acrylic",
         "satin",
         "silver plated",
-        "foam board"
+        "foam board",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -4033,7 +4770,10 @@
         "blue",
         "bronze",
         "natural",
-        "clear"
+        "clear",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -4059,9 +4799,9 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+(?:\\.\\d+)?)\\s?x\\s?(\\d+(?:\\.\\d+)?)",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?x[\\s-]?(\\d+(?:\\.\\d+)?)",
         "(\\d+(?:\\.\\d+)?)[\\s-]inch",
-        "(\\d+(?:\\.\\d+)?)\\s?quot"
+        "(\\d+(?:\\.\\d+)?)[\\s-]?quot"
       ],
       "note": "Common sizes include 4x6, 5x7, 8x10, 11x14"
     },
@@ -4128,7 +4868,31 @@
         "jacquard",
         "organza",
         "cotton duck",
-        "pique"
+        "pique",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -4148,7 +4912,10 @@
         "taupe",
         "navy",
         "tan",
-        "ivory"
+        "ivory",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -4169,15 +4936,15 @@
       "type": "regex",
       "patterns": [
         "(\\d+)[\\s-]inch",
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?x\\s?(\\d+)"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)"
       ]
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)"
       ],
       "note": "Common values include 1 piece, 2 piece, and 3 pc sets"
@@ -4225,7 +4992,31 @@
       "values": [
         "cotton",
         "fabric",
-        "cloth"
+        "cloth",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -4238,7 +5029,10 @@
         "red",
         "purple",
         "multi",
-        "multicolor"
+        "multicolor",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -4270,9 +5064,9 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
         "(\\d+)x(\\d+)"
       ],
       "note": "Common sizes include 60x90, 51x60, and 80x100 inches"
@@ -4288,8 +5082,8 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc"
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc"
       ]
     },
     "Theme": {
@@ -4344,7 +5138,31 @@
         "plastic",
         "gel",
         "sand",
-        "porcelain"
+        "porcelain",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -4362,7 +5180,10 @@
         "silver",
         "multicolor",
         "translucent",
-        "transparent"
+        "transparent",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -4384,9 +5205,9 @@
       "type": "regex",
       "patterns": [
         "(\\d+(?:\\.\\d+)?)[\\s-]ounce",
-        "(\\d+(?:\\.\\d+)?)\\s?oz",
-        "(\\d+(?:\\.\\d+)?)\\s?ml",
-        "(\\d+(?:\\.\\d+)?)\\s?gallon"
+        "(\\d+(?:\\.\\d+)?)[\\s-]?oz",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?ml",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?gallon"
       ],
       "note": "Dominant values: 8oz, 22oz"
     },
@@ -4394,15 +5215,15 @@
       "type": "regex",
       "patterns": [
         "(\\d+(?:\\.\\d+)?)[\\s-]pound",
-        "(\\d+(?:\\.\\d+)?)\\s?lb",
-        "(\\d+)\\s?gram"
+        "(\\d+(?:\\.\\d+)?)[\\s-]?lb",
+        "(\\d+)[\\s-]?gram"
       ]
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?piece",
         "set (?:of )?(\\d+)",
         "pack (?:of )?(\\d+)"
       ]
@@ -4454,7 +5275,29 @@
         "wood",
         "mango wood",
         "bamboo",
-        "mercury glass"
+        "mercury glass",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -4469,7 +5312,10 @@
         "gold",
         "silver",
         "brown",
-        "purple"
+        "purple",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -4497,10 +5343,10 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?(?:tall|high|h|w)",
-        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?(?:tall|high|h|w)",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
         "(\\d+)[\\s-]in"
       ],
       "note": "Standard measurements for height and width in inches"
@@ -4509,9 +5355,9 @@
       "type": "regex",
       "patterns": [
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?pack"
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?pack"
       ],
       "note": "Commonly sold in sets of 2, 3, or bulk packs for events"
     },
@@ -4564,7 +5410,31 @@
       "values": [
         "vinyl",
         "glass",
-        "gel"
+        "gel",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -4576,7 +5446,10 @@
         "black",
         "silver",
         "red",
-        "multicolor"
+        "multicolor",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -4602,12 +5475,12 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+(?:\\.\\d+)?)\\s?quot",
-        "(\\d+(?:\\.\\d+)?)\\s?inch",
-        "(\\d+(?:\\.\\d+)?)\\s?ft",
-        "(\\d+(?:\\.\\d+)?)\\s?foot",
-        "(\\d+)\\s?cm",
-        "(\\d+(?:\\.\\d+)?)\\s?[xX]\\s?(\\d+(?:\\.\\d+)?)",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?quot",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?inch",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?ft",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?foot",
+        "(\\d+)[\\s-]?cm",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?[xX][\\s-]?(\\d+(?:\\.\\d+)?)",
         "(\\d+(?:\\.\\d+)?)-by-(\\d+(?:\\.\\d+)?)"
       ],
       "note": "Captures width, height, and length in inches, feet, or centimeters"
@@ -4615,10 +5488,10 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?roll",
-        "(\\d+)\\s?sheet",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?roll",
+        "(\\d+)[\\s-]?sheet",
         "set (?:of )?(\\d+)"
       ],
       "note": "Captures the number of items, rolls, or sheets included"
@@ -4671,7 +5544,31 @@
         "wood",
         "crystal",
         "rope",
-        "wrought iron"
+        "wrought iron",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -4684,7 +5581,10 @@
         "pewter",
         "antique brass",
         "satin nickel",
-        "oil rubbed bronze"
+        "oil rubbed bronze",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -4704,11 +5604,11 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?in",
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?in",
         "(\\d+)[\\s-]?(\\d+)\\s?inch",
-        "(\\d+)\\/(\\d+)\\s?inch",
+        "(\\d+)\\/(\\d+)[\\s-]?inch",
         "diameter (?:of )?(\\d+(?:\\.\\d+)?)"
       ],
       "note": "Commonly captures rod length (e.g., 28-48, 66-120) and rod diameter (e.g., 3/4 inch, 1 inch)"
@@ -4716,11 +5616,11 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)",
         "pack (?:of )?(\\d+)",
-        "(\\d+)\\s?pair"
+        "(\\d+)[\\s-]?pair"
       ],
       "note": "Captures quantity of hardware items or pairs of tiebacks"
     }
@@ -4770,7 +5670,30 @@
         "fabric",
         "vinyl",
         "faux silk",
-        "faux wood"
+        "faux wood",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -4789,7 +5712,10 @@
         "grey",
         "pink",
         "burgundy",
-        "bronze"
+        "bronze",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -4817,22 +5743,22 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?w\\s?x\\s?(\\d+)\\s?l",
-        "(\\d+)\\s?long",
-        "(\\d+)\\s?wide"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?w[\\s-]?x[\\s-]?(\\d+)[\\s-]?l",
+        "(\\d+)[\\s-]?long",
+        "(\\d+)[\\s-]?wide"
       ],
       "note": "Common values: 84, 63, 52, 72, 54, 96, 108"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "set\\s?(?:of\\s?)?(\\d+)",
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?panel",
+        "set[\\s-]?(?:of[\\s-]?)?(\\d+)",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?panel",
         "pair"
       ],
       "note": "Pair indicates a 2 piece set"
@@ -4886,7 +5812,31 @@
         "nylon",
         "fabric",
         "plush",
-        "gel memory foam"
+        "gel memory foam",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -4896,7 +5846,10 @@
         "black",
         "white",
         "vanilla",
-        "french vanilla"
+        "french vanilla",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -4936,7 +5889,7 @@
       "type": "regex",
       "patterns": [
         "(\\d+)[\\s-]inch",
-        "(\\d+)\\s?quot",
+        "(\\d+)[\\s-]?quot",
         "(\\d+)\\\""
       ],
       "note": "Common height/thickness: 14 inch, 18 inch"
@@ -4972,7 +5925,31 @@
         "netting",
         "fabric",
         "sequin",
-        "eyelet"
+        "eyelet",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -4990,7 +5967,10 @@
         "ivory",
         "brown",
         "yellow",
-        "red"
+        "red",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -5030,10 +6010,10 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?inch",
-        "(\\d+)\"\\s?x\\s?(\\d+)\"",
-        "(\\d+)\\s?cm",
-        "(\\d+)'\\s?x\\s?(\\d+)'"
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)\"[\\s-]?x[\\s-]?(\\d+)\"",
+        "(\\d+)[\\s-]?cm",
+        "(\\d+)'[\\s-]?x[\\s-]?(\\d+)'"
       ],
       "note": "Captures height, width, and length measurements"
     }
@@ -5077,7 +6057,30 @@
         "latex",
         "microbead",
         "velour",
-        "shredded memory foam"
+        "shredded memory foam",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -5087,7 +6090,10 @@
         "blue",
         "black",
         "pink",
-        "gray"
+        "gray",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -5116,10 +6122,10 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?rdqu?o",
-        "(\\d+)\\s?x\\s?(\\d+)"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?rdqu?o",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)"
       ]
     },
     "Size": {
@@ -5136,16 +6142,16 @@
       "type": "regex",
       "patterns": [
         "(\\d+)[\\s-]thread[\\s-]count",
-        "(\\d+)\\s?tc"
+        "(\\d+)[\\s-]?tc"
       ],
       "note": "Common values include 300 thread count"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?pack",
+        "(\\d+)[\\s-]?pack",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?pc"
+        "(\\d+)[\\s-]?pc"
       ],
       "note": "Dominant values: 2 pack, set of 2"
     }
@@ -5184,7 +6190,31 @@
         "velvet",
         "plush",
         "suede",
-        "glass"
+        "glass",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -5206,7 +6236,10 @@
         "tan",
         "coral",
         "ivory",
-        "burnt orange"
+        "burnt orange",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -5226,10 +6259,10 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?in(?:ch)?",
-        "(\\d+)\\s?cm",
-        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?in(?:ch)?",
+        "(\\d+)[\\s-]?cm",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
         "(king|queen|full|twin|twin xl)"
       ],
       "note": "Common values include 34 quot, 86 quot, 87 quot, and 220cm"
@@ -5237,8 +6270,8 @@
     "Thread_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?thread\\s?count",
-        "(\\d+)\\s?tc"
+        "(\\d+)[\\s-]?thread[\\s-]?count",
+        "(\\d+)[\\s-]?tc"
       ],
       "note": "Example: 400 thread count"
     }
@@ -5268,7 +6301,31 @@
         "egyptian cotton",
         "microfiber",
         "linen",
-        "fabric"
+        "fabric",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -5290,7 +6347,10 @@
         "brown",
         "burgundy",
         "purple",
-        "beige"
+        "beige",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -5325,8 +6385,8 @@
     "Thread_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?thread(?:\\scount)?",
-        "(\\d+)\\s?tc"
+        "(\\d+)[\\s-]?thread(?:\\scount)?",
+        "(\\d+)[\\s-]?tc"
       ],
       "note": "Dominant values: 300, 400, 500, 1500"
     },
@@ -5344,9 +6404,9 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?pcs"
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?pcs"
       ],
       "note": "Usually 1 piece for standalone bed skirts."
     }
@@ -5393,7 +6453,31 @@
         "metal",
         "fabric",
         "elastic",
-        "rubber"
+        "rubber",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -5401,7 +6485,10 @@
       "values": [
         "white",
         "black",
-        "blue"
+        "blue",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -5421,10 +6508,10 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?quot",
         "(\\d+)\" ",
-        "(\\d+)\\s?h"
+        "(\\d+)[\\s-]?h"
       ]
     },
     "Size": {
@@ -5482,7 +6569,31 @@
         "microfiber",
         "jacquard",
         "sateen",
-        "long staple cotton"
+        "long staple cotton",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -5504,7 +6615,10 @@
         "beige",
         "sage",
         "gold",
-        "yellow"
+        "yellow",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -5538,16 +6652,16 @@
       "type": "regex",
       "patterns": [
         "(\\d+)[\\s-]?tc",
-        "(\\d+)\\s?thread\\s?count"
+        "(\\d+)[\\s-]?thread[\\s-]?count"
       ],
       "note": "Dominant values: 500tc, 600tc"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?pcs",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?pcs",
         "set (?:of )?(\\d+)"
       ],
       "note": "Total number of items in the bedding collection"
@@ -5592,7 +6706,31 @@
         "microfiber",
         "linen",
         "twill",
-        "ribcord"
+        "ribcord",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -5615,7 +6753,10 @@
         "navy",
         "pink",
         "yellow",
-        "coral"
+        "coral",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -5652,17 +6793,17 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot\\s?x\\s?(\\d+)\\s?quot",
-        "(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?inch"
+        "(\\d+)[\\s-]?quot[\\s-]?x[\\s-]?(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?inch"
       ],
       "note": "Dominant values: 108x88, 106x118, 90x90"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)"
       ],
       "note": "Common counts: 2pc, 3pc, 4pc, 5pc, 6pc"
@@ -5721,7 +6862,31 @@
         "raschel",
         "micro raschel",
         "flannel",
-        "knit"
+        "knit",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -5740,7 +6905,10 @@
         "coral",
         "navy",
         "chocolate",
-        "royal"
+        "royal",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -5772,10 +6940,10 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?in",
-        "(\\d+)\\s?x\\s?(\\d+)"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?in",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)"
       ]
     },
     "Size": {
@@ -5791,8 +6959,8 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)"
       ],
       "note": "Standard blankets are usually sold as single pieces unless specified as a set."
@@ -5835,7 +7003,31 @@
         "satin",
         "chenille",
         "egyptian cotton",
-        "linen"
+        "linen",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -5858,7 +7050,10 @@
         "sage",
         "gold",
         "chocolate",
-        "aqua"
+        "aqua",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -5902,9 +7097,9 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?pcs",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?pcs",
         "set (?:of )?(\\d+)"
       ],
       "note": "Dominant values: 3pc, 4pc, 5pc, 7pc, 8pc, 10pc, 12pc"
@@ -5955,7 +7150,31 @@
         "silk",
         "canvas",
         "burlap",
-        "cotton blend"
+        "cotton blend",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -5973,7 +7192,10 @@
         "gray",
         "grey",
         "gold",
-        "beige"
+        "beige",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -6015,11 +7237,11 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
         "(\\d+)x(\\d+)cm",
-        "(\\d+)\\s?cm"
+        "(\\d+)[\\s-]?cm"
       ],
       "note": "Common sizes: 18x18, 20x30, 16x16, 45x45cm"
     },
@@ -6027,8 +7249,8 @@
       "type": "regex",
       "patterns": [
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?piece",
         "pack (?:of )?(\\d+)"
       ],
       "note": "Common values: set of 2, set of 4"
@@ -6094,7 +7316,31 @@
         "silk",
         "flannel",
         "brushed twill",
-        "goose down"
+        "goose down",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -6113,7 +7359,10 @@
         "brown",
         "taupe",
         "beige",
-        "purple"
+        "purple",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -6144,9 +7393,9 @@
     "Thread_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?thread\\s?count",
-        "(\\d+)\\s?tc",
-        "(\\d+)\\s?count"
+        "(\\d+)[\\s-]?thread[\\s-]?count",
+        "(\\d+)[\\s-]?tc",
+        "(\\d+)[\\s-]?count"
       ],
       "note": "Common values: 300, 600, 800, 1000, 1200, 1500"
     },
@@ -6166,9 +7415,9 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?pcs",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?pcs",
         "set (?:of )?(\\d+)"
       ],
       "note": "Dominant values: 3pc, 4pc, 7pc"
@@ -6176,9 +7425,9 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
         "(\\d+)[\\s-]inch",
-        "(\\d+)\\s?quot"
+        "(\\d+)[\\s-]?quot"
       ],
       "note": "Commonly refers to inch measurements like 88x88 or 68x88"
     }
@@ -6226,7 +7475,31 @@
         "plush",
         "raschel",
         "flannel",
-        "silk touch"
+        "silk touch",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -6239,7 +7512,10 @@
         "green",
         "black",
         "red",
-        "multi color"
+        "multi color",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -6273,9 +7549,9 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?x\\s?(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
+        "(\\d+)[\\s-]?quot[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
         "(\\d+)\""
       ],
       "note": "Common sizes include 46x60, 50x60, 62x90"
@@ -6283,8 +7559,8 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)"
       ],
       "note": "Commonly 3pc, 4pc, 5pc, or 8pc sets"
@@ -6337,13 +7613,39 @@
         "wool",
         "terry",
         "gel",
-        "fabric"
+        "fabric",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
       "type": "dictionary",
       "values": [
-        "white"
+        "white",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -6378,9 +7680,9 @@
       "type": "regex",
       "patterns": [
         "(\\d+)[\\s-]inch",
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?thread\\s?count"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?thread[\\s-]?count"
       ],
       "note": "Captures thickness (e.g., 2 inch), dimensions (e.g., 60x80), and thread count"
     }
@@ -6424,7 +7726,31 @@
         "cotton",
         "wool",
         "fiber",
-        "polyester alternative"
+        "polyester alternative",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -6432,7 +7758,10 @@
       "values": [
         "white",
         "blue",
-        "ivory"
+        "ivory",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -6468,10 +7797,10 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+(?:\\.\\d+)?)\\s?inch",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?inch",
         "(\\d+(?:\\.\\d+)?)[\\s-]?in",
         "(\\d+(?:\\.\\d+)?)\"",
-        "(\\d+)\\s?x\\s?(\\d+)"
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)"
       ],
       "note": "Dominant values: 2 inch, 3 inch, 4 inch"
     },
@@ -6521,7 +7850,31 @@
       "values": [
         "cotton",
         "microfiber",
-        "textile"
+        "textile",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -6542,7 +7895,10 @@
         "ivory",
         "navy",
         "coral",
-        "yellow"
+        "yellow",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -6573,9 +7929,9 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?x\\s?(\\d+)"
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)"
       ]
     },
     "Size": {
@@ -6591,10 +7947,10 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?sham"
+        "(\\d+)[\\s-]?sham"
       ],
       "note": "Standard set sizes are 2-piece and 3-piece."
     }
@@ -6636,7 +7992,30 @@
         "silk",
         "mulberry silk",
         "linen",
-        "damask"
+        "damask",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -6657,7 +8036,10 @@
         "chocolate",
         "red",
         "light blue",
-        "navy blue"
+        "navy blue",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -6687,9 +8069,9 @@
     "Thread_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?thread\\s?count",
-        "(\\d+)\\s?tc",
-        "(\\d+)\\s?series"
+        "(\\d+)[\\s-]?thread[\\s-]?count",
+        "(\\d+)[\\s-]?tc",
+        "(\\d+)[\\s-]?series"
       ],
       "note": "Dominant values: 300, 400, 600, 800, 1000, 1200, 1500, 1800"
     },
@@ -6709,19 +8091,19 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?pillow\\s?case"
+        "(\\d+)[\\s-]?pillow[\\s-]?case"
       ],
       "note": "Total count of items in the sheet or bedding set"
     },
     "Pocket_Depth": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?inch(?:\\sdeep)?",
-        "(\\d+)\"\\s?deep",
-        "deep\\s?pocket\\s?(\\d+)"
+        "(\\d+)[\\s-]?inch(?:\\sdeep)?",
+        "(\\d+)\"[\\s-]?deep",
+        "deep[\\s-]?pocket[\\s-]?(\\d+)"
       ],
       "note": "Measurement of fitted sheet corner depth"
     }
@@ -6759,7 +8141,31 @@
         "canvas",
         "wood",
         "acrylic",
-        "oil"
+        "oil",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -6771,7 +8177,10 @@
         "black",
         "blue",
         "colorful",
-        "multicolor"
+        "multicolor",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -6797,19 +8206,19 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?cm",
-        "(\\d+)\\s?[xX]\\s?(\\d+)"
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?cm",
+        "(\\d+)[\\s-]?[xX][\\s-]?(\\d+)"
       ],
       "note": "Common sizes include 24 inch, 24x24, and 12 inch"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?panel",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?panel",
         "set (?:of )?(\\d+)"
       ],
       "note": "Dominant values: 3 piece, 5 piece, 4 piece"
@@ -6858,7 +8267,31 @@
         "canvas",
         "muslin",
         "cloth",
-        "titanium cloth"
+        "titanium cloth",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -6869,7 +8302,10 @@
         "white",
         "silver",
         "b&w",
-        "multicolor"
+        "multicolor",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -6895,9 +8331,9 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+(?:\\.\\d+)?)\\s?x\\s?(\\d+(?:\\.\\d+)?)",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?x[\\s-]?(\\d+(?:\\.\\d+)?)",
         "(\\d+(?:\\.\\d+)?)[\\s-]?inch",
-        "(\\d+(?:\\.\\d+)?)\\s?ft",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?ft",
         "(\\d+)x(\\d+)"
       ],
       "note": "Common sizes: 8x10, 11x14, 16x20, 5x6 ft"
@@ -6906,8 +8342,8 @@
       "type": "regex",
       "patterns": [
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc"
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc"
       ],
       "note": "Captures quantity of photographs or items in a collection"
     }
@@ -6977,7 +8413,31 @@
         "vinyl",
         "laminated",
         "cotton",
-        "parchment"
+        "parchment",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -6988,7 +8448,10 @@
         "blue",
         "red",
         "multicolor",
-        "pink"
+        "pink",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -7029,15 +8492,15 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?cm",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?cm",
         "(\\d+)x(\\d+)",
-        "(\\d+)\\s?in",
-        "(\\d+)\\s?x\\s?(\\d+)\\s?inch",
-        "(\\d+)\\s?ft\\s?x\\s?(\\d+)\\s?ft",
-        "(\\d+)ft\\s?x\\s?(\\d+)ft",
+        "(\\d+)[\\s-]?in",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?ft[\\s-]?x[\\s-]?(\\d+)[\\s-]?ft",
+        "(\\d+)ft[\\s-]?x[\\s-]?(\\d+)ft",
         "a1",
         "a2",
         "a3",
@@ -7048,11 +8511,11 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?panel",
-        "(\\d+)\\s?pack"
+        "(\\d+)[\\s-]?panel",
+        "(\\d+)[\\s-]?pack"
       ],
       "note": "Captures total number of units or panels in an art set"
     },
@@ -7140,7 +8603,30 @@
         "glass",
         "bonded leather",
         "solid wood",
-        "fabric"
+        "fabric",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -7157,7 +8643,10 @@
         "blue",
         "beige",
         "grey",
-        "ivory"
+        "ivory",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -7188,12 +8677,12 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?ft",
-        "(\\d+)\\s?feet",
-        "(\\d+)\\s?w\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?ft",
+        "(\\d+)[\\s-]?feet",
+        "(\\d+)[\\s-]?w[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?x[\\s-]?(\\d+)"
       ],
       "note": "Captures inches (quot), feet, and multi-dimensional layout strings"
     },
@@ -7202,8 +8691,8 @@
       "patterns": [
         "(\\d+)[\\s-]panel",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?piece"
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?piece"
       ],
       "note": "In this category, panel count is the primary indicator of size for dividers"
     }
@@ -7251,7 +8740,30 @@
         "travertine",
         "marble",
         "glass",
-        "linen"
+        "linen",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -7266,7 +8778,10 @@
         "cinnamon",
         "cream",
         "antique",
-        "dark"
+        "dark",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -7292,11 +8807,11 @@
       "type": "regex",
       "patterns": [
         "(\\d+(?:\\.\\d+)?)[\\s-]inch",
-        "(\\d+(?:\\.\\d+)?)\\s?quot",
-        "(\\d+(?:\\.\\d+)?)\\s?h",
-        "(\\d+(?:\\.\\d+)?)\\s?w",
-        "(\\d+(?:\\.\\d+)?)\\s?l",
-        "(\\d+(?:\\.\\d+)?)\\s?x\\s?(\\d+(?:\\.\\d+)?)"
+        "(\\d+(?:\\.\\d+)?)[\\s-]?quot",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?h",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?w",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?l",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?x[\\s-]?(\\d+(?:\\.\\d+)?)"
       ],
       "note": "Captures height, width, and depth in inches or quotients"
     },
@@ -7372,7 +8887,31 @@
         "linen",
         "gel memory foam",
         "visco elastic",
-        "upholstered"
+        "upholstered",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -7387,7 +8926,10 @@
         "oak",
         "walnut",
         "grey",
-        "natural"
+        "natural",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -7431,19 +8973,19 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?w\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?x\\s?(\\d+)"
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?w[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)"
       ],
       "note": "Common values include 8 inch, 10 inch, 12 inch mattress heights"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?drawer",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?drawer",
         "set (?:of )?(\\d+)"
       ],
       "note": "Captures both total set pieces and specific drawer counts for storage items"
@@ -7499,7 +9041,30 @@
         "stainless steel",
         "chrome",
         "bamboo",
-        "marble"
+        "marble",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -7518,7 +9083,10 @@
         "silver",
         "red",
         "natural",
-        "dark brown"
+        "dark brown",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -7545,20 +9113,20 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?w\\s?x\\s?(\\d+)\\s?h",
-        "(\\d+)\\s?x\\s?(\\d+)\\s?quot"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?w[\\s-]?x[\\s-]?(\\d+)[\\s-]?h",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?quot"
       ],
       "note": "Common dimensions found in entryway units for width, height, and depth"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?tier",
-        "(\\d+)\\s?hook",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?tier",
+        "(\\d+)[\\s-]?hook",
         "set (?:of )?(\\d+)"
       ],
       "note": "Tiers and hooks are primary capacity indicators for entryway racks and trees"
@@ -7614,7 +9182,31 @@
         "stainless steel",
         "chrome",
         "fabric",
-        "plastic"
+        "plastic",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -7633,7 +9225,10 @@
         "red",
         "blue",
         "green",
-        "natural"
+        "natural",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -7659,11 +9254,11 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?in",
-        "(\\d+)\\s?h",
-        "(\\d+)\\s?w\\s?x\\s?(\\d+)"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?in",
+        "(\\d+)[\\s-]?h",
+        "(\\d+)[\\s-]?w[\\s-]?x[\\s-]?(\\d+)"
       ],
       "note": "Common values include 24-inch, 26-inch, 29-inch, and 30-inch heights"
     },
@@ -7671,8 +9266,8 @@
       "type": "regex",
       "patterns": [
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:for )?(\\d+)",
         "set (?:two|four)"
       ],
@@ -7741,9 +9336,29 @@
         "faux leather",
         "chrome",
         "oak",
-        "cherry",
         "walnut",
-        "mahogany"
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -7762,7 +9377,9 @@
         "silver",
         "natural",
         "dark brown",
-        "mahogany"
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -7789,21 +9406,21 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?in",
-        "(\\d+)\\s?w\\s?x\\s?(\\d+)\\s?h",
-        "(\\d+)\\s?x\\s?(\\d+)\\s?x\\s?(\\d+)"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?in",
+        "(\\d+)[\\s-]?w[\\s-]?x[\\s-]?(\\d+)[\\s-]?h",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?x[\\s-]?(\\d+)"
       ],
       "note": "Common values include 36, 48, 72 inches"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?shelf",
-        "(\\d+)\\s?drawer",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?shelf",
+        "(\\d+)[\\s-]?drawer",
         "set (?:of )?(\\d+)"
       ],
       "note": "Common counts: 2-drawer, 3-shelf, 5-shelf"
@@ -7871,7 +9488,30 @@
         "upholstered",
         "metal",
         "vinyl",
-        "foam"
+        "foam",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -7888,7 +9528,10 @@
         "brown",
         "purple",
         "grey",
-        "multicolor"
+        "multicolor",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -7918,17 +9561,17 @@
       "type": "regex",
       "patterns": [
         "(\\d+)[\\s-]ounce",
-        "(\\d+)\\s?oz",
-        "(\\d+)\\s?lb",
-        "(\\d+)\\s?pound"
+        "(\\d+)[\\s-]?oz",
+        "(\\d+)[\\s-]?lb",
+        "(\\d+)[\\s-]?pound"
       ],
       "note": "Commonly refers to weight capacity in kids furniture or fill volume for bean bags"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)",
         "(\\d+)[\\s-]piece set"
       ],
@@ -7987,7 +9630,31 @@
         "chrome",
         "steel",
         "stainless steel",
-        "plastic"
+        "plastic",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -8007,7 +9674,10 @@
         "silver",
         "red",
         "natural",
-        "clear"
+        "clear",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -8033,21 +9703,21 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?in",
-        "(\\d+)\\\"\\s?[wxhl]",
-        "(\\d+)\\s?x\\s?(\\d+)"
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?in",
+        "(\\d+)\\\"[\\s-]?[wxhl]",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)"
       ],
       "note": "Common heights include 30 inch (standard) and 36 inch (counter height)"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?chair"
+        "(\\d+)[\\s-]?chair"
       ],
       "note": "Common counts: 2 piece (chairs), 3 piece (bistro), 5 piece (standard set), 7 piece (large set)"
     },
@@ -8124,7 +9794,31 @@
         "linen",
         "tempered glass",
         "solid wood",
-        "faux marble"
+        "faux marble",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -8145,7 +9839,10 @@
         "blue",
         "gray",
         "natural",
-        "ivory"
+        "ivory",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -8178,9 +9875,9 @@
       "patterns": [
         "(\\d+)[\\s-]inch",
         "(\\d+)[\\s-]quot",
-        "(\\d+)\\s?in",
-        "(\\d+)\\s?w\\s?x\\s?(\\d+)\\s?h",
-        "(\\d+)\\s?l\\s?x\\s?(\\d+)\\s?w"
+        "(\\d+)[\\s-]?in",
+        "(\\d+)[\\s-]?w[\\s-]?x[\\s-]?(\\d+)[\\s-]?h",
+        "(\\d+)[\\s-]?l[\\s-]?x[\\s-]?(\\d+)[\\s-]?w"
       ],
       "note": "Common screen sizes: 50, 60; common table heights/widths in inches"
     },
@@ -8239,7 +9936,30 @@
         "metal",
         "plastic",
         "foam",
-        "stainless steel"
+        "stainless steel",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -8250,7 +9970,9 @@
         "walnut",
         "mahogany",
         "dark walnut",
-        "polished"
+        "polished",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -8274,8 +9996,8 @@
       "patterns": [
         "(\\d+(?:\\.\\d+)?)[\\s-]?inch",
         "(\\d+(?:\\.\\d+)?)[\\s-]?quot",
-        "(\\d+(?:\\.\\d+)?)\\s?w\\s?x\\s?(\\d+(?:\\.\\d+)?)",
-        "(\\d+(?:\\.\\d+)?)\\s?mm"
+        "(\\d+(?:\\.\\d+)?)[\\s-]?w[\\s-]?x[\\s-]?(\\d+(?:\\.\\d+)?)",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?mm"
       ],
       "note": "Common sizes include 24 quot, 36 quot, 42 quot, and thickness measurements like 1/2 quot or 3/8 quot"
     },
@@ -8283,9 +10005,9 @@
       "type": "regex",
       "patterns": [
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
-        "(\\d+)\\s?pack"
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
+        "(\\d+)[\\s-]?pack"
       ],
       "note": "Dominant values: Set of 2, Set of 4"
     }
@@ -8326,7 +10048,31 @@
         "chenille",
         "latex",
         "rubber",
-        "woven"
+        "woven",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -8345,7 +10091,10 @@
         "red",
         "sage",
         "beige",
-        "ivory"
+        "ivory",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -8370,18 +10119,18 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot\\s?x\\s?(\\d+)\\s?quot",
-        "(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?quot"
+        "(\\d+)[\\s-]?quot[\\s-]?x[\\s-]?(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?quot"
       ],
       "note": "Common sizes include 17x24, 20x30, 21x34, and 24x40 inches"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)"
       ],
       "note": "Standard sets typically range from 2 to 3 pieces"
@@ -8497,7 +10246,29 @@
         "glass",
         "ceramic",
         "cotton",
-        "teak"
+        "teak",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -8515,7 +10286,10 @@
         "silver",
         "gold",
         "purple",
-        "natural"
+        "natural",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -8556,21 +10330,21 @@
       "type": "regex",
       "patterns": [
         "(\\d+)[\\s-]ounce",
-        "(\\d+)\\s?oz",
-        "(\\d+)\\s?ml",
-        "(\\d+)\\s?gram",
-        "(\\d+)\\s?liter",
-        "(\\d+)\\s?l"
+        "(\\d+)[\\s-]?oz",
+        "(\\d+)[\\s-]?ml",
+        "(\\d+)[\\s-]?gram",
+        "(\\d+)[\\s-]?liter",
+        "(\\d+)[\\s-]?l"
       ],
       "note": "Standard dispenser capacities usually range from 8oz to 16oz"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?pack",
+        "(\\d+)[\\s-]?pack",
         "pack of (\\d+)"
       ],
       "note": "Commonly seen as 4 piece bathroom sets or set of 12 hooks"
@@ -8578,12 +10352,12 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?x\\s?(\\d+)\\s?inch",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?in\\b",
-        "(\\d+)\\s?\\\"",
-        "(\\d+)\\s?x\\s?(\\d+)",
-        "(\\d+)\\s?w\\s?x\\s?(\\d+)\\s?h"
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?in\\b",
+        "(\\d+)[\\s-]?\\\"",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
+        "(\\d+)[\\s-]?w[\\s-]?x[\\s-]?(\\d+)[\\s-]?h"
       ],
       "note": "Captures common bathroom accessory dimensions such as 24 inch towel bars or 72x72 shower curtains"
     }
@@ -8641,7 +10415,30 @@
         "linen",
         "terry",
         "velour",
-        "jacquard"
+        "jacquard",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -8658,7 +10455,10 @@
         "yellow",
         "navy",
         "purple",
-        "ivory"
+        "ivory",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -8683,9 +10483,9 @@
     "Dimensions": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?quot",
-        "(\\d+)\\s?inch",
-        "(\\d+)\\s?x\\s?(\\d+)",
+        "(\\d+)[\\s-]?quot",
+        "(\\d+)[\\s-]?inch",
+        "(\\d+)[\\s-]?x[\\s-]?(\\d+)",
         "(\\d+)x(\\d+)"
       ],
       "note": "Common dimensions: 30x60, 28x58, 27x52"
@@ -8693,11 +10493,11 @@
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)",
-        "(\\d+)\\s?pack",
-        "(\\d+)\\s?pk"
+        "(\\d+)[\\s-]?pack",
+        "(\\d+)[\\s-]?pk"
       ],
       "note": "Captures total number of items in the towel set or pack"
     }
@@ -8747,7 +10547,31 @@
         "polyester",
         "fabric",
         "memory foam",
-        "resin"
+        "resin",
+        "oak",
+        "walnut",
+        "pine",
+        "maple",
+        "birch",
+        "bamboo",
+        "teak",
+        "cedar",
+        "ash",
+        "hickory",
+        "poplar",
+        "acacia",
+        "mango wood",
+        "rosewood",
+        "hardwood",
+        "american oak",
+        "white oak",
+        "faux wood",
+        "wooden",
+        "cherry wood",
+        "mahogany wood",
+        "walnut wood",
+        "mahogany",
+        "hazelnut"
       ]
     },
     "Color": {
@@ -8759,7 +10583,10 @@
         "red",
         "green",
         "colorful",
-        "multicolor"
+        "multicolor",
+        "mahogany",
+        "pine",
+        "hazelnut"
       ]
     },
     "Features": {
@@ -8780,16 +10607,16 @@
       "type": "regex",
       "patterns": [
         "(\\d+)[\\s-]ounce",
-        "(\\d+)\\s?oz",
-        "(\\d+)\\s?ml"
+        "(\\d+)[\\s-]?oz",
+        "(\\d+)[\\s-]?ml"
       ],
       "note": "Standard volume patterns for liquid bath products"
     },
     "Piece_Count": {
       "type": "regex",
       "patterns": [
-        "(\\d+)\\s?piece",
-        "(\\d+)\\s?pc",
+        "(\\d+)[\\s-]?piece",
+        "(\\d+)[\\s-]?pc",
         "set (?:of )?(\\d+)",
         "(\\d+)[\\s-]pack"
       ],
