@@ -11,9 +11,10 @@ import ast
 import json
 import re
 from pathlib import Path
-from typing import Iterable, Optional, Sequence, Union
+from typing import Iterable, Mapping, Optional, Sequence, Union
 
 import nltk
+import numpy as np
 import pandas as pd
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -34,6 +35,47 @@ STOPWORDS_TO_KEEP = {"no", "not", "non", "off", "self"}
 _DIMENSION_UNIT_RE = re.compile(
     r'[\s-]*(inch|inchs|in|cm|mm|ft|foot|feet|meter|m|quot|"|\")'
 )
+
+# Default schema for numeric parsing (matches notebooks/create_features.ipynb).
+NUMERIC_UNIT_FIELDS = (
+    "Capacity",
+    "Capacity_Volume",
+    "Piece_Count",
+    "Thread_Count",
+    "Weight",
+)
+NUMERIC_ONLY_FIELDS = {
+    "Bar_Pressure": "bar_pressure_numeric",
+    "Capacity_Cups": "capacity_cups_numeric",
+    "Density_Weight": "density_weight_lb",
+    "Pocket_Depth": "pocket_depth_in",
+    "Power_Rating": "power_rating_w",
+    "Stage_Count": "stage_count_numeric",
+    "Voltage": "voltage_numeric",
+}
+DIMENSION_FIELD = "Dimensions"
+
+UNIT_MAP = {
+    "feet": "ft", "foot": "ft",
+    "ounce": "oz",
+    "piece": "pc", "pieces": "pc", "pcs": "pc",
+    "quart": "qt",
+    "liter": "l",
+    "inch": "in", "inchs": "in", "inch deep": "in",
+    "pound": "lb",
+    "gallon": "gal",
+    "gram": "g", "gm": "g",
+    "centimeter": "cm",
+    "millimeter": "mm",
+    "watt": "w",
+    "volt": "v",
+    "dozen": "dz",
+    "cu ft": "cubic foot", "cuft": "cubic foot",
+    "tc": "thread count", "thread": "thread count", "threadcount": "thread count",
+    "pk": "pocket",
+    "count": "count", "ct": "count",
+    "pillowcase": "pillow case",
+}
 
 
 def _ensure_nltk_resources() -> None:
@@ -267,5 +309,115 @@ def run_feature_extraction(
     if priority is None:
         priority = list(text_columns)
     df["extracted_features"] = df.apply(lambda r: merge_extracted(r, priority), axis=1)
+
+    return df
+
+
+def parse_numeric_and_unit(value):
+    """Parse a string like '12 oz' or '16-oz' into (numeric, unit). NaN/NaN if unparseable."""
+    if pd.isna(value) or not isinstance(value, str) or value.strip() == "":
+        return np.nan, np.nan
+    value = value.strip().lower().replace("-", " ")
+    match = re.match(r"^([\d.]+)\s*([a-z%]+.*)?$", value)
+    if match:
+        num = float(match.group(1))
+        unit = match.group(2).strip() if match.group(2) else np.nan
+        return num, unit
+    return np.nan, np.nan
+
+
+def parse_dimensions(value):
+    """Parse '25x20x10 in' / '12 in x 18 in' / '32x-30' into (dim1, dim2, dim3, unit).
+
+    dim1 >= dim2 >= dim3. Missing dims are NaN.
+    """
+    if pd.isna(value) or not isinstance(value, str) or value.strip() == "":
+        return np.nan, np.nan, np.nan, np.nan
+    value = value.strip().lower()
+    match = re.match(
+        r"^([\d.]+)\s*([a-z]*)\s*[x×]\s*-?\s*([\d.]+)\s*([a-z]*)\s*"
+        r"(?:[x×]\s*-?\s*([\d.]+)\s*([a-z]*))?$",
+        value,
+    )
+    if match:
+        dims = [float(match.group(1)), float(match.group(3))]
+        if match.group(5):
+            dims.append(float(match.group(5)))
+        dims.sort(reverse=True)
+        unit = match.group(6) or match.group(4) or match.group(2) or np.nan
+        unit = unit.strip() if isinstance(unit, str) and unit.strip() else np.nan
+        dim1 = dims[0]
+        dim2 = dims[1] if len(dims) >= 2 else np.nan
+        dim3 = dims[2] if len(dims) >= 3 else np.nan
+        return dim1, dim2, dim3, unit
+    match = re.match(r"^([\d.]+)\s*([a-z]+.*)?$", value)
+    if match:
+        dim1 = float(match.group(1))
+        unit = match.group(2).strip() if match.group(2) else np.nan
+        return dim1, np.nan, np.nan, unit
+    return np.nan, np.nan, np.nan, np.nan
+
+
+def expand_features(
+    df: pd.DataFrame,
+    features_col: str = "extracted_features",
+    numeric_unit_fields: Sequence[str] = NUMERIC_UNIT_FIELDS,
+    numeric_only_fields: Mapping[str, str] = NUMERIC_ONLY_FIELDS,
+    dimension_field: str = DIMENSION_FIELD,
+    unit_map: Mapping[str, str] = UNIT_MAP,
+) -> pd.DataFrame:
+    """Expand the merged dict into typed columns — the table you saw in create_features.ipynb.
+
+    For each row's `extracted_features` dict, this:
+      1. Creates one column per field key (e.g. `Color`, `Material`, `Dimensions`).
+      2. For `numeric_unit_fields` (e.g. `Capacity_Volume='16 oz'`), splits into
+         `<field>_numeric` (16.0) and `<field>_unit` ('oz').
+      3. For `numeric_only_fields`, parses numeric only into the named output column
+         (single-unit fields like `power_rating_w`).
+      4. For `dimension_field` (`Dimensions='12x18 in'`), produces sorted-descending
+         `dimension_1`, `dimension_2`, `dimension_3`, `dimension_unit`.
+      5. Normalizes every `_unit` column through `unit_map` (e.g. 'feet'→'ft').
+
+    Fields configured but not present in any row's dict are skipped silently.
+    Returns a copy of `df` with the new columns added.
+    """
+    df = df.copy()
+
+    all_keys: set = set()
+    for d in df[features_col]:
+        if isinstance(d, dict):
+            all_keys.update(d.keys())
+    for key in sorted(all_keys):
+        df[key] = df[features_col].apply(
+            lambda x, k=key: x.get(k) if isinstance(x, dict) else None
+        )
+
+    parsed_unit_cols = []
+    for field in numeric_unit_fields:
+        if field not in df.columns:
+            continue
+        col_numeric = field.lower() + "_numeric"
+        col_unit = field.lower() + "_unit"
+        df[[col_numeric, col_unit]] = df[field].apply(
+            lambda x: pd.Series(parse_numeric_and_unit(x))
+        )
+        parsed_unit_cols.append(col_unit)
+
+    for field, col_name in numeric_only_fields.items():
+        if field not in df.columns:
+            continue
+        df[col_name] = df[field].apply(lambda x: parse_numeric_and_unit(x)[0])
+
+    if dimension_field in df.columns:
+        df[["dimension_1", "dimension_2", "dimension_3", "dimension_unit"]] = (
+            df[dimension_field].apply(lambda x: pd.Series(parse_dimensions(x)))
+        )
+        parsed_unit_cols.append("dimension_unit")
+
+    for col in parsed_unit_cols:
+        if col in df.columns:
+            df[col] = df[col].apply(
+                lambda x: unit_map.get(x, x) if isinstance(x, str) else x
+            )
 
     return df

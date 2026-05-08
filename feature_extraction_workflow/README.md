@@ -44,6 +44,16 @@ For each item:
 5. **Merge** — combine the per-source dicts into one `extracted_features` dict.
    Priority follows the order you pass in (`priority[0]` overwrites `priority[-1]`).
    Default priority is the order of `text_columns`.
+6. **Expand to per-field columns** (`expand_features`, optional follow-up step) —
+   turn the merged dict into typed columns:
+   - One column per field key (`Color`, `Material`, `Dimensions`, …).
+   - `<field>_numeric` + `<field>_unit` for `Capacity`, `Capacity_Volume`,
+     `Piece_Count`, `Thread_Count`, `Weight` (e.g. `"16 oz"` → `16.0` + `"oz"`).
+   - Single-unit fields parsed numeric-only into named columns: `power_rating_w`,
+     `voltage_numeric`, `pocket_depth_in`, etc.
+   - `Dimensions` parsed into sorted-descending `dimension_1`, `dimension_2`,
+     `dimension_3`, plus `dimension_unit`.
+   - All `_unit` columns standardized through `UNIT_MAP` (`feet`→`ft`, `gram`→`g`).
 
 The returned DataFrame keeps the original columns and adds:
 
@@ -51,11 +61,13 @@ The returned DataFrame keeps the original columns and adds:
 - `<col>_cleaned` for each text column
 - `extracted_features_<col>` for each text column
 - `extracted_features` — the merged dict per row
+- After `expand_features`: per-field columns plus the `_numeric` / `_unit` /
+  `dimension_*` columns described above.
 
 ## Quick example
 
 ```python
-from feature_extraction_workflow.extract_features import run_feature_extraction
+from feature_extraction_workflow import run_feature_extraction, expand_features
 
 df_with_features = run_feature_extraction(
     df_items,
@@ -66,7 +78,9 @@ df_with_features = run_feature_extraction(
     priority=['title', 'description', 'feature'],
 )
 
-# Inspect coverage
+# Optional: turn the dict into typed columns (table form like create_features.ipynb)
+df_table = expand_features(df_with_features)
+
 present = (df_with_features['extracted_features'].apply(len) > 0).sum()
 print(f"{present:,} / {len(df_with_features):,} items have extracted features")
 ```
@@ -84,6 +98,9 @@ print(f"{present:,} / {len(df_with_features):,} items have extracted features")
 | `remove_global_filters(text, regex)` | Strip the marketing phrases. |
 | `extract_features(text, cat_3, master_metadata)` | Single-row schema-driven extractor. |
 | `run_feature_extraction(df, text_columns, master_metadata, global_filters, ...)` | End-to-end driver. |
+| `parse_numeric_and_unit(value)` | `"16 oz"` → `(16.0, "oz")`. |
+| `parse_dimensions(value)` | `"12x18 in"` → `(18.0, 12.0, NaN, "in")`. |
+| `expand_features(df, ...)` | Expand merged dict to per-field + numeric/unit columns. |
 
 ## Notes
 
