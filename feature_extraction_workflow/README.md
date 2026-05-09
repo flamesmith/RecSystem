@@ -54,6 +54,10 @@ For each item:
    - `Dimensions` parsed into sorted-descending `dimension_1`, `dimension_2`,
      `dimension_3`, plus `dimension_unit`.
    - All `_unit` columns standardized through `UNIT_MAP` (`feet`→`ft`, `gram`→`g`).
+7. **Clean numeric ranges** (`clean_numeric_ranges`, optional) — for each numeric
+   column in `VALID_RANGES`, add a `<col>_cleaned` column where out-of-range
+   values are replaced with NaN. The original column is preserved untouched, so
+   you can compare or fall back. Same range table as `notebooks/analyze_features.ipynb`.
 
 The returned DataFrame keeps the original columns and adds:
 
@@ -101,6 +105,8 @@ print(f"{present:,} / {len(df_with_features):,} items have extracted features")
 | `parse_numeric_and_unit(value)` | `"16 oz"` → `(16.0, "oz")`. |
 | `parse_dimensions(value)` | `"12x18 in"` → `(18.0, 12.0, NaN, "in")`. |
 | `expand_features(df, ...)` | Expand merged dict to per-field + numeric/unit columns. |
+| `clean_numeric_ranges(df, valid_ranges=VALID_RANGES)` | Add `<col>_cleaned` columns clipping out-of-range numerics to NaN. |
+| `save_features(df, path)` | Pickle the final dataframe to disk (handles dict columns). |
 
 ## Notes
 

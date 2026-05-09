@@ -55,6 +55,18 @@ NUMERIC_ONLY_FIELDS = {
 }
 DIMENSION_FIELD = "Dimensions"
 
+VALID_RANGES = {
+    "bar_pressure_numeric": (1, 25),
+    "capacity_cups_numeric": (1, 30),
+    "density_weight_lb": (0.5, 30),
+    "pocket_depth_in": (5, 25),
+    "power_rating_w": (1, 5000),
+    "stage_count_numeric": (1, 10),
+    "voltage_numeric": (110, 240),
+    "thread_count_numeric": (80, 2000),
+    "weight_numeric": (0.1, 300),
+}
+
 UNIT_MAP = {
     "feet": "ft", "foot": "ft",
     "ounce": "oz",
@@ -420,4 +432,35 @@ def expand_features(
                 lambda x: unit_map.get(x, x) if isinstance(x, str) else x
             )
 
+    return df
+
+
+def save_features(df: pd.DataFrame, path: PathLike) -> None:
+    """Persist the final feature dataframe to disk as a pickle.
+
+    Pickle is used because several columns hold dicts/lists (e.g.
+    `extracted_features`, `extracted_features_<col>`) which CSV can't
+    round-trip without serialization gymnastics.
+    """
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    df.to_pickle(path)
+
+
+def clean_numeric_ranges(
+    df: pd.DataFrame,
+    valid_ranges: Mapping[str, Sequence[float]] = VALID_RANGES,
+    suffix: str = "_cleaned",
+) -> pd.DataFrame:
+    """Add `<col><suffix>` columns with out-of-range values set to NaN.
+
+    The original columns are preserved untouched — this just adds new columns
+    so callers can compare or fall back. Columns named in `valid_ranges` but
+    not present in `df` are skipped silently (so the call is safe even when
+    the upstream extractor produced a subset of fields).
+    """
+    df = df.copy()
+    for col, (low, high) in valid_ranges.items():
+        if col not in df.columns:
+            continue
+        df[f"{col}{suffix}"] = df[col].where(df[col].between(low, high), np.nan)
     return df

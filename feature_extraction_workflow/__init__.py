@@ -3,8 +3,10 @@ from .extract_features import (
     NUMERIC_ONLY_FIELDS,
     NUMERIC_UNIT_FIELDS,
     UNIT_MAP,
+    VALID_RANGES,
     build_global_filter_regex,
     build_stopwords,
+    clean_numeric_ranges,
     clean_text,
     ensure_cat_columns,
     expand_features,
@@ -16,6 +18,7 @@ from .extract_features import (
     parse_numeric_and_unit,
     remove_global_filters,
     run_feature_extraction,
+    save_features,
 )
 
 __all__ = [
@@ -23,8 +26,10 @@ __all__ = [
     "NUMERIC_ONLY_FIELDS",
     "NUMERIC_UNIT_FIELDS",
     "UNIT_MAP",
+    "VALID_RANGES",
     "build_global_filter_regex",
     "build_stopwords",
+    "clean_numeric_ranges",
     "clean_text",
     "ensure_cat_columns",
     "expand_features",
@@ -36,4 +41,5 @@ __all__ = [
     "parse_numeric_and_unit",
     "remove_global_filters",
     "run_feature_extraction",
+    "save_features",
 ]
