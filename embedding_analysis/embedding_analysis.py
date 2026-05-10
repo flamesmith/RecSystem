@@ -61,28 +61,29 @@ def create_embeddings(
     return df
 
 
-def build_normalized_matrix(
+def build_matrix(
     df: pd.DataFrame,
     embedding_col: str = "title_embedding",
     asin_col: str = "asin",
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """Stack the embedding column into a matrix and L2-normalize each row.
+    """Stack the embedding column into a matrix.
 
-    Returns `(matrix_norm, asins)` so cosine similarity can be computed via a
-    plain dot product. `asins` is the parallel array of identifiers — its order
-    matches the rows in `matrix_norm` and the rows in `df`.
+    Returns `(matrix, asins)` so cosine similarity can be computed via a plain
+    dot product. `asins` is the parallel array of identifiers — its order
+    matches the rows in `matrix` and the rows in `df`.
+
+    Assumes the embeddings are already unit-norm, which holds for
+    `all-MiniLM-L6-v2` (its final layer L2-normalizes). If you swap to an
+    encoder that doesn't return unit vectors, normalize the matrix here.
     """
     matrix = np.stack(df[embedding_col].values)
-    norms = np.linalg.norm(matrix, axis=1, keepdims=True)
-    norms[norms == 0] = 1.0
-    matrix_norm = matrix / norms
     asins = df[asin_col].values
-    return matrix_norm, asins
+    return matrix, asins
 
 
 # ---------------------------------------------------------------------------
 # Similarity helpers (ported verbatim from analyze_features_eda.ipynb)
-# Each takes (df, matrix_norm, asins) explicitly instead of relying on globals.
+# Each takes (df, matrix, asins) explicitly instead of relying on globals.
 # ---------------------------------------------------------------------------
 
 def _result_columns(df: pd.DataFrame, top_indices: np.ndarray, similarities: np.ndarray,
@@ -92,7 +93,7 @@ def _result_columns(df: pd.DataFrame, top_indices: np.ndarray, similarities: np.
     for c in extra_cols:
         if c not in cols:
             cols.append(c)
-    for c in ["brand", "extracted_features"]:
+    for c in ["brand", "extracted_features", "imageURL", "imageURLHighRes"]:
         if c not in cols:
             cols.append(c)
     out = {"asin": df["asin"].values[top_indices], "similarity": similarities.round(4)}
@@ -105,7 +106,7 @@ def _result_columns(df: pd.DataFrame, top_indices: np.ndarray, similarities: np.
 def get_similar_items_by_category(
     asin: str,
     df: pd.DataFrame,
-    matrix_norm: np.ndarray,
+    matrix: np.ndarray,
     asins: np.ndarray,
     n: int = 10,
     cat3_boost: float = 0.1,
@@ -121,7 +122,7 @@ def get_similar_items_by_category(
     query_cat3 = df.iloc[idx]["cat_3"]
     query_cat4 = df.iloc[idx]["cat_4"]
 
-    scores = matrix_norm[idx] @ matrix_norm.T
+    scores = matrix[idx] @ matrix.T
     scores[idx] = -1
 
     boosted = scores.copy()
@@ -144,7 +145,7 @@ def get_similar_items_by_category(
 def get_similar_items_same_cat3(
     asin: str,
     df: pd.DataFrame,
-    matrix_norm: np.ndarray,
+    matrix: np.ndarray,
     asins: np.ndarray,
     n: int = 10,
 ) -> Optional[pd.DataFrame]:
@@ -159,7 +160,7 @@ def get_similar_items_same_cat3(
     same_mask = df["cat_3"].values == query_cat3
     same_idx = np.where(same_mask)[0]
 
-    scores = matrix_norm[idx] @ matrix_norm[same_idx].T
+    scores = matrix[idx] @ matrix[same_idx].T
     self_pos = np.where(same_idx == idx)[0]
     if len(self_pos) > 0:
         scores[self_pos[0]] = -1
@@ -178,7 +179,7 @@ def get_similar_items_same_cat3(
 def get_similar_items_same_cat3_diff_cat4(
     asin: str,
     df: pd.DataFrame,
-    matrix_norm: np.ndarray,
+    matrix: np.ndarray,
     asins: np.ndarray,
     n: int = 10,
 ) -> Optional[pd.DataFrame]:
@@ -197,7 +198,7 @@ def get_similar_items_same_cat3_diff_cat4(
         print(f"No items found in cat_3='{q_cat3}' with a different cat_4 than '{q_cat4}'.")
         return None
 
-    scores = matrix_norm[idx] @ matrix_norm[filt_idx].T
+    scores = matrix[idx] @ matrix[filt_idx].T
     top_n = min(n, len(scores))
     top_local = np.argsort(scores)[-top_n:][::-1]
     top_indices = filt_idx[top_local]
@@ -212,7 +213,7 @@ def get_similar_items_same_cat3_diff_cat4(
 def get_similar_items_same_cat3_diff_cat4_product_type(
     asin: str,
     df: pd.DataFrame,
-    matrix_norm: np.ndarray,
+    matrix: np.ndarray,
     asins: np.ndarray,
     n: int = 10,
 ) -> Optional[pd.DataFrame]:
@@ -239,7 +240,7 @@ def get_similar_items_same_cat3_diff_cat4_product_type(
         )
         return None
 
-    scores = matrix_norm[idx] @ matrix_norm[filt_idx].T
+    scores = matrix[idx] @ matrix[filt_idx].T
     top_n = min(n, len(scores))
     top_local = np.argsort(scores)[-top_n:][::-1]
     top_indices = filt_idx[top_local]
@@ -254,7 +255,7 @@ def get_similar_items_same_cat3_diff_cat4_product_type(
 def get_similar_items_diff_cat4_product_type(
     asin: str,
     df: pd.DataFrame,
-    matrix_norm: np.ndarray,
+    matrix: np.ndarray,
     asins: np.ndarray,
     n: int = 10,
 ) -> Optional[pd.DataFrame]:
@@ -273,7 +274,7 @@ def get_similar_items_diff_cat4_product_type(
         print(f"No items with cat_4!='{q_cat4}' AND Product_Type!='{q_pt}'.")
         return None
 
-    scores = matrix_norm[idx] @ matrix_norm[filt_idx].T
+    scores = matrix[idx] @ matrix[filt_idx].T
     top_n = min(n, len(scores))
     top_local = np.argsort(scores)[-top_n:][::-1]
     top_indices = filt_idx[top_local]
@@ -288,7 +289,7 @@ def get_similar_items_diff_cat4_product_type(
 def get_similar_items_diff_cat3(
     asin: str,
     df: pd.DataFrame,
-    matrix_norm: np.ndarray,
+    matrix: np.ndarray,
     asins: np.ndarray,
     n: int = 10,
 ) -> Optional[pd.DataFrame]:
@@ -302,7 +303,7 @@ def get_similar_items_diff_cat3(
     q_cat3 = df.iloc[idx]["cat_3"]
     mask = df["cat_3"].values != q_cat3
     filt_idx = np.where(mask)[0]
-    scores = matrix_norm[idx] @ matrix_norm[filt_idx].T
+    scores = matrix[idx] @ matrix[filt_idx].T
 
     top_n = min(n, len(scores))
     top_local = np.argsort(scores)[-top_n:][::-1]
@@ -318,7 +319,7 @@ def get_similar_items_diff_cat3(
 def get_top_n_similar(
     asin: str,
     df: pd.DataFrame,
-    matrix_norm: np.ndarray,
+    matrix: np.ndarray,
     asins: np.ndarray,
     n: int = 10,
 ) -> Optional[pd.DataFrame]:
@@ -333,7 +334,7 @@ def get_top_n_similar(
         return None
     idx = idx[0]
 
-    scores = matrix_norm[idx] @ matrix_norm.T
+    scores = matrix[idx] @ matrix.T
     scores[idx] = -1
 
     top_indices = np.argsort(scores)[-n:][::-1]
@@ -360,7 +361,7 @@ def _white_background() -> None:
 
 
 def visualize_pca_overall(
-    matrix_norm: np.ndarray,
+    matrix: np.ndarray,
     df: pd.DataFrame,
     color_by: str = "cat_2",
     figsize: Tuple[int, int] = (14, 10),
@@ -372,7 +373,7 @@ def visualize_pca_overall(
 
     _white_background()
     pca = PCA(n_components=2, random_state=random_state)
-    embeddings_2d = pca.fit_transform(matrix_norm)
+    embeddings_2d = pca.fit_transform(matrix)
 
     labels = df[color_by].values
     unique_labels = sorted(set(labels))
@@ -400,7 +401,7 @@ def visualize_pca_overall(
 
 
 def visualize_pca_per_cat2(
-    matrix_norm: np.ndarray,
+    matrix: np.ndarray,
     df: pd.DataFrame,
     figsize: Tuple[int, int] = (12, 8),
     random_state: int = 42,
@@ -418,7 +419,7 @@ def visualize_pca_per_cat2(
             continue
 
         pca_sub = PCA(n_components=2, random_state=random_state)
-        emb_2d = pca_sub.fit_transform(matrix_norm[cat2_idx])
+        emb_2d = pca_sub.fit_transform(matrix[cat2_idx])
 
         cat3_labels = df.iloc[cat2_idx]["cat_3"].values
         unique_cat3 = sorted(set(cat3_labels))

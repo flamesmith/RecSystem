@@ -1,6 +1,6 @@
 from .embedding_analysis import (
     BRIGHT_COLORS,
-    build_normalized_matrix,
+    build_matrix,
     create_embeddings,
     get_similar_items_by_category,
     get_similar_items_diff_cat3,
@@ -15,7 +15,7 @@ from .embedding_analysis import (
 
 __all__ = [
     "BRIGHT_COLORS",
-    "build_normalized_matrix",
+    "build_matrix",
     "create_embeddings",
     "get_similar_items_by_category",
     "get_similar_items_diff_cat3",

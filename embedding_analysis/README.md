@@ -18,8 +18,9 @@ similarity helpers and PCA visualizations ported from
    new `title_embedding` column on the dataframe.
 3. **Save** the result to `data/df_features_with_embeddings.pkl`. Large
    pickle (vector × rows) — ignored via `.gitignore`.
-4. **Build** the normalized embedding matrix so cosine similarity
-   reduces to a dot product: `matrix_norm, asins = build_normalized_matrix(df)`.
+4. **Build** the embedding matrix: `matrix, asins = build_matrix(df)`.
+   Cosine similarity reduces to a plain dot product because
+   `all-MiniLM-L6-v2` already returns unit-norm vectors.
 5. **Query** with the similarity helpers (one ASIN at a time):
    - `get_top_n_similar` — plain top-N, no filter.
    - `get_similar_items_by_category` — adds cat_3 / cat_4 score boosts.
@@ -52,7 +53,7 @@ similarity helpers and PCA visualizations ported from
 import pandas as pd
 from embedding_analysis import (
     create_embeddings,
-    build_normalized_matrix,
+    build_matrix,
     get_similar_items_by_category,
     visualize_pca_overall,
 )
@@ -61,9 +62,9 @@ df = pd.read_pickle("data/df_features.pkl")
 df = create_embeddings(df, text_col="title_cleaned")
 df.to_pickle("data/df_features_with_embeddings.pkl")
 
-matrix_norm, asins = build_normalized_matrix(df)
-get_similar_items_by_category("B00029TCRG", df, matrix_norm, asins, n=10)
-visualize_pca_overall(matrix_norm, df, color_by="cat_2")
+matrix, asins = build_matrix(df)
+get_similar_items_by_category("B00029TCRG", df, matrix, asins, n=10)
+visualize_pca_overall(matrix, df, color_by="cat_2")
 ```
 
 ## Notes
@@ -88,7 +89,7 @@ visualize_pca_overall(matrix_norm, df, color_by="cat_2")
 | Function | Purpose |
 | --- | --- |
 | `create_embeddings(df, text_col, ...)` | Generate SBERT vectors for a text column. |
-| `build_normalized_matrix(df, embedding_col)` | Stack + L2-normalize embeddings; return `(matrix, asins)`. |
+| `build_matrix(df, embedding_col)` | Stack embeddings into a matrix; return `(matrix, asins)`. |
 | `get_similar_items_by_category(asin, df, matrix, asins, ...)` | Top-N with cat_3/cat_4 boosts. |
 | `get_similar_items_same_cat3(...)` | Top-N within the same cat_3. |
 | `get_similar_items_same_cat3_diff_cat4(...)` | Same cat_3, different cat_4. |
