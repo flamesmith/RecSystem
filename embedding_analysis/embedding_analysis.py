@@ -345,6 +345,63 @@ def get_top_n_similar(
     return results
 
 
+def get_similar_items_by_features(
+    asin: str,
+    df: pd.DataFrame,
+    matrix: np.ndarray,
+    asins: np.ndarray,
+    n: int = 10,
+) -> Optional[pd.DataFrame]:
+    """Top N similar items filtered by extracted feature values.
+
+    Keeps candidates whose:
+      - `Product_Type` matches the query OR is missing on the candidate,
+      - `Material`     matches the query OR is missing on the candidate,
+      - `Color`        matches the query exactly.
+
+    A filter is skipped when the query itself is missing that field.
+    """
+    idx = np.where(asins == asin)[0]
+    if len(idx) == 0:
+        print(f"ASIN '{asin}' not found.")
+        return None
+    idx = idx[0]
+
+    q_pt = df.iloc[idx].get("Product_Type")
+    q_mat = df.iloc[idx].get("Material")
+    q_color = df.iloc[idx].get("Color")
+
+    mask = np.ones(len(df), dtype=bool)
+    if "Product_Type" in df.columns and pd.notna(q_pt):
+        pt = df["Product_Type"]
+        mask &= ((pt == q_pt) | pt.isna()).values
+    if "Material" in df.columns and pd.notna(q_mat):
+        mat = df["Material"]
+        mask &= ((mat == q_mat) | mat.isna()).values
+    if "Color" in df.columns and pd.notna(q_color):
+        mask &= (df["Color"].values == q_color)
+
+    sub_idx = np.where(mask)[0]
+    scores = matrix[idx] @ matrix[sub_idx].T
+    self_pos = np.where(sub_idx == idx)[0]
+    if len(self_pos) > 0:
+        scores[self_pos[0]] = -1
+
+    top_n = min(n, len(scores))
+    top_local = np.argsort(scores)[-top_n:][::-1]
+    top_indices = sub_idx[top_local]
+    results = _result_columns(
+        df, top_indices, scores[top_local],
+        extra_cols=["Product_Type", "Material", "Color"],
+    )
+
+    print(f"Query: {df.iloc[idx]['title_cleaned'][:80]}")
+    print(f"ASIN:  {asin}")
+    print(f"Product_Type: {q_pt} | Material: {q_mat} | Color: {q_color}")
+    print(f"Matching items: {mask.sum():,}\n")
+    return results
+
+
 # ---------------------------------------------------------------------------
 # PCA visualization
 # ---------------------------------------------------------------------------
