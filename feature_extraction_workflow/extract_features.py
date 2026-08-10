@@ -55,6 +55,12 @@ NUMERIC_ONLY_FIELDS = {
 }
 DIMENSION_FIELD = "Dimensions"
 
+# Only single-unit numeric fields are range-cleaned. Fields that carry a
+# `*_unit` column (the NUMERIC_UNIT_FIELDS: Weight, Thread_Count, ...) are
+# intentionally excluded — their raw numbers can mix units (e.g. Weight in
+# both grams and pounds), so a single [low, high] range would be applied
+# inconsistently. Those keep their `_numeric` + `_unit` columns but get no
+# `_cleaned` version.
 VALID_RANGES = {
     "bar_pressure_numeric": (1, 25),
     "capacity_cups_numeric": (1, 30),
@@ -63,8 +69,10 @@ VALID_RANGES = {
     "power_rating_w": (1, 5000),
     "stage_count_numeric": (1, 10),
     "voltage_numeric": (110, 240),
-    "thread_count_numeric": (80, 2000),
-    "weight_numeric": (0.1, 300),
+    # Excluded — these carry a `*_unit` column and can mix units, so range
+    # cleaning would be applied inconsistently. Uncomment to re-enable.
+    # "thread_count_numeric": (80, 2000),
+    # "weight_numeric": (0.1, 300),
 }
 
 UNIT_MAP = {

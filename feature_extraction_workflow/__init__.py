@@ -20,6 +20,12 @@ from .extract_features import (
     run_feature_extraction,
     save_features,
 )
+from .extract_features_user import (
+    compute_user_features,
+    load_purchases,
+    run_user_feature_extraction,
+    save_user_features,
+)
 
 __all__ = [
     "DIMENSION_FIELD",
@@ -42,4 +48,8 @@ __all__ = [
     "remove_global_filters",
     "run_feature_extraction",
     "save_features",
+    "compute_user_features",
+    "load_purchases",
+    "run_user_feature_extraction",
+    "save_user_features",
 ]
