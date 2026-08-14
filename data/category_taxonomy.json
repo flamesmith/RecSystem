@@ -1,0 +1,675 @@
+{
+  "Bath": {
+    "Bath Rugs": [
+      "Missing"
+    ],
+    "Bathroom Accessories": [
+      "Bathroom Accessory Sets",
+      "Bathroom Mirrors",
+      "Bathtub Accessories",
+      "Hand Dryers",
+      "Holders & Dispensers",
+      "Makeup Organizers",
+      "Medicine Cabinets",
+      "Shower Accessories",
+      "Shower Curtains, Hooks & Liners",
+      "Toilet Accessories",
+      "Towel Holders",
+      "Towel Warmers",
+      "Missing",
+      "Bathroom Accessories_Other"
+    ],
+    "Towels": [
+      "Bath Sheets",
+      "Bath Towels",
+      "Beach Towels",
+      "Fingertip Towels",
+      "Hand Towels",
+      "Towel Sets",
+      "Washcloths",
+      "Missing",
+      "Towels_Other"
+    ]
+  },
+  "Bedding": {
+    "Air Mattresses & Accessories": [
+      "Air Mattresses",
+      "Pumps",
+      "Missing"
+    ],
+    "Bed Canopies & Drapes": [
+      "Missing"
+    ],
+    "Bed Pillows & Positioners": [
+      "Bed Pillows",
+      "Body Pillows",
+      "Leg Positioner Pillows",
+      "Lumbar Pillows",
+      "Neck & Cervical Pillows",
+      "Reading & Bed Rest Pillows",
+      "Specialty Medical Pillows",
+      "Travel Pillows",
+      "Missing",
+      "Bed Pillows & Positioners_Other"
+    ],
+    "Bed Runners & Scarves": [
+      "Missing"
+    ],
+    "Bed Skirts": [
+      "Missing",
+      "Bed Skirts_Other"
+    ],
+    "Bedding Accessories": [
+      "Bed Risers",
+      "Sheet Fasteners",
+      "Missing",
+      "Bedding Accessories_Other"
+    ],
+    "Bedding Sets & Collections": [
+      "Daybed Sets",
+      "Missing",
+      "Bedding Sets & Collections_Other"
+    ],
+    "Bedspreads, Coverlets & Sets": [
+      "Bedspread & Coverlet Sets",
+      "Bedspreads & Coverlets",
+      "Missing",
+      "Bedspreads, Coverlets & Sets_Other"
+    ],
+    "Blankets & Throws": [
+      "Bed Blankets",
+      "Electric Blankets",
+      "Electric Throws",
+      "Throws",
+      "Wearable Blankets",
+      "Weighted Blankets",
+      "Missing",
+      "Blankets & Throws_Other"
+    ],
+    "Comforters & Sets": [
+      "Comforter Sets",
+      "Comforters",
+      "Missing"
+    ],
+    "Decorative Pillows, Inserts & Covers": [
+      "Floor Pillows & Cushions",
+      "Pillow Inserts",
+      "Throw Pillow Covers",
+      "Throw Pillows",
+      "Missing",
+      "Decorative Pillows, Inserts & Covers_Other"
+    ],
+    "Duvets, Covers & Sets": [
+      "Duvet Cover Sets",
+      "Duvet Covers",
+      "Duvets & Down Comforters",
+      "Missing"
+    ],
+    "Kids' Bedding": [
+      "Air Mattresses",
+      "Bed Skirts",
+      "Bedding Sets & Collections",
+      "Blankets & Throws",
+      "Canopies",
+      "Comforters & Sets",
+      "Decorative Pillows & Covers",
+      "Duvet Covers & Sets",
+      "Quilts & Sets",
+      "Sheets & Pillowcases",
+      "Missing",
+      "Kids' Bedding_Other"
+    ],
+    "Mattress Pads & Protectors": [
+      "Electric Mattress Pads",
+      "Mattress Encasements",
+      "Mattress Pads",
+      "Mattress Protectors",
+      "Missing"
+    ],
+    "Mattress Toppers": [
+      "Missing",
+      "Mattress Toppers_Other"
+    ],
+    "Quilts & Sets": [
+      "Quilt Sets",
+      "Quilts",
+      "Missing"
+    ],
+    "Sheets & Pillowcases": [
+      "Fitted Sheets",
+      "Flat Sheets",
+      "Pillow Protectors",
+      "Pillow Shams",
+      "Pillowcases",
+      "Sheet & Pillowcase Sets",
+      "Missing",
+      "Sheets & Pillowcases_Other"
+    ]
+  },
+  "Furniture": {
+    "Accent Furniture": [
+      "Display & Curio Cabinets",
+      "Ladder Shelves",
+      "Ottomans & Storage Ottomans",
+      "Poufs",
+      "Room Dividers",
+      "Storage Cabinets",
+      "Storage Chests",
+      "Storage Trunks",
+      "Missing"
+    ],
+    "Bathroom Furniture": [
+      "Bathroom Sets",
+      "Over-the-Toilet Storage",
+      "Bathroom Furniture_Other"
+    ],
+    "Bedroom Furniture": [
+      "Bedroom Armoires",
+      "Bedroom Sets",
+      "Beds, Frames & Bases",
+      "Dressers",
+      "Mattresses & Box Springs",
+      "Nightstands",
+      "Quilt Stands",
+      "Vanities & Vanity Benches",
+      "Missing"
+    ],
+    "Entryway Furniture": [
+      "Coat Racks",
+      "Hall Trees",
+      "Storage Benches",
+      "Missing"
+    ],
+    "Game & Recreation Room Furniture": [
+      "Bean Bags",
+      "Directors Chairs",
+      "Folding Stools",
+      "Folding Tables & Chairs",
+      "Game Tables",
+      "Gliders",
+      "Home Bar Furniture",
+      "TV Trays",
+      "Video Game Chairs",
+      "Missing",
+      "Game & Recreation Room Furniture_Other"
+    ],
+    "Home Office Furniture": [
+      "Bookcases",
+      "Computer Armoires & Hutches",
+      "Drafting Tables",
+      "Home Office Cabinets",
+      "Home Office Desk Chairs",
+      "Home Office Desks",
+      "Home Office Furniture Sets",
+      "Hutch Furniture Attachments",
+      "Missing",
+      "Home Office Furniture_Other"
+    ],
+    "Kids' Furniture": [
+      "Armoires & Dressers",
+      "Bed Frames, Headboards & Footboards",
+      "Bedroom Sets",
+      "Bookcases, Cabinets & Shelves",
+      "Chairs & Seats",
+      "Chests & Trunks",
+      "Desks & Desk Sets",
+      "Sofas",
+      "Step Stools",
+      "Tables & Chairs",
+      "Missing",
+      "Kids' Furniture_Other"
+    ],
+    "Kitchen & Dining Room Furniture": [
+      "Baker's Racks",
+      "Buffets & Sideboards",
+      "Chairs",
+      "China Cabinets",
+      "Kitchen Islands & Carts",
+      "Pantries",
+      "Table & Chair Sets",
+      "Table Benches",
+      "Tables",
+      "Missing",
+      "Kitchen & Dining Room Furniture_Other"
+    ],
+    "Living Room Furniture": [
+      "Chairs",
+      "Chaise Lounges",
+      "Futons",
+      "Living Room Sets",
+      "Sofas & Couches",
+      "Tables",
+      "TV & Media Furniture",
+      "Missing",
+      "Living Room Furniture_Other"
+    ],
+    "Replacement Parts": [
+      "Bed Parts",
+      "Recliner Parts",
+      "Sofa Parts",
+      "Missing",
+      "Replacement Parts_Other"
+    ]
+  },
+  "Home Dcor": {
+    "Area Rugs, Runners & Pads": [
+      "Area Rug Sets",
+      "Area Rugs",
+      "Rug Pads",
+      "Runners",
+      "Missing",
+      "Area Rugs, Runners & Pads_Other"
+    ],
+    "Artificial Plants & Flowers": [
+      "Artificial Flowers",
+      "Artificial Fruit",
+      "Artificial Plants & Greenery",
+      "Artificial Shrubs & Topiaries",
+      "Artificial Trees",
+      "Artificial Vegetables",
+      "Missing"
+    ],
+    "Candles & Holders": [
+      "Accessories",
+      "Candleholders",
+      "Candles",
+      "Flameless Candles",
+      "Salt Lamps",
+      "Sets",
+      "Missing"
+    ],
+    "Clocks": [
+      "Alarm Clocks",
+      "Desk & Shelf Clocks",
+      "Floor & Grandfather Clocks",
+      "Mantel Clocks",
+      "Specialty Clocks",
+      "Wall Clocks",
+      "Missing",
+      "Clocks_Other"
+    ],
+    "Draft Stoppers": [
+      "Missing"
+    ],
+    "Gift Baskets": [
+      "Missing",
+      "Gift Baskets_Other"
+    ],
+    "Home Dcor Accents": [
+      "Ashtrays",
+      "Cardboard Cutouts",
+      "Collectible Buildings & Accessories",
+      "Collectible Dolls",
+      "Collectible Figurines",
+      "Collectible Vehicles",
+      "Commemorative & Decorative Plates",
+      "Corner Shelves",
+      "Decorative Accessories",
+      "Decorative Swags",
+      "Display Stands",
+      "Dream Catchers",
+      "Floating Shelves",
+      "Magazine Holders",
+      "Memo Boards",
+      "Mezuzahs",
+      "Mobiles",
+      "Musical Boxes & Figurines",
+      "Ornaments",
+      "Plaques",
+      "Sculptures",
+      "Snow Globes",
+      "Tassels",
+      "Umbrella Racks",
+      "Wall Crosses",
+      "Wall Pediments",
+      "Wooden Games",
+      "Wreath Hangers",
+      "Wreaths",
+      "Missing",
+      "Home Dcor Accents_Other"
+    ],
+    "Home Fragrance": [
+      "Fragrant Drawer Liners",
+      "Fragrant Room Sprays",
+      "Home Fragrance Accessories",
+      "Incense & Incense Holders",
+      "Light Bulb Rings",
+      "Potpourris",
+      "Reed Diffusers, Oils & Accessories",
+      "Sachets",
+      "Missing",
+      "Home Fragrance_Other"
+    ],
+    "Indoor Fountains & Accessories": [
+      "Floor-Standing Fountains",
+      "Indoor Fountain Accessories",
+      "Tabletop Fountains",
+      "Wall-Hanging Fountains",
+      "Missing"
+    ],
+    "Kids' Room Dcor": [
+      "Accents",
+      "Lamps & Lighting",
+      "Rugs",
+      "Wall Dcor",
+      "Window Treatments",
+      "Missing",
+      "Kids' Room Dcor_Other"
+    ],
+    "Mirrors": [
+      "Floor & Full Length Mirrors",
+      "Mirror Sets",
+      "Wall-Mounted Mirrors",
+      "Missing",
+      "Mirrors_Other"
+    ],
+    "Oil Lamps & Accessories": [
+      "Oil Lamps",
+      "Missing",
+      "Oil Lamps & Accessories_Other"
+    ],
+    "Photo Albums & Accessories": [
+      "Bookshelf Albums",
+      "Magnetic Page Albums",
+      "Photo Album Accessories",
+      "Three-Ring Binder Albums",
+      "Wedding Albums",
+      "Missing",
+      "Photo Albums & Accessories_Other"
+    ],
+    "Picture Frames": [
+      "Clip Photo Holders",
+      "Document Frames",
+      "Keychain Frames",
+      "Magnetic Frames",
+      "Poster Frames",
+      "Sculptural Frames & Holders",
+      "Shadow Boxes",
+      "Wall & Tabletop Frames",
+      "Missing",
+      "Picture Frames_Other"
+    ],
+    "Slipcovers": [
+      "Armchair Slipcovers",
+      "Dining Chair Slipcovers",
+      "Futon Slipcovers",
+      "Loveseat Slipcovers",
+      "Recliner Slipcovers",
+      "Slipcover Sets",
+      "Sofa Slipcovers",
+      "Stool Covers",
+      "Missing"
+    ],
+    "Tapestries": [
+      "Missing",
+      "Tapestries_Other"
+    ],
+    "Vase Fillers": [
+      "Missing"
+    ],
+    "Vases": [
+      "Missing",
+      "Vases_Other"
+    ],
+    "Window Stickers & Films": [
+      "Window Films",
+      "Window Stickers",
+      "Missing"
+    ],
+    "Window Treatment Hardware": [
+      "Clip Rings",
+      "Finials",
+      "Holdbacks",
+      "Rod Holders",
+      "Shutter Hardware",
+      "Window Hardware Sets",
+      "Window Rods",
+      "Missing",
+      "Window Treatment Hardware_Other"
+    ],
+    "Window Treatments": [
+      "Blinds & Shades",
+      "Draperies & Curtains",
+      "Stained Glass Panels",
+      "Window Shutters",
+      "Window Treatment Sets",
+      "Missing",
+      "Window Treatments_Other"
+    ]
+  },
+  "Kids' Home Store": {
+    "Kids' Bath": [
+      "Kids' Bath Towels",
+      "Kids' Bathroom Accessories",
+      "Kids' Bath_Other"
+    ]
+  },
+  "Kitchen & Dining": {
+    "Bakeware": [
+      "Bakers & Casseroles",
+      "Bakeware Sets",
+      "Baking & Cookie Sheets",
+      "Baking Tools & Accessories",
+      "Bread & Loaf Pans",
+      "Cake Pans",
+      "Candy Making Supplies",
+      "Decorating Tools",
+      "Kids' Baking Supplies",
+      "Mixing Bowls",
+      "Muffin & Cupcake Pans",
+      "Pie, Tart & Quiche Pans",
+      "Pizza Pans & Stones",
+      "Ramekins & Souffl Dishes",
+      "Small Pastry Molds",
+      "Missing",
+      "Bakeware_Other"
+    ],
+    "Coffee, Tea & Espresso": [
+      "Coffee Grinders",
+      "Coffee Makers",
+      "Coffee Scoops",
+      "Espresso Machine & Coffeemaker Combos",
+      "Espresso Machines",
+      "Stovetop Espresso & Moka Pots",
+      "Tea Accessories",
+      "Missing",
+      "Coffee, Tea & Espresso_Other"
+    ],
+    "Cookware": [
+      "All Pans",
+      "Canning",
+      "Cookware Accessories",
+      "Cookware Sets",
+      "Disposable Cookware",
+      "Double Boilers",
+      "Dutch Ovens",
+      "Fondue",
+      "Griddles",
+      "Grill Pans",
+      "Lids",
+      "Pot Racks",
+      "Pressure Cookers",
+      "Roasting Pans",
+      "Saucepans",
+      "Saut Pans",
+      "Skillets",
+      "Specialty Cookware",
+      "Steamers, Stock & Pasta Pots",
+      "Teakettles",
+      "Toaster Oven Cookware",
+      "Woks & Stir-Fry Pans",
+      "Missing",
+      "Cookware_Other"
+    ],
+    "Cutlery & Knife Accessories": [
+      "Asian Knives",
+      "Boning & Fillet Knives",
+      "Bread & Serrated Knives",
+      "Carving Knives & Forks",
+      "Chef's Knives",
+      "Cleavers",
+      "Cutting Boards",
+      "Electric Knives",
+      "Knife Accessories",
+      "Knife Blocks & Storage",
+      "Knife Sets",
+      "Knife Sharpeners",
+      "Paring Knives",
+      "Shears",
+      "Specialty Knives",
+      "Steak Knives",
+      "Utility Knives",
+      "Missing",
+      "Cutlery & Knife Accessories_Other"
+    ],
+    "Dining & Entertaining": [
+      "Bar Tools & Drinkware",
+      "Dinnerware",
+      "Flatware",
+      "Glassware & Drinkware",
+      "Novelty",
+      "Serveware",
+      "Missing",
+      "Dining & Entertaining_Other"
+    ],
+    "Home Brewing & Wine Making": [
+      "Beer Brewing",
+      "Cleaning & Sanitizing",
+      "Fermentation & More",
+      "Labeling Supplies",
+      "Racking & Storage",
+      "Wine Making",
+      "Missing",
+      "Home Brewing & Wine Making_Other"
+    ],
+    "Kitchen & Table Linens": [
+      "Accessories",
+      "Aprons",
+      "Chair Pads",
+      "Cloth Napkins",
+      "Dish Cloths & Dish Towels",
+      "Disposable Table Covers",
+      "Kitchen Linen Sets",
+      "Kitchen Rugs",
+      "Place Mats",
+      "Potholders & Oven Mitts",
+      "Table Runners",
+      "Table Toppers",
+      "Tablecloths",
+      "Tea Cozies",
+      "Missing",
+      "Kitchen & Table Linens_Other"
+    ],
+    "Kitchen Utensils & Gadgets": [
+      "Bar & Wine Tools",
+      "Can Openers",
+      "Cheese Tools",
+      "Colanders & Food Strainers",
+      "Cooking Utensils",
+      "Fruit & Vegetable Tools",
+      "Graters, Peelers & Slicers",
+      "Jar Openers",
+      "Kitchen Accessories",
+      "Measuring Tools & Scales",
+      "Meat & Poultry Tools",
+      "Oil Sprayers & Dispensers",
+      "Pasta & Pizza Tools",
+      "Salad Tools & Spinners",
+      "Salt & Pepper",
+      "Seasoning & Spice Tools",
+      "Specialty Tools & Gadgets",
+      "Thermometers & Timers",
+      "Tool & Gadget Sets",
+      "Missing",
+      "Kitchen Utensils & Gadgets_Other"
+    ],
+    "Small Appliance Parts & Accessories": [
+      "Blender Replacement Parts",
+      "Bread Machine Parts & Accessories",
+      "Coffee & Espresso Machine Parts & Accessories",
+      "Deep Fryer Parts & Accessories",
+      "Food Processor Parts & Accessories",
+      "Juicer Parts & Accessories",
+      "Microwave Oven Parts & Accessories",
+      "Mixer Parts & Accessories",
+      "Pressure Cooker Parts & Accessories",
+      "Soda Maker Parts & Accessories",
+      "Missing",
+      "Small Appliance Parts & Accessories_Other"
+    ],
+    "Small Appliances": [
+      "Blenders",
+      "Bread Machines",
+      "Cake Pop & Mini Cake Makers",
+      "Coffee, Tea & Espresso Appliances",
+      "Compact Refrigerators",
+      "Contact Grills",
+      "Countertop Burners",
+      "Electric Griddles",
+      "Electric Pressure Cookers",
+      "Electric Skillets",
+      "Electric Woks",
+      "Food Processors",
+      "Fryers",
+      "Hot Pots",
+      "Ice Cream Machines",
+      "Juicers",
+      "Microwave Ovens",
+      "Mixers",
+      "Ovens & Toasters",
+      "Rice Cookers",
+      "Slow Cookers",
+      "Soda Makers",
+      "Specialty Appliances",
+      "Steamers",
+      "Waffle Irons",
+      "Wine Cellars",
+      "Missing",
+      "Small Appliances_Other"
+    ],
+    "Storage & Organization": [
+      "Cabinet & Drawer Organization",
+      "Countertop & Wall Organization",
+      "Dinnerware & Stemware Storage",
+      "Flatware & Utensil Storage",
+      "Food Storage",
+      "Kitchen Storage & Organization Accessories",
+      "Travel & To-Go Food Containers",
+      "Wine Racks & Cabinets",
+      "Missing",
+      "Storage & Organization_Other"
+    ],
+    "Travel & To-Go Drinkware": [
+      "Commuter & Travel Mugs",
+      "Thermoses",
+      "Travel Insulated Tumblers",
+      "Missing"
+    ],
+    "Water Coolers & Filters": [
+      "Pitcher Water Filters",
+      "Replacement Water Filters",
+      "Water Coolers",
+      "Water Filter Cleaners",
+      "Missing"
+    ],
+    "Wine Accessories": [
+      "Wine Accessory Sets",
+      "Wine Education & Games",
+      "Wine Accessories_Other"
+    ]
+  },
+  "Wall Art": {
+    "Paintings": [
+      "Missing",
+      "Paintings_Other"
+    ],
+    "Photographs": [
+      "Missing",
+      "Photographs_Other"
+    ],
+    "Posters & Prints": [
+      "Missing",
+      "Posters & Prints_Other"
+    ]
+  }
+}
