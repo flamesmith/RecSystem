@@ -37,8 +37,12 @@ _DIMENSION_UNIT_RE = re.compile(
 )
 
 # Default schema for numeric parsing (matches notebooks/create_features.ipynb).
+# "Capacity" was removed: it was declared only in the Coffee, Tea & Espresso
+# schema, where its patterns duplicated Capacity_Cups (cups) and
+# Capacity_Volume (oz/litres) in that same schema, so every match landed in two
+# columns at once. Cups now come from Capacity_Cups, oz/litres from
+# Capacity_Volume, and `capacity_numeric`/`capacity_unit` are no longer produced.
 NUMERIC_UNIT_FIELDS = (
-    "Capacity",
     "Capacity_Volume",
     "Piece_Count",
     "Thread_Count",

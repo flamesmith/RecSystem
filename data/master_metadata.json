@@ -330,15 +330,6 @@
         "capsule"
       ]
     },
-    "Capacity": {
-      "type": "regex",
-      "patterns": [
-        "(?<!\\w)(\\d+)[\\s-]?cup",
-        "(?<!\\w)(\\d+)[\\s-]?oz",
-        "(\\d+\\.?\\d*)[\\s-]?[Ll]iter",
-        "(\\d+\\.?\\d*)[\\s-]?[Ll]"
-      ]
-    },
     "Material": {
       "type": "dictionary",
       "values": [
@@ -421,10 +412,10 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)[\\s-]?oz",
-        "(\\d+)[\\s-]?ounce",
-        "(\\d+)[\\s-]?liter",
-        "(\\d+)[\\s-]?l"
+        "(\\d+\\.?\\d*)[\\s-]?oz\\b",
+        "(\\d+\\.?\\d*)[\\s-]?ounce",
+        "(\\d+\\.?\\d*)[\\s-]?liter",
+        "(\\d+\\.?\\d*)[\\s-]?l\\b"
       ]
     },
     "Bar_Pressure": {
@@ -1027,11 +1018,11 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)[\\s-]ounce",
-        "(\\d+)[\\s-]?oz",
-        "(\\d+)[\\s-]?ml",
-        "(\\d+)[\\s-]?liter",
-        "(\\d+)[\\s-]?l"
+        "(\\d+\\.?\\d*)[\\s-]ounce",
+        "(\\d+\\.?\\d*)[\\s-]?oz\\b",
+        "(\\d+\\.?\\d*)[\\s-]?ml",
+        "(\\d+\\.?\\d*)[\\s-]?liter",
+        "(\\d+\\.?\\d*)[\\s-]?l\\b"
       ],
       "note": "Dominant values: 11oz, 15oz, 16oz, 20oz, 24oz"
     },
@@ -1265,12 +1256,12 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)[\\s-]?gallon",
-        "(\\d+)[\\s-]?gal",
-        "(\\d+)[\\s-]?liter",
-        "(\\d+)[\\s-]?oz",
-        "(\\d+)[\\s-]?ml",
-        "(\\d+)[\\s-]?lb"
+        "(\\d+\\.?\\d*)[\\s-]?gallon",
+        "(\\d+\\.?\\d*)[\\s-]?gal",
+        "(\\d+\\.?\\d*)[\\s-]?liter",
+        "(\\d+\\.?\\d*)[\\s-]?oz\\b",
+        "(\\d+\\.?\\d*)[\\s-]?ml",
+        "(\\d+\\.?\\d*)[\\s-]?lb"
       ],
       "note": "Common: 1 gal, 5 gal, 64 oz (Growler), 5 lb (CO2 Tank)"
     },
@@ -2097,10 +2088,10 @@
       "patterns": [
         "(\\d+\\.?\\d*)[\\s-]?cu[\\s-]?ft",
         "(\\d+\\.?\\d*)[\\s-]?cubic[\\s-]?foot",
-        "(\\d+)[\\s-]?quart",
-        "(\\d+)[\\s-]?cup",
-        "(\\d+)[\\s-]?slice",
-        "(\\d+)[\\s-]?bottle"
+        "(\\d+\\.?\\d*)[\\s-]?quart",
+        "(\\d+\\.?\\d*)[\\s-]?cup",
+        "(\\d+\\.?\\d*)[\\s-]?slice",
+        "(\\d+\\.?\\d*)[\\s-]?bottle"
       ],
       "note": "Microwaves (cu ft), Slow Cookers (quart), Toasters (slice), Wine Coolers (bottle)"
     },
@@ -2406,10 +2397,10 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)[\\s-]?oz",
-        "(\\d+)[\\s-]?ounce",
-        "(\\d+)[\\s-]?fl oz",
-        "(\\d+)oz"
+        "(\\d+\\.?\\d*)[\\s-]?oz\\b",
+        "(\\d+\\.?\\d*)[\\s-]?ounce",
+        "(\\d+\\.?\\d*)[\\s-]?fl oz\\b",
+        "(\\d+\\.?\\d*)oz\\b"
       ],
       "note": "Dominant sizes: 14oz, 16oz, 20oz, 30oz"
     }
@@ -2984,9 +2975,9 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)[\\s-]ounce",
-        "(\\d+)[\\s-]?oz",
-        "(\\d+)[\\s-]?ml"
+        "(\\d+\\.?\\d*)[\\s-]ounce",
+        "(\\d+\\.?\\d*)[\\s-]?oz\\b",
+        "(\\d+\\.?\\d*)[\\s-]?ml"
       ],
       "note": "Standard capacity formats; less common in this category compared to dimensions."
     },
@@ -3135,7 +3126,7 @@
       "type": "regex",
       "patterns": [
         "(\\d+(?:\\.\\d+)?)[\\s-]ounce",
-        "(\\d+(?:\\.\\d+)?)[\\s-]?oz"
+        "(\\d+(?:\\.\\d+)?)[\\s-]?oz\\b"
       ],
       "note": "Dominant values include 13oz, 14.5oz, 22oz"
     },
@@ -3581,8 +3572,8 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)[\\s-]?oz",
-        "(\\d+)[\\s-]?ml"
+        "(\\d+\\.?\\d*)[\\s-]?oz\\b",
+        "(\\d+\\.?\\d*)[\\s-]?ml"
       ],
       "note": "Commonly used for wine or liquid gifts included in sets"
     },
@@ -4025,9 +4016,9 @@
       "type": "regex",
       "patterns": [
         "(\\d+(?:\\.\\d+)?)[\\s-]ounce",
-        "(\\d+(?:\\.\\d+)?)[\\s-]?oz",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?oz\\b",
         "(\\d+(?:\\.\\d+)?)[\\s-]?ml",
-        "(\\d+(?:\\.\\d+)?)[\\s-]?fl\\.?[\\s-]?oz",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?fl\\.?[\\s-]?oz\\b",
         "(\\d+(?:\\.\\d+)?)[\\s-]?(?:gram|gm|g)\\b"
       ],
       "note": "Common values include 0.33oz, 2oz, 4oz, 8oz, and 3.2 fl oz for wax melts."
@@ -4182,10 +4173,10 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)[\\s-]?lb",
-        "(\\d+)[\\s-]?pound",
-        "(\\d+)[\\s-]?oz",
-        "(\\d+)[\\s-]ounce"
+        "(\\d+\\.?\\d*)[\\s-]?lb",
+        "(\\d+\\.?\\d*)[\\s-]?pound",
+        "(\\d+\\.?\\d*)[\\s-]?oz\\b",
+        "(\\d+\\.?\\d*)[\\s-]ounce"
       ],
       "note": "Dominant values: 1lb, 2lb, 5lb"
     },
@@ -4596,8 +4587,8 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)[\\s-]?oz",
-        "(\\d+)[\\s-]?ml",
+        "(\\d+\\.?\\d*)[\\s-]?oz\\b",
+        "(\\d+\\.?\\d*)[\\s-]?ml",
         "(\\d+\\.?\\d*)[\\s-]?ounce"
       ],
       "note": "Dominant values found: 500ml, 16.9oz"
@@ -5286,7 +5277,7 @@
       "type": "regex",
       "patterns": [
         "(\\d+(?:\\.\\d+)?)[\\s-]ounce",
-        "(\\d+(?:\\.\\d+)?)[\\s-]?oz",
+        "(\\d+(?:\\.\\d+)?)[\\s-]?oz\\b",
         "(\\d+(?:\\.\\d+)?)[\\s-]?ml",
         "(\\d+(?:\\.\\d+)?)[\\s-]?gallon"
       ],
@@ -9749,10 +9740,10 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)[\\s-]ounce",
-        "(\\d+)[\\s-]?oz",
-        "(\\d+)[\\s-]?lb",
-        "(\\d+)[\\s-]?pound"
+        "(\\d+\\.?\\d*)[\\s-]ounce",
+        "(\\d+\\.?\\d*)[\\s-]?oz\\b",
+        "(\\d+\\.?\\d*)[\\s-]?lb",
+        "(\\d+\\.?\\d*)[\\s-]?pound"
       ],
       "note": "Commonly refers to weight capacity in kids furniture or fill volume for bean bags"
     },
@@ -10534,12 +10525,12 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)[\\s-]ounce",
-        "(\\d+)[\\s-]?oz",
-        "(\\d+)[\\s-]?ml",
+        "(\\d+\\.?\\d*)[\\s-]ounce",
+        "(\\d+\\.?\\d*)[\\s-]?oz\\b",
+        "(\\d+\\.?\\d*)[\\s-]?ml",
         "(\\d+(?:\\.\\d+)?)[\\s-]?(?:gram|gm|g)\\b",
-        "(\\d+)[\\s-]?liter",
-        "(\\d+)[\\s-]?l"
+        "(\\d+\\.?\\d*)[\\s-]?liter",
+        "(\\d+\\.?\\d*)[\\s-]?l\\b"
       ],
       "note": "Standard dispenser capacities usually range from 8oz to 16oz"
     },
@@ -10819,9 +10810,9 @@
     "Capacity_Volume": {
       "type": "regex",
       "patterns": [
-        "(\\d+)[\\s-]ounce",
-        "(\\d+)[\\s-]?oz",
-        "(\\d+)[\\s-]?ml"
+        "(\\d+\\.?\\d*)[\\s-]ounce",
+        "(\\d+\\.?\\d*)[\\s-]?oz\\b",
+        "(\\d+\\.?\\d*)[\\s-]?ml"
       ],
       "note": "Standard volume patterns for liquid bath products"
     },
