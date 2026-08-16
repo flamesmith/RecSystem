@@ -1184,8 +1184,8 @@
     "Capacity_Cups": {
       "type": "regex",
       "patterns": [
-        "(\\d+)[\\s-]cup",
-        "(\\d+)\\s?cup"
+        "(\\d+\\.?\\d*)[\\s-]cup",
+        "(\\d+\\.?\\d*)\\s?cup"
       ],
       "note": "Commonly 1, 4, 8, 10, or 12 cups"
     },

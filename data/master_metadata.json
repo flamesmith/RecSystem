@@ -404,8 +404,8 @@
     "Capacity_Cups": {
       "type": "regex",
       "patterns": [
-        "(?<!\\w)(\\d+)[\\s-]cup",
-        "(?<!\\w)(\\d+)[\\s-]?cup"
+        "(?<!\\w)(\\d+\\.?\\d*)[\\s-]cup",
+        "(?<!\\w)(\\d+\\.?\\d*)[\\s-]?cup"
       ],
       "note": "Commonly 1, 4, 8, 10, or 12 cups"
     },

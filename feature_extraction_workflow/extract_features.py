@@ -59,12 +59,24 @@ NUMERIC_ONLY_FIELDS = {
 }
 DIMENSION_FIELD = "Dimensions"
 
-# Only single-unit numeric fields are range-cleaned. Fields that carry a
-# `*_unit` column (the NUMERIC_UNIT_FIELDS: Weight, Thread_Count, ...) are
-# intentionally excluded — their raw numbers can mix units (e.g. Weight in
-# both grams and pounds), so a single [low, high] range would be applied
-# inconsistently. Those keep their `_numeric` + `_unit` columns but get no
-# `_cleaned` version.
+# A bound here plays one of two roles, and it is worth knowing which:
+#
+#   * On a single-scale column it is a statement about the quantity —
+#     `voltage_numeric` is always volts, so (110, 240) means mains voltage.
+#     Thread_Count belongs here too: it carries a `*_unit` column only because
+#     it is parsed by `parse_numeric_and_unit`, but a thread count is
+#     dimensionless (`tc`, `thread`, `threadcount` all normalize to one label).
+#
+#   * On a column that still mixes units — capacity_volume (oz/ml/l/lb/...),
+#     weight (lb and g), piece_count — it is only a plausibility guard against
+#     parse junk: zeros, model numbers, digits grabbed from the wrong place.
+#     The number is read in whatever unit that row happens to use, so the bound
+#     is deliberately loose. Converting those columns to one unit first would
+#     let the bound mean something sharper.
+#
+# Entries are (low, high) — inclusive on both ends — or (low, high, inclusive)
+# where `inclusive` is passed straight to pandas' Series.between:
+# "both" | "neither" | "left" | "right".
 VALID_RANGES = {
     "bar_pressure_numeric": (1, 25),
     "capacity_cups_numeric": (1, 30),
@@ -73,10 +85,16 @@ VALID_RANGES = {
     "power_rating_w": (1, 5000),
     "stage_count_numeric": (1, 10),
     "voltage_numeric": (110, 240),
-    # Excluded — these carry a `*_unit` column and can mix units, so range
-    # cleaning would be applied inconsistently. Uncomment to re-enable.
-    # "thread_count_numeric": (80, 2000),
-    # "weight_numeric": (0.1, 300),
+    # The two-part fields. These still mix units within a column, so a bound
+    # here is a plausibility guard against parse junk — zeros, model numbers,
+    # digits grabbed from the wrong place — not a statement about one scale.
+    # All four are written the same way: an open interval starting at 0, so a
+    # zero — always a parse failure, never a measurement — is excluded, and the
+    # high bound is the first value to drop.
+    "capacity_volume_numeric": (0, 1000, "neither"),   # 0 < v < 1000
+    "weight_numeric": (0, 501, "neither"),             # 0 < v < 501
+    "piece_count_numeric": (0, 501, "neither"),        # 0 < v < 501
+    "thread_count_numeric": (0, 2001, "neither"),      # 0 < v < 2001
 }
 
 UNIT_MAP = {
@@ -471,8 +489,14 @@ def clean_numeric_ranges(
     the upstream extractor produced a subset of fields).
     """
     df = df.copy()
-    for col, (low, high) in valid_ranges.items():
+    for col, bounds in valid_ranges.items():
         if col not in df.columns:
             continue
-        df[f"{col}{suffix}"] = df[col].where(df[col].between(low, high), np.nan)
+        low, high = bounds[0], bounds[1]
+        # Optional third element picks which ends are inclusive, matching
+        # pandas: "both" (default), "neither", "left", "right". Needed because
+        # several bounds are open at zero — a 0 is a parse failure, not a value.
+        inclusive = bounds[2] if len(bounds) > 2 else "both"
+        df[f"{col}{suffix}"] = df[col].where(
+            df[col].between(low, high, inclusive=inclusive), np.nan)
     return df

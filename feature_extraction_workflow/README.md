@@ -14,13 +14,16 @@ structured `extracted_features` dict per item, using a category-specific schema.
 
 This is the same pipeline that lives in `notebooks/create_features.ipynb`,
 re-packaged so it can be called from any notebook or script.
+`extract_features.ipynb` in this folder is the runnable driver — it defines no
+logic of its own, it only calls the functions below, so edits to this module take
+effect there with no notebook change.
 
 ## Inputs
 
 - A pandas DataFrame `df` containing one row per item.
 - One or more text columns to extract from (e.g. `['title', 'description', 'feature']`).
 - `master_metadata` — `{cat_3: {field_name: {type: 'dictionary'|'regex', values|patterns: [...]}}}`.
-  Loaded from `data/master_metadata.json` by default.
+  Loaded from `data/master_metadata.json` by default. 69 `cat_3` schemas.
 - `global_filters` — list of marketing phrases to scrub before extraction
   (e.g. `"100% satisfaction guaranteed"`). Loaded from `data/global_filters.json`.
 - A `category` column **or** an existing `cat_3` column. Categories are stringified
@@ -28,59 +31,192 @@ re-packaged so it can be called from any notebook or script.
 
 ## Pipeline stages
 
-For each item:
+Five calls end to end:
+
+```python
+df_result   = run_feature_extraction(df_items, text_columns, master_metadata, global_filters, ...)
+df_expanded = expand_features(df_result)
+df_clean    = clean_numeric_ranges(df_expanded)
+save_features(df_clean, 'data/df_features.pkl')
+```
+
+`run_feature_extraction` covers stages 1–5:
 
 1. **Ensure `cat_3`** — if `cat_1`…`cat_6` are missing, parse them from `category`
    (`ast.literal_eval` + index lookup). `cat_3` is the schema key.
 2. **Filter to valid `cat_3`** — drop rows whose `cat_3` isn't in `master_metadata`
-   (no extraction schema means no features can be extracted).
+   (no extraction schema means no features can be extracted). *See Filter 1.*
 3. **Clean text** — for each text column:
    - if it's a stringified list (description, feature), flatten with `parse_list_string`,
    - lowercase, convert number words to digits, normalize unit hyphens,
    - strip non-alphanumeric (keep digits, spaces, decimals, hyphens),
    - tokenize → drop NLTK stopwords (minus `{no, not, non, off, self}`) → lemmatize,
-   - remove `global_filters` phrases,
+   - remove `global_filters` phrases (*see Filter 2*),
    - collapse whitespace.
 
    Output: `<col>_cleaned` for each text column.
 4. **Extract features per source** — run `extract_features(text, cat_3)` on each
    cleaned column. Uses `master_metadata[cat_3]` to know which fields to look for:
    - `dictionary` fields: scan for any value, longest first; first match wins.
-   - `regex` fields: try each pattern; first match wins.
+   - `regex` fields: try each pattern in order; first match wins, and the **whole
+     match** is stored (`match.group(0)`), not just the captured number.
      `Dimensions` greedily extends the match to capture a trailing unit token.
+
+   Fields are independent — nothing stops two fields in the same schema from
+   matching the same text, so overlapping patterns fill both columns.
 
    Output: `extracted_features_<col>` (a dict per row) for each text column.
 5. **Merge** — combine the per-source dicts into one `extracted_features` dict.
    Priority follows the order you pass in (`priority[0]` overwrites `priority[-1]`).
    Default priority is the order of `text_columns`.
-6. **Expand to per-field columns** (`expand_features`, optional follow-up step) —
-   turn the merged dict into typed columns:
-   - One column per field key (`Color`, `Material`, `Dimensions`, …).
-   - `<field>_numeric` + `<field>_unit` for `Capacity`, `Capacity_Volume`,
-     `Piece_Count`, `Thread_Count`, `Weight` (e.g. `"16 oz"` → `16.0` + `"oz"`).
-   - Single-unit fields parsed numeric-only into named columns: `power_rating_w`,
-     `voltage_numeric`, `pocket_depth_in`, etc.
-   - `Dimensions` parsed into sorted-descending `dimension_1`, `dimension_2`,
-     `dimension_3`, plus `dimension_unit`.
-   - All `_unit` columns standardized through `UNIT_MAP` (`feet`→`ft`, `gram`→`g`).
-7. **Clean numeric ranges** (`clean_numeric_ranges`, optional) — for each numeric
-   column in `VALID_RANGES`, add a `<col>_cleaned` column where out-of-range
-   values are replaced with NaN. The original column is preserved untouched, so
-   you can compare or fall back. Same range table as `notebooks/analyze_features.ipynb`.
 
-The returned DataFrame keeps the original columns and adds:
+Then, as separate calls:
 
-- `cat_1` … `cat_6` (if not already present)
-- `<col>_cleaned` for each text column
-- `extracted_features_<col>` for each text column
-- `extracted_features` — the merged dict per row
-- After `expand_features`: per-field columns plus the `_numeric` / `_unit` /
-  `dimension_*` columns described above.
+6. **Expand to per-field columns** (`expand_features`) — turn the merged dict into
+   typed columns. See *What gets extracted* below for the full inventory. All
+   `_unit` columns are standardized through `UNIT_MAP` (`feet`→`ft`, `gram`→`g`,
+   `liter`→`l`). Note this normalizes the unit **label** only — it never converts
+   the value.
+7. **Clean numeric ranges** (`clean_numeric_ranges`) — add a `<col>_cleaned`
+   column for each entry in `VALID_RANGES`, with out-of-range values set to NaN.
+   The original column is preserved untouched. *See Filter 3.*
+
+## What gets extracted
+
+**25 fields**, in five groups. "cat_3" is how many of the 69 schemas declare the
+field — a field only exists where its schema asks for it.
+
+### Categorical — closed vocabulary (11)
+
+`dictionary` fields: a value can only be one of the strings listed in that
+schema, so junk can't enter.
+
+| Field | cat_3 | Field | cat_3 |
+| --- | --- | --- | --- |
+| `Brand` | 69 | `Sub_Type` | 9 |
+| `Color` | 69 | `Scent` | 2 |
+| `Features` | 69 | `Shape_Style` | 2 |
+| `Material` | 69 | | |
+| `Product_Type` | 69 | | |
+| `Theme` | 19 | | |
+| `Size` | 17 | | |
+| `Shape` | 14 | | |
+
+### Categorical — unparsed strings (2)
+
+`regex` fields that are never parsed into numbers, so they stay as raw text and
+have no closed vocabulary.
+
+| Field | cat_3 | Note |
+| --- | --- | --- |
+| `Filter_Rating` | 1 | holds `'5 micron'`, `'40 gallon'` — a number and a unit in one string |
+| `Part_Number` | 1 | |
+
+### Numeric — single unit (7)
+
+Parsed to one number; the unit is implicit and identical for every row, so a
+range means something about the quantity itself.
+
+| Field | Column | Range |
+| --- | --- | --- |
+| `Bar_Pressure` | `bar_pressure_numeric` | `[1, 25]` |
+| `Capacity_Cups` | `capacity_cups_numeric` | `[1, 30]` |
+| `Density_Weight` | `density_weight_lb` | `[0.5, 30]` |
+| `Pocket_Depth` | `pocket_depth_in` | `[5, 25]` |
+| `Power_Rating` | `power_rating_w` | `[1, 5000]` |
+| `Stage_Count` | `stage_count_numeric` | `[1, 10]` |
+| `Voltage` | `voltage_numeric` | `[110, 240]` |
+
+### Numeric — value + unit pair (4)
+
+Parsed into `<field>_numeric` **and** `<field>_unit`. The number alone is
+meaningless — `1.5` is litres or ounces depending on the unit column on that row.
+
+| Field | cat_3 | Columns | Units seen |
+| --- | --- | --- | --- |
+| `Piece_Count` | 59 | `piece_count_numeric`, `piece_count_unit` | `pc`, `pack`, `count`, `dz`, and the noun being counted (`chair`, `door`, `hook`) |
+| `Capacity_Volume` | 16 | `capacity_volume_numeric`, `capacity_volume_unit` | `oz`, `ml`, `l`, `gal`, `qt`, `cup`, plus non-volume `lb`, `g`, `cubic foot`, `bottle`, `slice` |
+| `Thread_Count` | 6 | `thread_count_numeric`, `thread_count_unit` | `thread count`, `tc`, `count`, `series` — dimensionless |
+| `Weight` | 1 | `weight_numeric`, `weight_unit` | `lb`, `g` |
+
+### Dimensions (1)
+
+| Field | cat_3 | Columns |
+| --- | --- | --- |
+| `Dimensions` | 55 | `dimension_1`, `dimension_2`, `dimension_3` (sorted descending), `dimension_unit` |
+
+`dimension_unit` mixes `in`, `cm`, `mm`, `ft` and also picks up non-length values
+(`count`, `count foot`) from schemas whose `Dimensions` patterns claim `count`,
+`qt` or `oz`.
+
+## Filters applied
+
+Three different things get filtered, at three different stages.
+
+### Filter 1 — rows, by `cat_3` (`filter_by_cat_3`)
+
+Drops every item whose `cat_3` has no schema in `master_metadata.json`. Only the
+69 covered categories survive; nothing else can produce features.
+
+### Filter 2 — text, by `global_filters` (`remove_global_filters`)
+
+Strips marketing boilerplate from the cleaned text *before* extraction, so
+phrases like `"100% satisfaction guaranteed"` can't be mistaken for attributes.
+Matching is whole-phrase with word boundaries, longest phrase first.
+
+### Filter 3 — values, by `VALID_RANGES` (`clean_numeric_ranges`)
+
+Adds `<col>_cleaned` with out-of-range values replaced by NaN. **The original
+column is never modified**, so you can always compare or fall back.
+
+Entries are `(low, high)` — inclusive on both ends — or `(low, high, inclusive)`
+where the third element goes straight to pandas' `Series.between`:
+`"both"` | `"neither"` | `"left"` | `"right"`.
+
+| Column | Bound | Meaning |
+| --- | --- | --- |
+| `bar_pressure_numeric` | `(1, 25)` | `1 <= v <= 25` |
+| `capacity_cups_numeric` | `(1, 30)` | `1 <= v <= 30` |
+| `density_weight_lb` | `(0.5, 30)` | `0.5 <= v <= 30` |
+| `pocket_depth_in` | `(5, 25)` | `5 <= v <= 25` |
+| `power_rating_w` | `(1, 5000)` | `1 <= v <= 5000` |
+| `stage_count_numeric` | `(1, 10)` | `1 <= v <= 10` |
+| `voltage_numeric` | `(110, 240)` | `110 <= v <= 240` |
+| `capacity_volume_numeric` | `(0, 1000, "neither")` | `0 < v < 1000` |
+| `weight_numeric` | `(0, 501, "neither")` | `0 < v < 501` |
+| `piece_count_numeric` | `(0, 501, "neither")` | `0 < v < 501` |
+| `thread_count_numeric` | `(0, 2001, "neither")` | `0 < v < 2001` |
+
+The two groups mean different things:
+
+- On the **seven single-unit columns** the bound describes the quantity — mains
+  voltage really is 110–240 V, so a value outside it is wrong.
+- On the **four two-part columns** the bound is only a plausibility guard against
+  parse junk — zeros, model numbers, digits grabbed from the wrong place. The
+  number is read in whatever unit that row happens to use, so the bound is
+  deliberately loose. Converting each to a single unit first would let it mean
+  something sharper.
+
+`Dimensions` has no range filter at all.
+
+## A note on `Capacity`
+
+There used to be a `Capacity` field producing `capacity_numeric` /
+`capacity_unit`. It was declared in exactly one schema — `Coffee, Tea &
+Espresso` — where its patterns duplicated `Capacity_Cups` (an identical cup
+regex) and `Capacity_Volume` (oz/litres) **in that same schema**, so every match
+landed in two columns at once. It has been removed. Cups now come from
+`Capacity_Cups`, oz and litres from `Capacity_Volume`.
+
+Pickles written before that change still contain `capacity_numeric` and
+`capacity_unit`; re-running extraction removes them.
 
 ## Quick example
 
 ```python
-from feature_extraction_workflow import run_feature_extraction, expand_features
+from feature_extraction_workflow import (
+    run_feature_extraction, expand_features, clean_numeric_ranges, save_features,
+)
 
 df_with_features = run_feature_extraction(
     df_items,
@@ -91,8 +227,9 @@ df_with_features = run_feature_extraction(
     priority=['title', 'description', 'feature'],
 )
 
-# Optional: turn the dict into typed columns (table form like create_features.ipynb)
-df_table = expand_features(df_with_features)
+df_table = expand_features(df_with_features)   # dict -> typed columns
+df_clean = clean_numeric_ranges(df_table)      # adds the *_cleaned columns
+save_features(df_clean, 'data/df_features.pkl')
 
 present = (df_with_features['extracted_features'].apply(len) > 0).sum()
 print(f"{present:,} / {len(df_with_features):,} items have extracted features")
@@ -103,18 +240,18 @@ print(f"{present:,} / {len(df_with_features):,} items have extracted features")
 | Function | Purpose |
 | --- | --- |
 | `ensure_cat_columns(df, category_col='category')` | Parse `category` into `cat_1..cat_6` if missing. |
-| `filter_by_cat_3(df, master_metadata)` | Keep only rows with `cat_3` in the schema. |
+| `filter_by_cat_3(df, master_metadata)` | **Filter 1** — keep only rows with `cat_3` in the schema. |
 | `parse_list_string(text)` | `"['a', 'b']"` → `'a b'`. |
 | `build_stopwords()` | NLTK English stopwords minus a kept whitelist. |
 | `clean_text(text, stop_words, lemmatizer)` | Lowercase, normalize, lemmatize, drop stopwords. |
 | `build_global_filter_regex(filters)` | Compile the global-filter pattern. |
-| `remove_global_filters(text, regex)` | Strip the marketing phrases. |
+| `remove_global_filters(text, regex)` | **Filter 2** — strip the marketing phrases. |
 | `extract_features(text, cat_3, master_metadata)` | Single-row schema-driven extractor. |
-| `run_feature_extraction(df, text_columns, master_metadata, global_filters, ...)` | End-to-end driver. |
+| `run_feature_extraction(df, text_columns, master_metadata, global_filters, ...)` | End-to-end driver for stages 1–5. |
 | `parse_numeric_and_unit(value)` | `"16 oz"` → `(16.0, "oz")`. |
 | `parse_dimensions(value)` | `"12x18 in"` → `(18.0, 12.0, NaN, "in")`. |
 | `expand_features(df, ...)` | Expand merged dict to per-field + numeric/unit columns. |
-| `clean_numeric_ranges(df, valid_ranges=VALID_RANGES)` | Add `<col>_cleaned` columns clipping out-of-range numerics to NaN. |
+| `clean_numeric_ranges(df, valid_ranges=VALID_RANGES)` | **Filter 3** — add `<col>_cleaned` with out-of-range values set to NaN. |
 | `save_features(df, path)` | Pickle the final dataframe to disk (handles dict columns). |
 
 ## Notes
@@ -125,6 +262,13 @@ print(f"{present:,} / {len(df_with_features):,} items have extracted features")
   items in this dataset, description alone ~81%, all three combined a bit higher.
 - The merge step is order-sensitive — pick a `priority` that matches how clean each
   source is (titles are usually cleanest, bullet `feature` text is usually noisiest).
+- A regex field stores the whole match, so a mis-anchored pattern loses information
+  permanently — `(\d+)[\s-]?liter` on `"1.5 liter"` stores `"5 liter"`, and the `1`
+  is gone from every column. Patterns capture `(\d+\.?\d*)` so decimals survive.
+- Known open issues in the schemas: `Bakeware` has `Dimensions` and `Piece_Count`
+  both claiming `count`; `Bedding Accessories` has `Piece_Count` claiming `x(\d+)`,
+  so `24x36` parses as a piece count of 36; `Color` and `Material` share wood words
+  (`mahogany`, `pine`, `oak`) in ~50 schemas, so one mention fills both fields.
 
 ---
 
