@@ -97,6 +97,47 @@ VALID_RANGES = {
     "thread_count_numeric": (0, 2001, "neither"),      # 0 < v < 2001
 }
 
+# Spelling variants that the schema lists as separate vocabulary entries, so the
+# extractor stores whichever one the listing happened to use. Both spellings stay
+# in `master_metadata.json` — removing one would stop it matching — and the
+# duplicate is folded onto a single label here instead.
+#
+# Counts below are occurrences in df_features at the time this map was written;
+# they record how the surviving label was chosen, not a rule the code enforces.
+# Only fields the extractor produces are listed: `brand` comes from the source
+# metadata, and Filter_Rating / Part_Number need parsing fixes, not aliases.
+CANONICAL_VALUES = {
+    "Color": {
+        "grey": "gray",                          # grey 5,227 / gray 3,284 — standard
+        "multi color": "multicolor",             # 124 -> 3,883                spelling wins
+    },
+    "Features": {
+        "freestanding": "free standing",         # 4 -> 268
+        "hand-painted": "hand painted",          # 408 -> 16,212
+        "high back": "high-back",                # 39 -> 88
+        "mid century modern": "mid-century modern",   # 63 -> 190
+        "non skid": "non-skid",                  # 45 -> 1,037
+        "non slip": "non-slip",                  # 163 -> 3,460
+        "nonstick": "non-stick",                 # 3,975 -> 4,863
+        "single ply": "single-ply",              # 73 -> 185
+    },
+    "Product_Type": {
+        "airbed": "air bed",                     # 76 -> 129
+        "barstool": "bar stool",                 # 950 -> 2,134
+        "bedskirt": "bed skirt",                 # 508 -> 1,364
+        "pillow case": "pillowcase",             # 5,617 -> 6,328
+        "sauce pan": "saucepan",                 # 572 -> 982
+        "stockpot": "stock pot",                 # 364 -> 632
+        "wash cloth": "washcloth",               # 280 -> 407
+    },
+}
+
+# `brand` is a passthrough column from the source metadata, not something this
+# pipeline extracts — but it arrives with ~98k distinct values, most carried by a
+# handful of items, so it is folded here to keep every consumer consistent.
+BRAND_MIN_ITEMS = 10          # keep brands on MORE than this many distinct items
+BRAND_OTHER = "other_brands"
+
 UNIT_MAP = {
     "feet": "ft", "foot": "ft",
     "ounce": "oz",
@@ -474,6 +515,72 @@ def save_features(df: pd.DataFrame, path: PathLike) -> None:
     """
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     df.to_pickle(path)
+
+
+def clean_brand(
+    df: pd.DataFrame,
+    col: str = "brand",
+    id_col: str = "asin",
+    min_items: int = BRAND_MIN_ITEMS,
+    other: str = BRAND_OTHER,
+    out: str = "brand_clean",
+) -> pd.DataFrame:
+    """Add `<out>`: brand spellings merged, then rare brands folded to `other`.
+
+    Two steps. First spelling variants are merged — values that agree once case,
+    whitespace and separators are removed ("3d rose" / "3drose") collapse onto
+    the spelling carried by the most items, ties broken alphabetically so the
+    result is reproducible. Then any brand on `min_items` or fewer distinct
+    `id_col` values becomes `other`.
+
+    `df[col]` is left untouched, so a different threshold can be recomputed from
+    it without re-extracting. Missing brands stay missing: "no brand recorded"
+    and "a brand too rare to model" are different things and should not share an
+    embedding.
+
+    Note the surviving brand list is derived from the rows passed in — running
+    this on a sample folds far more aggressively than a full run.
+    """
+    df = df.copy()
+    if col not in df.columns:
+        return df
+
+    s = (df[col].astype("string").str.strip().str.lower()
+                .str.replace(r"\s+", " ", regex=True))
+    key = s.str.replace(r"[\s\-\.,'&]", "", regex=True)
+
+    counts = (pd.DataFrame({"key": key, "val": s, "id": df[id_col]})
+                .dropna(subset=["key", "val"])
+                .groupby(["key", "val"], observed=True)["id"].nunique()
+                .reset_index(name="n_items")
+                .sort_values(["key", "n_items", "val"], ascending=[True, False, True]))
+    canonical = counts.drop_duplicates("key").set_index("key")["val"]
+    merged = key.map(canonical)
+
+    per_brand = merged.to_frame("b").assign(id=df[id_col]).groupby("b")["id"].nunique()
+    keep = per_brand[per_brand > min_items].index
+
+    df[out] = merged.where(merged.isin(keep) | merged.isna(), other)
+    return df
+
+
+def canonicalize_values(
+    df: pd.DataFrame,
+    aliases: Mapping[str, Mapping[str, str]] = CANONICAL_VALUES,
+) -> pd.DataFrame:
+    """Fold spelling variants of a categorical value onto one label.
+
+    Unlike `clean_numeric_ranges` this replaces in place rather than adding a
+    `_cleaned` twin: the two spellings mean the same thing, so there is nothing
+    to compare against and no reason to carry both into the model.
+
+    Fields named in `aliases` but not present in `df` are skipped silently.
+    """
+    df = df.copy()
+    for field, mapping in aliases.items():
+        if field in df.columns:
+            df[field] = df[field].replace(mapping)
+    return df
 
 
 def clean_numeric_ranges(

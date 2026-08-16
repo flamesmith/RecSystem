@@ -36,7 +36,8 @@ Five calls end to end:
 ```python
 df_result   = run_feature_extraction(df_items, text_columns, master_metadata, global_filters, ...)
 df_expanded = expand_features(df_result)
-df_clean    = clean_numeric_ranges(df_expanded)
+df_canon    = clean_brand(canonicalize_values(df_expanded))
+df_clean    = clean_numeric_ranges(df_canon)
 save_features(df_clean, 'data/df_features.pkl')
 ```
 
@@ -77,7 +78,11 @@ Then, as separate calls:
    `_unit` columns are standardized through `UNIT_MAP` (`feet`→`ft`, `gram`→`g`,
    `liter`→`l`). Note this normalizes the unit **label** only — it never converts
    the value.
-7. **Clean numeric ranges** (`clean_numeric_ranges`) — add a `<col>_cleaned`
+7. **Canonicalize categorical values** (`canonicalize_values`) — fold spelling
+   variants of a value onto one label. Replaces in place, since the variants mean
+   the same thing. *See Filter 4.* Then `clean_brand` adds `brand_clean`, with
+   brand spellings merged and rare brands folded. *See Filter 5.*
+8. **Clean numeric ranges** (`clean_numeric_ranges`) — add a `<col>_cleaned`
    column for each entry in `VALID_RANGES`, with out-of-range values set to NaN.
    The original column is preserved untouched. *See Filter 3.*
 
@@ -151,7 +156,7 @@ meaningless — `1.5` is litres or ounces depending on the unit column on that r
 
 ## Filters applied
 
-Three different things get filtered, at three different stages.
+Five different things get filtered, at five different stages.
 
 ### Filter 1 — rows, by `cat_3` (`filter_by_cat_3`)
 
@@ -199,6 +204,63 @@ The two groups mean different things:
 
 `Dimensions` has no range filter at all.
 
+### Filter 4 — categorical values, by `CANONICAL_VALUES` (`canonicalize_values`)
+
+Some spelling variants are listed as **separate vocabulary entries** in
+`master_metadata.json`, so the extractor stores whichever one a listing happened
+to use and one concept ends up under two labels. Both spellings stay in the
+schema — deleting one would stop it matching — and the duplicate is folded here
+instead.
+
+17 aliases across three fields:
+
+| Field | Aliases | Examples |
+| --- | --- | --- |
+| `Color` | 2 | `grey` → `gray`, `multi color` → `multicolor` |
+| `Features` | 8 | `nonstick` → `non-stick`, `non slip` → `non-slip` |
+| `Product_Type` | 7 | `barstool` → `bar stool`, `pillow case` → `pillowcase` |
+
+Unlike Filter 3 this replaces in place rather than adding a `_cleaned` twin:
+two spellings of one value carry no information to compare against.
+
+Deliberately excluded: `brand` (not produced by this pipeline — it comes from the
+source metadata) and `Filter_Rating` / `Part_Number` (their values are broken
+fragments like `'000 gallon'`; that needs a parsing fix, not an alias).
+
+Scope note: this is a small effect — roughly 1% of distinct values. It does not
+touch `Material`, `Scent`, `Shape`, `Shape_Style`, `Size`, `Sub_Type` or `Theme`,
+which have no spelling variants. Their quality problems are values sitting in the
+wrong field (`queen` and `twin` are in `Shape_Style`; `large` and `small` are in
+`Shape`) and 33 values claimed by two fields at once — schema edits, not aliases.
+
+### Filter 5 — rare brands, by item count (`clean_brand`)
+
+`brand` is **not extracted** — it is a passthrough column from the source
+metadata — but it arrives with ~98,532 distinct values, the large majority
+carried by one or two items. An embedding table that size is mostly rows that
+never get trained, so it is folded here rather than separately in every
+downstream notebook.
+
+Two steps, into a new `brand_clean` column:
+
+1. **Merge spellings** — values that agree once case, whitespace and separators
+   are dropped (`3d rose` / `3drose` / `3D Rose `) collapse onto the spelling
+   carried by the most items, ties broken alphabetically so a given input always
+   gives the same output.
+2. **Fold the tail** — brands on `BRAND_MIN_ITEMS` (10) or fewer distinct `asin`
+   become `other_brands`.
+
+Merging runs first on purpose: counted separately, `3d rose` (7 items) and
+`3drose` (4) both fall under the threshold, while merged they clear it at 11.
+
+`brand` itself is left untouched, so a different threshold can be recomputed
+without re-extracting. **Missing stays missing** — "no brand recorded" and "a
+brand too rare to model" are different things and should not share an embedding;
+turning NaN into an explicit level is a modeling decision, made downstream.
+
+Note the surviving brand list is derived from the rows passed in, so a sampled
+run (`nrows=`) folds far more aggressively than a full one.
+
 ## A note on `Capacity`
 
 There used to be a `Capacity` field producing `capacity_numeric` /
@@ -215,7 +277,8 @@ Pickles written before that change still contain `capacity_numeric` and
 
 ```python
 from feature_extraction_workflow import (
-    run_feature_extraction, expand_features, clean_numeric_ranges, save_features,
+    run_feature_extraction, expand_features, canonicalize_values,
+    clean_brand, clean_numeric_ranges, save_features,
 )
 
 df_with_features = run_feature_extraction(
@@ -228,7 +291,9 @@ df_with_features = run_feature_extraction(
 )
 
 df_table = expand_features(df_with_features)   # dict -> typed columns
-df_clean = clean_numeric_ranges(df_table)      # adds the *_cleaned columns
+df_canon = canonicalize_values(df_table)       # folds grey -> gray, etc.
+df_canon = clean_brand(df_canon)               # adds brand_clean
+df_clean = clean_numeric_ranges(df_canon)      # adds the *_cleaned columns
 save_features(df_clean, 'data/df_features.pkl')
 
 present = (df_with_features['extracted_features'].apply(len) > 0).sum()
@@ -251,6 +316,8 @@ print(f"{present:,} / {len(df_with_features):,} items have extracted features")
 | `parse_numeric_and_unit(value)` | `"16 oz"` → `(16.0, "oz")`. |
 | `parse_dimensions(value)` | `"12x18 in"` → `(18.0, 12.0, NaN, "in")`. |
 | `expand_features(df, ...)` | Expand merged dict to per-field + numeric/unit columns. |
+| `canonicalize_values(df, aliases=CANONICAL_VALUES)` | **Filter 4** — fold spelling variants of a categorical value onto one label. |
+| `clean_brand(df, min_items=BRAND_MIN_ITEMS)` | **Filter 5** — merge brand spellings, fold rare brands to `other_brands`. |
 | `clean_numeric_ranges(df, valid_ranges=VALID_RANGES)` | **Filter 3** — add `<col>_cleaned` with out-of-range values set to NaN. |
 | `save_features(df, path)` | Pickle the final dataframe to disk (handles dict columns). |
 
