@@ -36,7 +36,7 @@ Five calls end to end:
 ```python
 df_result   = run_feature_extraction(df_items, text_columns, master_metadata, global_filters, ...)
 df_expanded = expand_features(df_result)
-df_canon    = clean_brand(canonicalize_values(df_expanded))
+df_canon    = normalize_dimensions(clean_brand(canonicalize_values(df_expanded)))
 df_clean    = clean_numeric_ranges(df_canon)
 save_features(df_clean, 'data/df_features.pkl')
 ```
@@ -81,7 +81,9 @@ Then, as separate calls:
 7. **Canonicalize categorical values** (`canonicalize_values`) — fold spelling
    variants of a value onto one label. Replaces in place, since the variants mean
    the same thing. *See Filter 4.* Then `clean_brand` adds `brand_clean`, with
-   brand spellings merged and rare brands folded. *See Filter 5.*
+   brand spellings merged and rare brands folded (*Filter 5*), and
+   `normalize_dimensions` converts the dimensions to inches and tidies their
+   unit column (*Filter 6*).
 8. **Clean numeric ranges** (`clean_numeric_ranges`) — add a `<col>_cleaned`
    column for each entry in `VALID_RANGES`, with out-of-range values set to NaN.
    The original column is preserved untouched. *See Filter 3.*
@@ -152,11 +154,13 @@ meaningless — `1.5` is litres or ounces depending on the unit column on that r
 
 `dimension_unit` mixes `in`, `cm`, `mm`, `ft` and also picks up non-length values
 (`count`, `count foot`) from schemas whose `Dimensions` patterns claim `count`,
-`qt` or `oz`.
+`qt` or `oz`. Filter 6 converts what it can to inches — `dimension_1_in`,
+`dimension_2_in`, `dimension_3_in`, plus `dimension_unit_clean` — and
+`clean_numeric_ranges` then bounds them at `0 < v < 151`.
 
 ## Filters applied
 
-Five different things get filtered, at five different stages.
+Six different things get filtered, at six different stages.
 
 ### Filter 1 — rows, by `cat_3` (`filter_by_cat_3`)
 
@@ -261,6 +265,50 @@ turning NaN into an explicit level is a modeling decision, made downstream.
 Note the surviving brand list is derived from the rows passed in, so a sampled
 run (`nrows=`) folds far more aggressively than a full one.
 
+### Filter 6 — dimensions, to one scale (`normalize_dimensions`)
+
+`dimension_unit` arrives with **~1,500 distinct values**, and only about 83% of
+them are lengths. The rest are orientation words (`tall`, `w`, `h`, `wide`,
+`long`), units of other quantities (`l`, `oz`, `qt`, `count`), and parse debris
+(`x35 inch - m`). On top of that the values themselves mix `in`, `cm`, `mm`,
+`ft` and `m`, so `dimension_1` is not comparable across rows.
+
+Three steps:
+
+1. **Resolve the unit.** Strip a trailing `" m"` (`cm m` → `cm`), then read the
+   unit from the **start** of what remains, so the greedy extension's leftovers
+   — `inch round`, `inch in`, `inch drop` — all resolve to `inch`.
+2. **Convert to inches** into `dimension_1_in`, `dimension_2_in`,
+   `dimension_3_in`:
+
+   | Unit | Factor | | Unit | Factor |
+   | --- | --- | --- | --- | --- |
+   | `in` / `inch` / `inches` / `quot` / `"` | ×1 | | `cm` | ×0.3937 |
+   | `ft` / `foot` / `feet` | ×12 | | `mm` | ×0.03937 |
+   | `m` / `meter` / `meters` | ×39.37 | | | |
+
+   Inches because ~76% of the column is already in them, so most values pass
+   through untouched and only the metric minority goes through arithmetic — and
+   the round numbers that dominate listings (12, 18, 24, 36) stay round.
+3. **Relabel.** `dimension_unit_clean` reports the unit the value is in *after*
+   conversion, so every converted row reads `in` and `cm` / `mm` / `ft` vanish
+   from the breakdown. A unit that was present but unrecognised becomes
+   `Other`; **a missing unit stays missing** — those are different situations.
+   `dimension_unit_src` keeps the source unit for auditing.
+
+The range bounds `0 < v < 151` inches live in `VALID_RANGES` for the three
+`_in` columns, so `clean_numeric_ranges` produces `dimension_1_in_cleaned` and
+friends — which is why this step has to run **before** it. This is the first
+point at which a bound on a dimension means anything, because the column only
+becomes single-scale here.
+
+**A related fix in the extractor itself.** `_DIMENSION_UNIT_RE` listed `m` with
+no boundary, so it matched the first letter of any m-word: `"12 inch modern"`
+was stored as `12 inch m`. That is where `m`, `inch m`, `cm m` and `tall m` came
+from — about 5% of rows. The pattern now ends with `(?![a-z])`, and `inches` /
+`meters` were added so plurals still match. The `" m"` strip in step 1 remains
+for data extracted before this fix.
+
 ## A note on `Capacity`
 
 There used to be a `Capacity` field producing `capacity_numeric` /
@@ -278,7 +326,7 @@ Pickles written before that change still contain `capacity_numeric` and
 ```python
 from feature_extraction_workflow import (
     run_feature_extraction, expand_features, canonicalize_values,
-    clean_brand, clean_numeric_ranges, save_features,
+    clean_brand, normalize_dimensions, clean_numeric_ranges, save_features,
 )
 
 df_with_features = run_feature_extraction(
@@ -293,6 +341,7 @@ df_with_features = run_feature_extraction(
 df_table = expand_features(df_with_features)   # dict -> typed columns
 df_canon = canonicalize_values(df_table)       # folds grey -> gray, etc.
 df_canon = clean_brand(df_canon)               # adds brand_clean
+df_canon = normalize_dimensions(df_canon)      # adds dimension_*_in
 df_clean = clean_numeric_ranges(df_canon)      # adds the *_cleaned columns
 save_features(df_clean, 'data/df_features.pkl')
 
@@ -317,6 +366,7 @@ print(f"{present:,} / {len(df_with_features):,} items have extracted features")
 | `parse_dimensions(value)` | `"12x18 in"` → `(18.0, 12.0, NaN, "in")`. |
 | `expand_features(df, ...)` | Expand merged dict to per-field + numeric/unit columns. |
 | `canonicalize_values(df, aliases=CANONICAL_VALUES)` | **Filter 4** — fold spelling variants of a categorical value onto one label. |
+| `normalize_dimensions(df)` | **Filter 6** — convert dimensions to inches, tidy `dimension_unit`. |
 | `clean_brand(df, min_items=BRAND_MIN_ITEMS)` | **Filter 5** — merge brand spellings, fold rare brands to `other_brands`. |
 | `clean_numeric_ranges(df, valid_ranges=VALID_RANGES)` | **Filter 3** — add `<col>_cleaned` with out-of-range values set to NaN. |
 | `save_features(df, path)` | Pickle the final dataframe to disk (handles dict columns). |

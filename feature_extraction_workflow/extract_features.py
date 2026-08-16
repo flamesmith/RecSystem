@@ -32,8 +32,13 @@ NUMBER_PATTERN = re.compile(r"\b(" + "|".join(NUMBER_WORDS.keys()) + r")\b")
 
 STOPWORDS_TO_KEEP = {"no", "not", "non", "off", "self"}
 
+# The trailing `(?![a-z])` matters: without it `m` matches the first letter of
+# any m-word, so "12 inch modern" extended to "12 inch m" and the unit column
+# filled with `m`, `inch m`, `cm m`. `inches`/`meters` are listed so the plural
+# still matches now that a letter may not follow.
 _DIMENSION_UNIT_RE = re.compile(
-    r'[\s-]*(inch|inchs|in|cm|mm|ft|foot|feet|meter|m|quot|"|\")'
+    r'[\s-]*(inches|inchs|inch|in|feet|foot|ft|cm|mm|meters|meter|m|quot|"|\")'
+    r'(?![a-z])'
 )
 
 # Default schema for numeric parsing (matches notebooks/create_features.ipynb).
@@ -95,6 +100,11 @@ VALID_RANGES = {
     "weight_numeric": (0, 501, "neither"),             # 0 < v < 501
     "piece_count_numeric": (0, 501, "neither"),        # 0 < v < 501
     "thread_count_numeric": (0, 2001, "neither"),      # 0 < v < 2001
+    # Added by `normalize_dimensions`, so that step must run first. A bound is
+    # only meaningful here because the column is single-scale by then.
+    "dimension_1_in": (0, 151, "neither"),             # 0 < v < 151 inches
+    "dimension_2_in": (0, 151, "neither"),
+    "dimension_3_in": (0, 151, "neither"),
 }
 
 # Spelling variants that the schema lists as separate vocabulary entries, so the
@@ -131,6 +141,27 @@ CANONICAL_VALUES = {
         "wash cloth": "washcloth",               # 280 -> 407
     },
 }
+
+# Dimensions arrive in mixed units, and the unit column also collects things
+# that are not lengths at all (`tall`, `w`, `oz`, `count`). Values are converted
+# to inches — 75.6% of the column is already in them, so most values pass through
+# untouched and only the metric minority goes through arithmetic.
+DIMENSION_UNIT_TO_INCHES = {
+    "in": 1.0, "inch": 1.0, "inchs": 1.0, "inches": 1.0, "quot": 1.0, '"': 1.0,
+    "ft": 12.0, "foot": 12.0, "feet": 12.0,
+    "cm": 0.3937007874,
+    "mm": 0.03937007874,
+    "m": 39.3700787, "meter": 39.3700787, "meters": 39.3700787,
+}
+DIMENSION_UNKNOWN_UNIT = "Other"
+DIMENSION_COLS = ("dimension_1", "dimension_2", "dimension_3")
+
+# The unit extension is greedy, so a real unit often arrives with trailing text
+# ("inch round", "inch in", "inch drop"). Match on the unit at the START of the
+# string; longest alternatives first so "inch" is not read as "in" + "ch".
+_UNIT_HEAD_RE = re.compile(
+    r"^(inches|inchs|inch|in|feet|foot|ft|cm|mm|meters|meter|m|quot)\b")
+_TRAILING_M_RE = re.compile(r"\s+m$")
 
 # `brand` is a passthrough column from the source metadata, not something this
 # pipeline extracts — but it arrives with ~98k distinct values, most carried by a
@@ -561,6 +592,54 @@ def clean_brand(
     keep = per_brand[per_brand > min_items].index
 
     df[out] = merged.where(merged.isin(keep) | merged.isna(), other)
+    return df
+
+
+def normalize_dimensions(
+    df: pd.DataFrame,
+    cols: Sequence[str] = DIMENSION_COLS,
+    unit_col: str = "dimension_unit",
+    suffix: str = "_in",
+    unknown: str = DIMENSION_UNKNOWN_UNIT,
+) -> pd.DataFrame:
+    """Put every dimension on one scale — inches — and tidy the unit column.
+
+    Three steps:
+
+    1. **Resolve the unit.** Strip a trailing " m" left by the old greedy unit
+       extension ("cm m" -> "cm"), then read the unit from the START of what
+       remains, so "inch round" / "inch in" / "inch drop" resolve to "inch".
+    2. **Convert.** `<col>_in` = value x factor for every recognised length
+       unit. Rows whose unit is not a length (`tall`, `w`, `oz`, `count`) or
+       that have no unit at all get NaN — the number is kept in the original
+       column either way.
+    3. **Label.** `dimension_unit_clean` reports the unit the value is in
+       *after* conversion, so every converted row reads "in". A unit that was
+       present but unrecognised becomes `unknown`; a missing unit stays missing,
+       which is a different thing.
+
+    `dimension_unit_src` records the source unit for auditing, since
+    `dimension_unit_clean` no longer says where a value came from.
+
+    The originals are untouched. `VALID_RANGES` carries bounds for the `<col>_in`
+    columns, so run this before `clean_numeric_ranges`.
+    """
+    df = df.copy()
+    if unit_col not in df.columns:
+        return df
+
+    u = df[unit_col].astype("string").str.strip().str.lower()
+    u = u.str.replace(_TRAILING_M_RE, "", regex=True)
+    head = u.str.extract(_UNIT_HEAD_RE, expand=False)
+    factor = head.map(DIMENSION_UNIT_TO_INCHES)
+
+    for c in cols:
+        if c in df.columns:
+            df[f"{c}{suffix}"] = df[c] * factor
+
+    df["dimension_unit_src"] = head
+    clean = u.mask(factor.notna(), "in")
+    df["dimension_unit_clean"] = clean.mask(factor.isna() & u.notna(), unknown)
     return df
 
 

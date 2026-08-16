@@ -1,6 +1,9 @@
 from .extract_features import (
     CANONICAL_VALUES,
+    DIMENSION_COLS,
     DIMENSION_FIELD,
+    DIMENSION_UNIT_TO_INCHES,
+    DIMENSION_UNKNOWN_UNIT,
     NUMERIC_ONLY_FIELDS,
     NUMERIC_UNIT_FIELDS,
     UNIT_MAP,
@@ -18,6 +21,7 @@ from .extract_features import (
     extract_features,
     filter_by_cat_3,
     merge_extracted,
+    normalize_dimensions,
     parse_dimensions,
     parse_list_string,
     parse_numeric_and_unit,
@@ -34,7 +38,10 @@ from .extract_features_user import (
 
 __all__ = [
     "CANONICAL_VALUES",
+    "DIMENSION_COLS",
     "DIMENSION_FIELD",
+    "DIMENSION_UNIT_TO_INCHES",
+    "DIMENSION_UNKNOWN_UNIT",
     "NUMERIC_ONLY_FIELDS",
     "NUMERIC_UNIT_FIELDS",
     "UNIT_MAP",
@@ -52,6 +59,7 @@ __all__ = [
     "extract_features",
     "filter_by_cat_3",
     "merge_extracted",
+    "normalize_dimensions",
     "parse_dimensions",
     "parse_list_string",
     "parse_numeric_and_unit",
