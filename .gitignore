@@ -12,3 +12,5 @@ data/*.pkl
 venv/
 __pycache__/
 *.pyc
+# Pickle backups (df_features.pkl.bak-YYYYMMDD)
+data/*.pkl.bak*
