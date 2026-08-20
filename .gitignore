@@ -5,6 +5,10 @@ data/*.csv
 data/*.tsv
 data/*.xlsx
 data/*.xls
+# ...except the design workbook: category counts, the reviewed cat_4 folding
+# behind category_taxonomy.json, per-category field coverage, and the pipeline
+# spec extract_features.py was written from. Curated by hand, not generated.
+!data/Item Features.xlsx
 data/*.pkl
 data/*.parquet
 data/*.feather
