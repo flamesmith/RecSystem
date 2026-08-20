@@ -1,6 +1,27 @@
-# Data files
+# Data tables — everything tabular/binary in data/ stays local.
+# The schema/config JSONs (category_taxonomy, global_filters, master_metadata*)
+# are the deliberate exception and stay tracked.
 data/*.csv
+data/*.tsv
+data/*.xlsx
+data/*.xls
 data/*.pkl
+data/*.parquet
+data/*.feather
+data/*.npy
+data/*.npz
+data/*.h5
+data/*.hdf5
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+data/*.zip
+data/*.gz
+# Pickle backups (df_features.pkl.bak-YYYYMMDD)
+data/*.pkl.bak*
+
+# Raw source dataset (~16 GB) — the schema/config JSONs in data/ stay tracked
+data/meta_Home_and_Kitchen.json
 
 # IDE
 .idea/
@@ -12,5 +33,3 @@ data/*.pkl
 venv/
 __pycache__/
 *.pyc
-# Pickle backups (df_features.pkl.bak-YYYYMMDD)
-data/*.pkl.bak*
