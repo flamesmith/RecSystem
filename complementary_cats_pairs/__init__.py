@@ -1,4 +1,4 @@
-from .complementary_categories import (
+from .categories import (
     DEFAULT_MIN_EDGES,
     DEFAULT_MIN_LIFT,
     DST_COLS,
@@ -22,8 +22,20 @@ from .complementary_categories import (
     score_pairs,
     threshold_grid,
 )
+from .pairs import (
+    DEFAULT_WINDOW_DAYS,
+    ITEM_COL,
+    SECONDS_PER_DAY,
+    TIME_COL,
+    USER_COL,
+    co_purchase_pairs,
+    load_interactions,
+    run_co_purchase_pairs,
+    save_co_purchase_pairs,
+)
 
 __all__ = [
+    # categories.py — Amazon's also_buy lists -> category pairs
     "DEFAULT_MIN_EDGES",
     "DEFAULT_MIN_LIFT",
     "DST_COLS",
@@ -46,4 +58,14 @@ __all__ = [
     "save_pairs",
     "score_pairs",
     "threshold_grid",
+    # pairs.py — the interaction log -> item-item co-purchase pairs
+    "DEFAULT_WINDOW_DAYS",
+    "ITEM_COL",
+    "SECONDS_PER_DAY",
+    "TIME_COL",
+    "USER_COL",
+    "co_purchase_pairs",
+    "load_interactions",
+    "run_co_purchase_pairs",
+    "save_co_purchase_pairs",
 ]
