@@ -171,10 +171,10 @@ same architecture and no weights.
   complementary-category mapping, and that concatenation is the final query
   representation.
 
-Because both sides are items, the user features assembled in the notebook's §4
-are not tower inputs. They are kept because the same table backs the
-user/item variant, and because a user's history is what defines which pairs
-count as co-purchased at all.
+Because both sides are items, per-user history is not a tower input, and
+`ttn_complementary.ipynb` does not load it. A user's history still shapes the
+data — it is what defines which items count as co-purchased — but that happens
+upstream, in `complementary_cats_pairs/pairs.ipynb`.
 
 ### Suggested flow in `ttn_complementary.ipynb`
 
