@@ -27,6 +27,13 @@ data/*.pkl.bak*
 # Raw source dataset (~16 GB) — the schema/config JSONs in data/ stay tracked
 data/meta_Home_and_Kitchen.json
 
+# Generated tables anywhere in the repo, not just data/. The rules above are
+# path-scoped, so a pickle or CSV written next to a notebook — e.g. a pair
+# table saved into complementary_cats_pairs/ or ttn/ — would otherwise be
+# committed. It is still a generated data table and still stays local.
+*.pkl
+*.csv
+
 # IDE
 .idea/
 
