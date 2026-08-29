@@ -5,7 +5,7 @@ answer the same question from different evidence.
 
 | Half | Evidence | Grain | Output |
 | --- | --- | --- | --- |
-| **categories** | Amazon's `also_buy` lists — what Amazon *says* is bought together | category pair | `data/complementary_pairs.pkl` |
+| **categories** | Amazon's `also_buy` lists — what Amazon *says* is bought together | category pair | `data/complementary_categories.pkl` |
 | **pairs** | the review log — what users *actually* bought together | item pair | `data/co_purchase_pairs.pkl` |
 
 They need not agree, and the disagreement is itself informative.
@@ -16,7 +16,7 @@ They need not agree, and the disagreement is itself informative.
 | --- | --- |
 | `categories.py` | every function for the `also_buy` half; defines that pipeline |
 | `category_analysis.ipynb` | builds and scores the category pairs, plots what each threshold costs, saves `data/pair_stats.pkl` |
-| `categories.ipynb` | applies the chosen thresholds to that table and writes `data/complementary_pairs.pkl` |
+| `categories.ipynb` | applies the chosen thresholds to that table and writes `data/complementary_categories.pkl` |
 | `pairs.py` | every function for the co-purchase half |
 | `pairs.ipynb` | builds the item-item pairs and writes `data/co_purchase_pairs.pkl` |
 
@@ -36,7 +36,7 @@ Turns Amazon's `also_buy` lists — the asins shown as "frequently bought
 together" — into a table of category pairs that get bought together, scored by
 support and lift and cut down to the pairs strong enough to act on.
 
-Output: `data/complementary_pairs.pkl`, one row per directed category pair.
+Output: `data/complementary_categories.pkl`, one row per directed category pair.
 
 **Run `category_analysis.ipynb` first.** It does the expensive work — the 2.7 GB
 pickle and the 2.1 GB catalogue CSV, several minutes — once, and saves the full
@@ -136,7 +136,7 @@ that loses all of its pairs drops out and counts as not ok.
 
 ## Output schema
 
-`data/complementary_pairs.pkl`, one row per surviving directed pair:
+`data/complementary_categories.pkl`, one row per surviving directed pair:
 
 | Column | Meaning |
 | --- | --- |
@@ -183,7 +183,7 @@ Output: `data/co_purchase_pairs.pkl`, one row per distinct item pair.
   review. Only `reviewerID`, `asin` and `unixReviewTime` are read; the file is
   851 MB across 11 columns and the other eight are dead weight here.
 - `ttn/constants.json` — `date_threshold`, the train/test split point, shared
-  with `ttn/ttn.ipynb` §6. Tracked in git, unlike the tables in `data/`.
+  with `ttn/ttn_complementary.ipynb` §6. Tracked in git, unlike the tables in `data/`.
 
 ## Pipeline stages
 
@@ -206,10 +206,10 @@ Applied in this order, and both matter:
   any pairing happens, so a table built for training cannot encode what happened
   during the evaluation window. Strictly-before, the same convention as
   `compute_cooccurrence_before_time` in `functions/rs_baseline_models.py`,
-  `InteractionMatrixBuilder`, and the split in `ttn/ttn.ipynb` §6. One global
+  `InteractionMatrixBuilder`, and the split in `ttn/ttn_complementary.ipynb` §6. One global
   cutoff, not a per-user one, so every training row precedes every test row.
   The date is not written in this package at all: `pairs.ipynb` reads
-  `date_threshold` from **`ttn/constants.json`**, and `ttn/ttn.ipynb` §6 reads
+  `date_threshold` from **`ttn/constants.json`**, and `ttn/ttn_complementary.ipynb` §6 reads
   the same key for the model's train/test split. One value, in one tracked file,
   read by both notebooks — so the two splits are the same by construction rather
   than by convention, and changing the date is a one-line diff that both follow.
