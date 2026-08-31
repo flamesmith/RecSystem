@@ -12,6 +12,9 @@ data/*.xls
 data/*.pkl
 data/*.parquet
 data/*.feather
+# Section 9's model-ready arrays (items.npz, pairs_*.parquet, vocabs.json)
+data/tower/
+
 data/*.npy
 data/*.npz
 data/*.h5

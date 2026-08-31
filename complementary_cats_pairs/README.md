@@ -6,7 +6,7 @@ answer the same question from different evidence.
 | Half | Evidence | Grain | Output |
 | --- | --- | --- | --- |
 | **categories** | Amazon's `also_buy` lists — what Amazon *says* is bought together | category pair | `data/complementary_categories.pkl` |
-| **pairs** | the review log — what users *actually* bought together | item pair | `data/co_purchase_pairs.pkl` |
+| **pairs** | the review log — what users *actually* bought together | item pair | `data/co_purchase_pairs_{train,test}.pkl` |
 
 They need not agree, and the disagreement is itself informative.
 
@@ -18,7 +18,7 @@ They need not agree, and the disagreement is itself informative.
 | `category_analysis.ipynb` | builds and scores the category pairs, plots what each threshold costs, saves `data/pair_stats.pkl` |
 | `categories.ipynb` | applies the chosen thresholds to that table and writes `data/complementary_categories.pkl` |
 | `pairs.py` | every function for the co-purchase half |
-| `pairs.ipynb` | builds the item-item pairs and writes `data/co_purchase_pairs.pkl` |
+| `pairs.ipynb` | builds the item-item pairs and writes `data/co_purchase_pairs_train.pkl` and `data/co_purchase_pairs_test.pkl` |
 
 All three notebooks are thin drivers: they define no logic, so edits to the
 modules take effect with no notebook change. The one exception is the charts,
@@ -175,7 +175,17 @@ stay local like every other generated table in this project.
 Every unordered pair of items the same user bought within a short window of
 each other, read straight off the interaction log.
 
-Output: `data/co_purchase_pairs.pkl`, one row per distinct item pair.
+Outputs, one row per distinct item pair in each:
+
+| File | Interactions used |
+| --- | --- |
+| `data/co_purchase_pairs_train.pkl` | strictly **before** `date_threshold` |
+| `data/co_purchase_pairs_test.pkl` | at or **after** it |
+
+The window applies within each slice, and for the test slice the frame is
+filtered *before* the call with `cutoff_time=None`, so both purchases of a test
+pair fall inside the test period. A pair straddling the boundary belongs to
+neither and is dropped. An item may appear in both slices; that is intended.
 
 ## Inputs
 
@@ -237,7 +247,7 @@ What each costs on the full log, at the 2017-12-09 cutoff:
 
 ## Output schema
 
-`data/co_purchase_pairs.pkl`, one row per distinct pair:
+Both output files, one row per distinct pair:
 
 | Column | Meaning |
 | --- | --- |

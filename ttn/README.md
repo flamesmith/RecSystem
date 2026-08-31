@@ -54,7 +54,7 @@ for the first — see `complementary_cats_pairs/README.md`.
 | Paper | Here |
 | --- | --- |
 | complementary-category mapping (one-to-many, from co-purchase data) | `data/complementary_categories.pkl`, built by `complementary_cats_pairs/categories.ipynb`, scored by support and lift |
-| co-occurring product pairs above a minimum threshold | `data/co_purchase_pairs.pkl`, built by `complementary_cats_pairs/pairs.ipynb` |
+| co-occurring product pairs above a minimum threshold | `data/co_purchase_pairs_train.pkl` and `_test.pkl`, built by `complementary_cats_pairs/pairs.ipynb` |
 | product-encoder input attributes | `data/df_features.pkl` / `df_features_with_embeddings.pkl` — `title_cleaned`, `cat_*`, `brand`, and the extracted attributes |
 | train/test split point | `date_threshold` in [`constants.json`](./constants.json), shared with `pairs.ipynb` so both read one value |
 
@@ -119,10 +119,12 @@ loss, not the data or the towers.
 Three sources in `data/`, and the first is what makes this a *complementary*
 model rather than a similarity one:
 
-1. **Co-purchase pairs** — `data/co_purchase_pairs.pkl`, built by
+1. **Co-purchase pairs** — `data/co_purchase_pairs_train.pkl` and
+   `data/co_purchase_pairs_test.pkl`, built by
    `complementary_cats_pairs/pairs.ipynb`. Every unordered pair of items the
-   same user bought within `window_days` of each other, using only
-   interactions before `date_threshold`. These pairs are the **positive
+   same user bought within `window_days` of each other, split on
+   `date_threshold`: the train slice from interactions before it, the test
+   slice from interactions at or after it. These pairs are the **positive
    examples**: `(query item, candidate item)`. Other items are candidate
    **negatives** to sample from. The window matters — two purchases four years
    apart are not one shopping intent, and without it every item a long-lived
@@ -178,8 +180,8 @@ upstream, in `complementary_cats_pairs/pairs.ipynb`.
 
 ### Suggested flow in `ttn_complementary.ipynb`
 
-1. Load `df_features_with_embeddings.pkl`, `co_purchase_pairs.pkl` and
-   `complementary_categories.pkl`.
+1. Load `df_features_with_embeddings.pkl`, both `co_purchase_pairs_*.pkl`
+   slices and `complementary_categories.pkl`.
 2. Build index maps for items, each categorical feature, and the category
    paths used as targets.
 3. Create a `Dataset` that yields `(query_item, pos_candidate, neg_candidate)`
@@ -190,6 +192,19 @@ upstream, in `complementary_cats_pairs/pairs.ipynb`.
 5. Train with the loss above; evaluate with ranking metrics (Recall@K,
    NDCG@K) on co-purchase pairs held out after `date_threshold`.
 6. Export candidate vectors for retrieval.
+
+### Fit on train, apply to both
+
+Every statistic `ttn_complementary.ipynb` learns is fitted on the training
+slice and applied unchanged to the test slice: the brand-fold threshold (§5),
+the eight categorical vocabularies (§6), the category price medians (§7) and
+the `target_node` vocabulary (§8). Fitting any of them twice would put the same
+category on a different integer code at evaluation time, and that code is the
+embedding index — the model would look up the wrong vector for a value it knows.
+
+A test value outside a fitted vocabulary becomes `Missing` rather than a
+separate `Unknown` level. It is rare (6 of 541,914 item-slots) and an `Unknown`
+embedding with no training examples would never leave its initialisation.
 
 ## Dependencies
 
