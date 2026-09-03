@@ -1,0 +1,55 @@
+edges scored: 909,843
+
+MOST cross-category source categories (complement-like):
+                                edges  same_cat4  same_cat3  same_brand  median_price
+s4                                                                                   
+Knife Sets                       4186      0.136      0.627       0.519        49.950
+Chef's Knives                    3694      0.161      0.857       0.599        43.490
+Colanders & Food Strainers       3378      0.188      0.577       0.205        13.960
+Countertop & Wall Organization   3395      0.211      0.348       0.214        17.890
+Plaques                          3725      0.238      0.790       0.292        16.990
+Cutting Boards                   3721      0.238      0.410       0.264        21.840
+Seasoning & Spice Tools          3507      0.246      0.549       0.237        14.950
+Graters, Peelers & Slicers       4477      0.256      0.671       0.331         9.990
+All Pans                         7087      0.271      0.567       0.595        31.990
+Banners & Garlands               4735      0.281      0.541       0.272         6.990
+Bakers & Casseroles              3093      0.287      0.457       0.692        28.310
+Candleholders                    5145      0.339      0.690       0.228        15.980
+
+MOST same-category source categories (substitute-like):
+                             edges  same_cat4  same_cat3  same_brand  median_price
+s4                                                                                
+Candy Making Supplies        29218      0.728      0.908       0.240         6.990
+Beer Brewing                 11889      0.737      0.874       0.088        21.500
+Kitchen Accessories          22001      0.740      0.780       0.534         6.950
+Home Fragrance Accessories    3018      0.742      0.831       0.693        14.990
+Decorative Accessories       36276      0.749      0.848       0.306        10.990
+Candles                      23278      0.802      0.868       0.504        15.990
+Wall & Tabletop Frames        7154      0.808      0.840       0.357        17.990
+Collectible Figurines        42681      0.820      0.959       0.532        24.320
+Ornaments                    44882      0.893      0.953       0.628        13.400
+Replacement Water Filters     6834      0.895      0.921       0.449        25.360
+Indoor Fountain Accessories   6944      0.928      0.932       0.297         9.950
+Incense & Incense Holders    18153      0.961      0.962       0.281         8.350
+
+
+By source price decile:
+      edges  median_price  same_cat4  same_brand
+band                                            
+0     73984         4.790      0.613       0.324
+1     73983         6.790      0.630       0.357
+2     73701         8.430      0.606       0.332
+3     73900         9.990      0.574       0.327
+4     82833        12.950      0.568       0.332
+5     64942        14.990      0.518       0.375
+6     73850        18.950      0.510       0.377
+7     73903        24.000      0.492       0.415
+8     73819        33.880      0.489       0.449
+9     73871        65.980      0.430       0.503
+
+correlation(log source price, same_cat4): -0.123
+
+
+Named lookups:
+  Area Rugs                          edges   3,599  same_cat4 0.442  same_brand 0.339  median $ 9.72
+  Throw Pillow Covers                edges   8,797  same_cat4 0.658  same_brand 0.136  median $ 7.99

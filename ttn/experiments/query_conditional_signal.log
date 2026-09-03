@@ -1,0 +1,7 @@
+top-10 built from train counts, grouped by      R@10  lenient  group used
+target category only (the baseline)           0.2147   0.4114     100.0%
++ query cat_3                                 0.2139   0.4128     100.0%
++ query cat_4                                 0.2167   0.4144     100.0%
++ query brand                                 0.2099   0.4022      94.4%
++ query product_type                          0.2039   0.3936      98.9%
++ the exact query item (memorisation)         0.1816   0.3377      47.2%

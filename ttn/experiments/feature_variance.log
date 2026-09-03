@@ -1,0 +1,21 @@
+WITHIN each category -- how different are items from each other?
+
+                category  items  title cos  brand distinct  brand entropy  color distinct  color entropy  material entropy  price CV
+              Dinnerware   3594      0.348             433          6.297              18          2.908             3.290     0.891
+               Serveware   3573      0.269             533          6.673              17          2.866             3.606     1.137
+   Glassware & Drinkware   3182      0.379             321          5.476              17          2.501             2.288     0.993
+                 Missing   2972      0.369             144          4.972               9          1.451             2.314     1.140
+               Area Rugs   2668      0.529             142          5.105              17          3.488             2.455     2.052
+    Draperies & Curtains   2399      0.471             193          5.887              17          3.394             2.792     1.062
+Baking Tools & Accessori   2236      0.325             267          4.825              12          1.788             3.261     0.845
+Shower Curtains, Hooks &   2177      0.501             188          5.326              15          2.713             3.281     0.501
+     Throw Pillow Covers   2088      0.536             157          4.462              13          2.716             2.307     0.846
+Travel & To-Go Food Cont   2069      0.335             198          4.388               9          2.183             1.933     1.476
+            Food Storage   2062      0.308             343          5.863              10          2.375             2.631     1.199
+        Cooking Utensils   2028      0.311             300          5.936              15          2.545             2.672     1.065
+
+reference: mean title cosine between two RANDOM items anywhere: 0.187
+           mean title cosine WITHIN a category:                 0.390
+
+max possible entropy at 300 sampled items is 8.2 bits;
+an entropy near 0 would mean every item in the category shares that value.

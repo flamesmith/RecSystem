@@ -1,0 +1,12 @@
+--- TTN filtered pairs (what the model trains on) ---
+pairs: 2,223,995   with a real brand on both sides: 59.0%
+same brand : 9.209%
+same cat_4 : 2.771%
+same node  : 2.275%
+chance same-brand (random item in the same target node): 1.899%
+
+--- raw also_buy from the metadata ---
+edges with brand on both sides: 1,181,927
+same brand : 36.829%
+same cat_4 : 54.798%
+chance same-brand (brand marginal): 0.229%

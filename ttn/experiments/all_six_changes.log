@@ -1,0 +1,26 @@
+device: mps
+training on 2,223,995 pairs over 137,362 items
+
+3 epochs x 543 steps of 4,096
+epoch 0 (untrained)          R@10 0.0000  R@100 0.0004  medRank 64,592
+epoch 1 (543 steps)  loss 0.4885 (easy 0.1127 hard 0.6138)  R@10 0.0344  R@100 0.1664  medRank 588  [59s]
+epoch 2 (1,086 steps)  loss 0.4205 (easy 0.0925 hard 0.5298)  R@10 0.0492  R@100 0.2206  medRank 406  [117s]
+epoch 3 (1,629 steps)  loss 0.5072 (easy 0.0829 hard 0.6486)  R@10 0.0436  R@100 0.2298  medRank 358  [175s]
+
+3 epochs / 1,629 steps in 175s (38,077 pairs/s)
+
+train  Recall@10 0.0446  NDCG@10 0.0219  Recall@50 0.1477  NDCG@50 0.0439  Recall@100 0.2280  NDCG@100 0.0569  MedianRank 365
+test   Recall@10 0.0477  NDCG@10 0.0244  Recall@50 0.1512  NDCG@50 0.0462  Recall@100 0.2391  NDCG@100 0.0604  MedianRank 348  Recall@10_lenient 0.1217
+
+baseline  random over catalogue R@10                 0.0001
+baseline  random within category R@10                0.0253
+baseline  popularity within category R@10            0.2136
+baseline  popularity within category R@10 lenient    0.4034
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/run_cell23.py", line 21, in <module>
+    exec(compile(src, "cell23", "exec"), globals())
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "cell23", line 349, in <module>
+  File "/opt/anaconda3/lib/python3.13/pathlib/_local.py", line 385, in relative_to
+    raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+ValueError: '/private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/ttn_v2.pt' is not in the subpath of '/Users/lazr/PycharmProjects/RecSystem'

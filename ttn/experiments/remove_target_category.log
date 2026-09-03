@@ -1,0 +1,172 @@
+
+==============================================================================
+### WITH the target-category embedding
+==============================================================================
+device: mps
+training on 2,223,995 pairs over 137,362 items
+
+3 epochs x 543 steps of 4,096
+epoch 0 (untrained)          R@10 0.0000  R@100 0.0000  medRank 66,114
+epoch 1 (543 steps)  loss 0.4837  R@10 0.1010  R@100 0.4328  medRank 136  [20s]
+epoch 2 (1,086 steps)  loss 0.4720  R@10 0.1052  R@100 0.4406  medRank 135  [40s]
+epoch 3 (1,629 steps)  loss 0.4700  R@10 0.1122  R@100 0.4600  medRank 122  [60s]
+
+3 epochs / 1,629 steps in 60s (111,308 pairs/s)
+
+train  Recall@10 0.1138  NDCG@10 0.0567  Recall@50 0.3253  NDCG@50 0.1023  Recall@100 0.4610  NDCG@100 0.1243  MedianRank 121
+test   Recall@10 0.1153  NDCG@10 0.0567  Recall@50 0.3234  NDCG@50 0.1019  Recall@100 0.4557  NDCG@100 0.1234  MedianRank 124  Recall@10_lenient 0.2513
+
+baseline  random over the whole catalogue            0.0001
+baseline  random within the asked-for category       0.0253
+baseline  popularity within the category             0.2136
+baseline  popularity within the category (lenient)   0.4034
+
+saved -> /private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/nonode.pt (2.8 MB)
+reloaded checkpoint reproduces R@10 exactly: 0.1122
+
+--- diversity audit ---
+Per (input category -> asked-for category), least diverse first:
+
+                     input category                           asked for  queries  slots  distinct  distinct %  distinct top-1  jaccard@10  items available
+Bathroom Accesso > Shower Curtains,                 Bath Rugs > Missing      150   1500        25       0.017               4       0.789              675
+        Bakeware > Baking Tools & A         Bakeware > Decorating Tools      150   1500        25       0.017               5       0.605              840
+Kitchen Utensils > Cooking Utensils Kitchen Utensils > Measuring Tools       150   1500        29       0.019               5       0.616             1272
+Bathroom Accesso > Shower Curtains, Window Treatment > Draperies & Curt      150   1500        36       0.024               6       0.498             2399
+Window Treatment > Draperies & Curt      Window Treatment > Window Rods      150   1500        36       0.024               7       0.743              391
+Decorative Pillo > Throw Pillow Cov        Area Rugs, Runne > Area Rugs      150   1500        37       0.025               4       0.545             2668
+       Area Rugs, Runne > Area Rugs           Living Room Furn > Tables      150   1500        39       0.026               7       0.499             1084
+Decorative Pillo > Throw Pillow Cov Window Treatment > Draperies & Curt      150   1500        40       0.027               5       0.575             2399
+    Storage & Organi > Food Storage          Storage & Organi > Missing      150   1500        43       0.029               9       0.481             1741
+Window Treatment > Draperies & Curt Sheets & Pillowc > Sheet & Pillowca      150   1500        43       0.029               6       0.489             1659
+Dining & Enterta > Glassware & Drin Dining & Enterta > Bar Tools & Drin      150   1500        44       0.029               7       0.438             1987
+Dining & Enterta > Glassware & Drin Kitchen Utensils > Bar & Wine Tools      150   1500        48       0.032               8       0.315             1762
+Bathroom Accesso > Shower Curtains,        Area Rugs, Runne > Area Rugs      150   1500        48       0.032               7       0.475             2668
+Window Treatment > Draperies & Curt Bathroom Accesso > Shower Curtains,      150   1500        50       0.033              12       0.486             2177
+Window Treatment > Draperies & Curt Decorative Pillo > Throw Pillow Cov      150   1500        53       0.035               9       0.397             2088
+Window Treatment > Draperies & Curt        Area Rugs, Runne > Area Rugs      150   1500        55       0.037               9       0.490             2668
+      Dining & Enterta > Dinnerware         Dining & Enterta > Flatware      150   1500        56       0.037              15       0.275             1805
+         Storage & Organi > Missing     Storage & Organi > Food Storage      150   1500        56       0.037               9       0.482             2062
+       Area Rugs, Runne > Area Rugs Window Treatment > Draperies & Curt      150   1500        66       0.044              15       0.261             2399
+       Area Rugs, Runne > Area Rugs Bathroom Accesso > Shower Curtains,      150   1500        71       0.047              17       0.313             2177
+       Area Rugs, Runne > Area Rugs Decorative Pillo > Throw Pillow Cov      150   1500        72       0.048              11       0.320             2088
+      Dining & Enterta > Dinnerware        Dining & Enterta > Serveware      150   1500        77       0.051              19       0.237             3573
+       Dining & Enterta > Serveware         Dining & Enterta > Flatware      150   1500        85       0.057              15       0.305             1805
+       Dining & Enterta > Serveware       Dining & Enterta > Dinnerware      150   1500        99       0.066              22       0.267             3594
+         Posters & Prints > Missing          Posters & Prints > Missing      150   1500       425       0.283              66       0.201             2972
+
+
+Rolled up by input category:
+
+                                     cells  queries  slots  distinct  jaccard  distinct %
+input category                                                                           
+Bakeware > Baking Tools & A              1      150   1500        25    0.605       0.017
+Kitchen Utensils > Cooking Utensils      1      150   1500        29    0.616       0.019
+Bathroom Accesso > Shower Curtains,      3      450   4500       109    0.587       0.024
+Decorative Pillo > Throw Pillow Cov      2      300   3000        77    0.560       0.026
+Storage & Organi > Food Storage          1      150   1500        43    0.481       0.029
+Dining & Enterta > Glassware & Drin      2      300   3000        92    0.377       0.031
+Window Treatment > Draperies & Curt      5      750   7500       237    0.521       0.032
+Storage & Organi > Missing               1      150   1500        56    0.482       0.037
+Area Rugs, Runne > Area Rugs             4      600   6000       248    0.348       0.041
+Dining & Enterta > Dinnerware            2      300   3000       133    0.256       0.044
+Dining & Enterta > Serveware             2      300   3000       184    0.286       0.061
+Posters & Prints > Missing               1      150   1500       425    0.201       0.283
+
+
+Overall across the 25 busiest cells
+  mean jaccard@10 between two queries in the same cell : 0.444
+  distinct items returned, as a share of slots         : 0.044
+  cells returning literally one shared list (<= 10 distinct): 0 of 25
+  median distinct top-1 across cells                   : 9
+
+jaccard 1.0 and distinct == 10 mean the query item changed nothing.
+jaccard near 0 and distinct near slots mean every query got its own list.
+
+share of top-10 landing in the asked-for category: 0.992
+distinct items over those 5,000 queries x 10: 6,431 of 50,000 slots
+
+==============================================================================
+### WITHOUT the target-category embedding
+==============================================================================
+device: mps
+training on 2,223,995 pairs over 137,362 items
+
+3 epochs x 543 steps of 4,096
+epoch 0 (untrained)          R@10 0.0002  R@100 0.0002  medRank 70,307
+epoch 1 (543 steps)  loss 0.5207  R@10 0.0028  R@100 0.0256  medRank 4,704  [20s]
+epoch 2 (1,086 steps)  loss 0.5077  R@10 0.0032  R@100 0.0298  medRank 4,171  [41s]
+epoch 3 (1,629 steps)  loss 0.5061  R@10 0.0030  R@100 0.0316  medRank 4,003  [62s]
+
+3 epochs / 1,629 steps in 62s (107,043 pairs/s)
+
+train  Recall@10 0.0029  NDCG@10 0.0015  Recall@50 0.0168  NDCG@50 0.0043  Recall@100 0.0294  NDCG@100 0.0064  MedianRank 4,058
+test   Recall@10 0.0037  NDCG@10 0.0017  Recall@50 0.0159  NDCG@50 0.0042  Recall@100 0.0312  NDCG@100 0.0067  MedianRank 4,058  Recall@10_lenient 0.0137
+
+baseline  random over the whole catalogue            0.0001
+baseline  random within the asked-for category       0.0253
+baseline  popularity within the category             0.2136
+baseline  popularity within the category (lenient)   0.4034
+
+saved -> /private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/nonode.pt (2.8 MB)
+reloaded checkpoint reproduces R@10 exactly: 0.0030
+
+--- diversity audit ---
+Per (input category -> asked-for category), least diverse first:
+
+                     input category                           asked for  queries  slots  distinct  distinct %  distinct top-1  jaccard@10  items available
+Bathroom Accesso > Shower Curtains, Window Treatment > Draperies & Curt      150   1500       141       0.094              38       0.160             2399
+Bathroom Accesso > Shower Curtains,                 Bath Rugs > Missing      150   1500       146       0.097              34       0.145              675
+Kitchen Utensils > Cooking Utensils Kitchen Utensils > Measuring Tools       150   1500       153       0.102              42       0.150             1272
+Bathroom Accesso > Shower Curtains,        Area Rugs, Runne > Area Rugs      150   1500       156       0.104              34       0.178             2668
+Decorative Pillo > Throw Pillow Cov        Area Rugs, Runne > Area Rugs      150   1500       178       0.119              44       0.138             2668
+Decorative Pillo > Throw Pillow Cov Window Treatment > Draperies & Curt      150   1500       189       0.126              41       0.130             2399
+Dining & Enterta > Glassware & Drin Dining & Enterta > Bar Tools & Drin      150   1500       191       0.127              58       0.089             1987
+    Storage & Organi > Food Storage          Storage & Organi > Missing      150   1500       197       0.131              51       0.088             1741
+Dining & Enterta > Glassware & Drin Kitchen Utensils > Bar & Wine Tools      150   1500       204       0.136              59       0.102             1762
+Window Treatment > Draperies & Curt Sheets & Pillowc > Sheet & Pillowca      150   1500       215       0.143              49       0.120             1659
+       Area Rugs, Runne > Area Rugs           Living Room Furn > Tables      150   1500       221       0.147              55       0.089             1084
+Window Treatment > Draperies & Curt Decorative Pillo > Throw Pillow Cov      150   1500       235       0.157              54       0.075             2088
+Window Treatment > Draperies & Curt      Window Treatment > Window Rods      150   1500       240       0.160              53       0.110              391
+Window Treatment > Draperies & Curt Bathroom Accesso > Shower Curtains,      150   1500       254       0.169              56       0.099             2177
+Window Treatment > Draperies & Curt        Area Rugs, Runne > Area Rugs      150   1500       262       0.175              64       0.093             2668
+        Bakeware > Baking Tools & A         Bakeware > Decorating Tools      150   1500       277       0.185              61       0.062              840
+       Area Rugs, Runne > Area Rugs Bathroom Accesso > Shower Curtains,      150   1500       278       0.185              61       0.064             2177
+       Area Rugs, Runne > Area Rugs Decorative Pillo > Throw Pillow Cov      150   1500       284       0.189              60       0.069             2088
+       Area Rugs, Runne > Area Rugs Window Treatment > Draperies & Curt      150   1500       295       0.197              60       0.106             2399
+      Dining & Enterta > Dinnerware        Dining & Enterta > Serveware      150   1500       344       0.229              80       0.042             3573
+      Dining & Enterta > Dinnerware         Dining & Enterta > Flatware      150   1500       354       0.236              72       0.051             1805
+       Dining & Enterta > Serveware       Dining & Enterta > Dinnerware      150   1500       359       0.239              76       0.044             3594
+         Storage & Organi > Missing     Storage & Organi > Food Storage      150   1500       420       0.280              90       0.037             2062
+       Dining & Enterta > Serveware         Dining & Enterta > Flatware      150   1500       425       0.283              85       0.040             1805
+         Posters & Prints > Missing          Posters & Prints > Missing      150   1500       690       0.460              90       0.052             2972
+
+
+Rolled up by input category:
+
+                                     cells  queries  slots  distinct  jaccard  distinct %
+input category                                                                           
+Bathroom Accesso > Shower Curtains,      3      450   4500       443    0.161       0.098
+Kitchen Utensils > Cooking Utensils      1      150   1500       153    0.150       0.102
+Decorative Pillo > Throw Pillow Cov      2      300   3000       367    0.134       0.122
+Storage & Organi > Food Storage          1      150   1500       197    0.088       0.131
+Dining & Enterta > Glassware & Drin      2      300   3000       395    0.096       0.132
+Window Treatment > Draperies & Curt      5      750   7500      1206    0.099       0.161
+Area Rugs, Runne > Area Rugs             4      600   6000      1078    0.082       0.180
+Bakeware > Baking Tools & A              1      150   1500       277    0.062       0.185
+Dining & Enterta > Dinnerware            2      300   3000       698    0.047       0.233
+Dining & Enterta > Serveware             2      300   3000       784    0.042       0.261
+Storage & Organi > Missing               1      150   1500       420    0.037       0.280
+Posters & Prints > Missing               1      150   1500       690    0.052       0.460
+
+
+Overall across the 25 busiest cells
+  mean jaccard@10 between two queries in the same cell : 0.093
+  distinct items returned, as a share of slots         : 0.179
+  cells returning literally one shared list (<= 10 distinct): 0 of 25
+  median distinct top-1 across cells                   : 58
+
+jaccard 1.0 and distinct == 10 mean the query item changed nothing.
+jaccard near 0 and distinct near slots mean every query got its own list.
+
+share of top-10 landing in the asked-for category: 0.072
+distinct items over those 5,000 queries x 10: 9,529 of 50,000 slots

@@ -1,0 +1,147 @@
+
+==============================================================================
+### 1. reproduce the original: 1 uniform negative, no temperature
+==============================================================================
+device: mps
+training on 2,223,995 pairs over 137,362 items
+
+3 epochs x 543 steps of 4,096
+epoch 0 (untrained)          R@10 0.0000  R@100 0.0000  medRank 66,114
+epoch 1 (543 steps)  loss 0.4825 (easy 0.3731 hard 0.5918)  R@10 0.1068  R@100 0.4242  medRank 141  [22s]
+epoch 2 (1,086 steps)  loss 0.4682 (easy 0.3769 hard 0.5594)  R@10 0.1160  R@100 0.4536  medRank 129  [43s]
+epoch 3 (1,629 steps)  loss 0.4690 (easy 0.3783 hard 0.5597)  R@10 0.1192  R@100 0.4514  medRank 126  [64s]
+
+3 epochs / 1,629 steps in 64s (104,570 pairs/s)
+
+train  Recall@10 0.1184  NDCG@10 0.0605  Recall@50 0.3283  NDCG@50 0.1058  Recall@100 0.4552  NDCG@100 0.1264  MedianRank 126
+test   Recall@10 0.1240  NDCG@10 0.0615  Recall@50 0.3281  NDCG@50 0.1056  Recall@100 0.4559  NDCG@100 0.1263  MedianRank 124  Recall@10_lenient 0.2460
+
+baseline  random over catalogue R@10                 0.0001
+baseline  random within category R@10                0.0253
+baseline  popularity within category R@10            0.2136
+baseline  popularity within category R@10 lenient    0.4034
+
+saved -> /private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/sweep.pt (2.8 MB)
+reloaded checkpoint reproduces R@10 exactly: 0.1192
+
+==============================================================================
+### 2. + mined negatives only (no temperature, no LN, no dropout)
+==============================================================================
+device: mps
+training on 2,223,995 pairs over 137,362 items
+
+3 epochs x 543 steps of 4,096
+epoch 0 (untrained)          R@10 0.0000  R@100 0.0000  medRank 66,114
+epoch 1 (543 steps)  loss 0.5095 (easy 0.3330 hard 0.6860)  R@10 0.0500  R@100 0.2682  medRank 276  [58s]
+epoch 2 (1,086 steps)  loss 0.5071 (easy 0.3354 hard 0.6787)  R@10 0.0652  R@100 0.3244  medRank 214  [118s]
+epoch 3 (1,629 steps)  loss 0.5086 (easy 0.3291 hard 0.6881)  R@10 0.0612  R@100 0.3156  medRank 220  [181s]
+
+3 epochs / 1,629 steps in 181s (36,812 pairs/s)
+
+train  Recall@10 0.0603  NDCG@10 0.0288  Recall@50 0.1973  NDCG@50 0.0582  Recall@100 0.3046  NDCG@100 0.0755  MedianRank 233
+test   Recall@10 0.0636  NDCG@10 0.0319  Recall@50 0.2099  NDCG@50 0.0631  Recall@100 0.3223  NDCG@100 0.0813  MedianRank 217  Recall@10_lenient 0.1363
+
+baseline  random over catalogue R@10                 0.0001
+baseline  random within category R@10                0.0253
+baseline  popularity within category R@10            0.2136
+baseline  popularity within category R@10 lenient    0.4034
+
+saved -> /private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/sweep.pt (2.8 MB)
+reloaded checkpoint reproduces R@10 exactly: 0.0612
+
+==============================================================================
+### 3. + temperature 0.2
+==============================================================================
+device: mps
+training on 2,223,995 pairs over 137,362 items
+
+3 epochs x 543 steps of 4,096
+epoch 0 (untrained)          R@10 0.0000  R@100 0.0000  medRank 66,114
+epoch 1 (543 steps)  loss 0.3167 (easy 0.0379 hard 0.5955)  R@10 0.0652  R@100 0.3292  medRank 213  [64s]
+epoch 2 (1,086 steps)  loss 0.2818 (easy 0.0419 hard 0.5217)  R@10 0.0968  R@100 0.3680  medRank 201  [127s]
+epoch 3 (1,629 steps)  loss 0.3362 (easy 0.0311 hard 0.6412)  R@10 0.0826  R@100 0.3248  medRank 228  [188s]
+
+3 epochs / 1,629 steps in 188s (35,415 pairs/s)
+
+train  Recall@10 0.0692  NDCG@10 0.0370  Recall@50 0.2068  NDCG@50 0.0663  Recall@100 0.3198  NDCG@100 0.0846  MedianRank 226
+test   Recall@10 0.0810  NDCG@10 0.0465  Recall@50 0.2176  NDCG@50 0.0757  Recall@100 0.3247  NDCG@100 0.0930  MedianRank 226  Recall@10_lenient 0.1581
+
+baseline  random over catalogue R@10                 0.0001
+baseline  random within category R@10                0.0253
+baseline  popularity within category R@10            0.2136
+baseline  popularity within category R@10 lenient    0.4034
+
+saved -> /private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/sweep.pt (2.8 MB)
+reloaded checkpoint reproduces R@10 exactly: 0.0826
+
+==============================================================================
+### 4. + temperature 0.05
+==============================================================================
+device: mps
+training on 2,223,995 pairs over 137,362 items
+
+3 epochs x 543 steps of 4,096
+epoch 0 (untrained)          R@10 0.0000  R@100 0.0000  medRank 66,114
+epoch 1 (543 steps)  loss 0.3005 (easy 0.0128 hard 0.5883)  R@10 0.0574  R@100 0.2674  medRank 285  [67s]
+epoch 2 (1,086 steps)  loss 0.2652 (easy 0.0116 hard 0.5188)  R@10 0.0828  R@100 0.3046  medRank 250  [136s]
+epoch 3 (1,629 steps)  loss 0.3209 (easy 0.0112 hard 0.6305)  R@10 0.0660  R@100 0.2888  medRank 264  [204s]
+
+3 epochs / 1,629 steps in 204s (32,634 pairs/s)
+
+train  Recall@10 0.0626  NDCG@10 0.0327  Recall@50 0.2031  NDCG@50 0.0630  Recall@100 0.3027  NDCG@100 0.0791  MedianRank 249
+test   Recall@10 0.0659  NDCG@10 0.0341  Recall@50 0.1997  NDCG@50 0.0631  Recall@100 0.2953  NDCG@100 0.0785  MedianRank 256  Recall@10_lenient 0.1453
+
+baseline  random over catalogue R@10                 0.0001
+baseline  random within category R@10                0.0253
+baseline  popularity within category R@10            0.2136
+baseline  popularity within category R@10 lenient    0.4034
+
+saved -> /private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/sweep.pt (2.8 MB)
+reloaded checkpoint reproduces R@10 exactly: 0.0660
+
+==============================================================================
+### 5. temperature 0.2 + LayerNorm, no node dropout
+==============================================================================
+device: mps
+training on 2,223,995 pairs over 137,362 items
+
+3 epochs x 543 steps of 4,096
+epoch 0 (untrained)          R@10 0.0000  R@100 0.0004  medRank 64,592
+epoch 1 (543 steps)  loss 0.3207 (easy 0.0400 hard 0.6013)  R@10 0.0614  R@100 0.2770  medRank 281  [68s]
+epoch 2 (1,086 steps)  loss 0.2808 (easy 0.0415 hard 0.5202)  R@10 0.0954  R@100 0.3522  medRank 209  [134s]
+epoch 3 (1,629 steps)  loss 0.3354 (easy 0.0308 hard 0.6400)  R@10 0.0638  R@100 0.3204  medRank 217  [202s]
+
+3 epochs / 1,629 steps in 202s (33,032 pairs/s)
+
+train  Recall@10 0.0689  NDCG@10 0.0343  Recall@50 0.2084  NDCG@50 0.0644  Recall@100 0.3219  NDCG@100 0.0827  MedianRank 230
+test   Recall@10 0.0660  NDCG@10 0.0323  Recall@50 0.2030  NDCG@50 0.0617  Recall@100 0.3275  NDCG@100 0.0819  MedianRank 213  Recall@10_lenient 0.1434
+
+baseline  random over catalogue R@10                 0.0001
+baseline  random within category R@10                0.0253
+baseline  popularity within category R@10            0.2136
+baseline  popularity within category R@10 lenient    0.4034
+
+saved -> /private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/sweep.pt (2.8 MB)
+reloaded checkpoint reproduces R@10 exactly: 0.0638
+
+==============================================================================
+### 6. temperature 0.2 + LayerNorm + node dropout 0.3
+==============================================================================
+device: mps
+training on 2,223,995 pairs over 137,362 items
+
+3 epochs x 543 steps of 4,096
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/sweep.py", line 51, in <module>
+    if CFG == "6": run("6. temperature 0.2 + LayerNorm + node dropout 0.3",
+                   ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                       N_MINED=4, N_UNIFORM=4, TAU=0.2, W_EASY=0.5, NODE_DROPOUT=0.3, LAYERNORM=True)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/sweep.py", line 37, in run
+    exec(compile(src, name, "exec"), g)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "6. temperature 0.2 + LayerNorm + node dropout 0.3", line 199, in <module>
+  File "/opt/anaconda3/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "6. temperature 0.2 + LayerNorm + node dropout 0.3", line 136, in evaluate
+NameError: name 'lenient' is not defined
