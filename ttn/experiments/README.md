@@ -21,3 +21,15 @@ away from what the notebook actually says.
 
 Scripts load pair tables from a scratch `.npz`; point `_ld` at
 `data/tower/pairs_{train,test}.parquet` to run them against the repo directly.
+
+## The one that worked
+
+| file | question | headline |
+| --- | --- | --- |
+| `overfit_capacity_test.*` | can the model fit 5,000 pairs it sees 150 times? | no — R@10 0.0398 against a 0.0964 ceiling for a *constant*; loss fell while recall reversed |
+| `temperature_overfit_sweep.log` | is score compression the cause? | yes — same setup, TAU 0.1 reaches 0.5158, a 13x gain, inverted-U with 0.05 over-sharpening |
+| `temperature_full_sweep.log` | does it transfer to 2.2M pairs? | yes — R@10 0.1218 (TAU 1.0) → 0.1916 (TAU 0.1) at 3 epochs |
+| `temperature_final_run.log` | 30 epochs with early stopping | best epoch 9: **R@10 0.2174, lenient 0.4115**, both above the popularity baseline (0.2136 / 0.4034) |
+
+Diversity did **not** improve (distinct share 0.048 against 0.044). Temperature
+fixed ranking, not collapse.

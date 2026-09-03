@@ -1,0 +1,40 @@
+device: mps
+training on 2,223,995 pairs over 137,362 items
+
+30 epochs x 543 steps of 4,096
+epoch 0 (untrained)          R@10 0.0000  R@100 0.0000  medRank 66,114
+epoch  1 (543 steps)  loss 0.2554  R@10 0.1676  R@100 0.4926  medRank 103  [21s]  <- best
+epoch  2 (1,086 steps)  loss 0.2272  R@10 0.1870  R@100 0.5332  medRank 82  [44s]  <- best
+epoch  3 (1,629 steps)  loss 0.2328  R@10 0.1978  R@100 0.5428  medRank 79  [65s]  <- best
+epoch  4 (2,172 steps)  loss 0.2154  R@10 0.1984  R@100 0.5484  medRank 77  [87s]  <- best
+epoch  5 (2,715 steps)  loss 0.2174  R@10 0.2092  R@100 0.5526  medRank 76  [108s]  <- best
+epoch  6 (3,258 steps)  loss 0.2078  R@10 0.2090  R@100 0.5638  medRank 70  [129s]
+epoch  7 (3,801 steps)  loss 0.2075  R@10 0.2074  R@100 0.5618  medRank 73  [150s]
+epoch  8 (4,344 steps)  loss 0.2106  R@10 0.2066  R@100 0.5662  medRank 69  [171s]
+epoch  9 (4,887 steps)  loss 0.2070  R@10 0.2198  R@100 0.5752  medRank 69  [193s]  <- best
+epoch 10 (5,430 steps)  loss 0.1976  R@10 0.2116  R@100 0.5708  medRank 65  [214s]
+epoch 11 (5,973 steps)  loss 0.1995  R@10 0.2158  R@100 0.5714  medRank 69  [236s]
+epoch 12 (6,516 steps)  loss 0.2039  R@10 0.2160  R@100 0.5710  medRank 68  [257s]
+epoch 13 (7,059 steps)  loss 0.1881  R@10 0.2142  R@100 0.5682  medRank 66  [279s]
+epoch 14 (7,602 steps)  loss 0.1906  R@10 0.2118  R@100 0.5784  medRank 65  [300s]
+
+no improvement in 5 epochs -- stopping at epoch 14
+restored epoch 9 (test R@10 0.2198)
+
+30 epochs / 7,602 steps in 300s (222,044 pairs/s)
+
+train  Recall@10 0.2161  NDCG@10 0.1168  Recall@50 0.4655  NDCG@50 0.1713  Recall@100 0.5987  NDCG@100 0.1930  MedianRank 59
+test   Recall@10 0.2174  NDCG@10 0.1213  Recall@50 0.4409  NDCG@50 0.1700  Recall@100 0.5723  NDCG@100 0.1913  MedianRank 69  Recall@10_lenient 0.4115
+
+baseline  random over the whole catalogue            0.0001
+baseline  random within the asked-for category       0.0253
+baseline  popularity within the category             0.2136
+baseline  popularity within the category (lenient)   0.4034
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/run_cell23.py", line 21, in <module>
+    exec(compile(src, "cell23", "exec"), globals())
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "cell23", line 305, in <module>
+  File "/opt/anaconda3/lib/python3.13/pathlib/_local.py", line 385, in relative_to
+    raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+ValueError: '/private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/ttn_v2.pt' is not in the subpath of '/Users/lazr/PycharmProjects/RecSystem'
