@@ -1,0 +1,11 @@
+catalogue with a cat_4: 1,029,575  [32s]
+reviews kept: 5,441,472 over 766,950 users  [45s]
+co-review edges: 5,739,135  [72s]
+
+            CO-REVIEW                    (also_buy for comparison)
+                   real     null    lift        real    null   lift
+same cat_4         5.1%     0.7%   7.12x       54.8%               
+same brand         3.2%     0.2%  14.59x       36.8%    0.2%   161x
+
+price corr(log q, log t) = +0.065   (also_buy training pairs: +0.186, chance +0.144)
+[95s]
