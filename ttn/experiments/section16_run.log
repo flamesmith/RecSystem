@@ -1,0 +1,112 @@
+
+===== cell 1 (c03ea61068ae347c)  [0s] =====
+
+===== cell 3 (load-code)  [1s] =====
+df_reviews              (6898955, 11)
+df_features             (1134566, 92)
+co_pairs[train]         (10595885, 2)
+co_pairs[test]            (942795, 2)
+comp_cat                   (5845, 11)
+meta_catalogue           (1300540, 5)
+
+unique users: 777,242 | unique items: 189,172
+items described by df_features : 1,134,566
+items described by the catalogue: 1,285,392
+split point (ttn/constants.json): 2017-12-09
+
+===== cell 5 (validate-code)  [48s] =====
+1,134,566 rows x 92 columns — 1 failure(s), 0 warning(s)
+     check level   subject                                        detail
+0  columns  FAIL  also_buy  present in the table but not in the contract
+
+===== cell 7 (clean-cat-code)  [52s] =====
+taxonomy: 7 cat_2 | 69 cat_3 | 521 valid cat_4 slots
+
+distinct cat_4 : 921 -> 451
+items folded into '<cat_3>_Other': 1,099 (0.10% of the catalog)
+
+===== cell 9 (tower-join)  [52s] =====
+train   10,595,885 pairs ->   7,729,936 with features both ends (73.0%) ->  2,916,635 directed rows
+test       942,795 pairs ->     696,070 with features both ends (73.8%) ->    270,957 directed rows
+
+held out: 8.5%
+
+===== cell 11 (14b6350b40948daf)  [149s] =====
+counted on   : brand, over 146,984 training items
+brands kept  : 2,322 of 25,726 seen in training
+all items    : 50.9% in other_brands, 5.7% missing (left as NaN for §7)
+
+brand_clean
+other_brands     577792
+3dRose             8569
+CafePress          7489
+Disney             6249
+Unknown            5594
+Hallmark           4720
+Generic            4500
+Department 56      3416
+Safavieh           3227
+Kurt Adler         3124
+Name: count, dtype: int64
+
+===== cell 13 (55ce47cefdbb3a0c)  [181s] =====
+price parsed : 515,980 of 1,134,566 items (45.5%)
+
+vocabularies fitted on 2,916,635 training rows:
+  cat_2                 7 levels
+  cat_3                69 levels
+  cat_4               395 levels
+  brand_clean       2,323 levels
+  color                63 levels
+  features            542 levels
+  material            211 levels
+  product_type      1,106 levels
+
+===== cell 15 (impute-code)  [235s] =====
+median population : 193,265 items reviewed before 2017-12-09 (120,916 priced)
+median tables     : 584 cat_4 paths | 159 cat_3 | 13 cat_2 | global $16.45
+
+--- train ---
+  query     726,061 missing (24.9%) -> cat_4 726,061 | cat_3 0 | cat_2 0 | global 0 | still NaN 0
+  target    721,768 missing (24.7%) -> cat_4 721,768 | cat_3 0 | cat_2 0 | global 0 | still NaN 0
+  values outside the training vocabulary: 0 (0.0000% of slots)
+
+--- test ---
+  query      38,727 missing (14.3%) -> cat_4 38,727 | cat_3 0 | cat_2 0 | global 0 | still NaN 0
+  target     38,301 missing (14.1%) -> cat_4 38,301 | cat_3 0 | cat_2 0 | global 0 | still NaN 0
+  values outside the training vocabulary: 6 (0.0001% of slots)  {'features': 4, 'product_type': 2}
+
+===== cell 16 (fill-cats-code)  [295s] =====
+train  filled 7,096,407 categorical values with 'Missing' (15.21% of slots)
+test   filled   589,876 categorical values with 'Missing' (13.61% of slots)
+
+vocabularies identical across towers and slices:
+  cat_2          True  (8 levels, 'Missing' present: True)
+  cat_3          True  (70 levels, 'Missing' present: True)
+  cat_4          True  (395 levels, 'Missing' present: True)
+  brand_clean    True  (2,324 levels, 'Missing' present: True)
+  color          True  (64 levels, 'Missing' present: True)
+  features       True  (543 levels, 'Missing' present: True)
+  material       True  (212 levels, 'Missing' present: True)
+  product_type   True  (1,107 levels, 'Missing' present: True)
+
+===== cell 18 (node-code)  [296s] =====
+target_node vocabulary: 448 paths, fitted on 2,916,635 training rows
+  train   448 distinct | outside the training vocabulary: 0
+  test    425 distinct | outside the training vocabulary: 0
+
+train     (2916635, 25) |  1,202 MB | price complete: True
+
+test       (270957, 25) |    117 MB | price complete: True
+
+columns (25): ['asin_query', 'query_cat_2', 'query_cat_3', 'query_cat_4', 'query_title_cleaned', 'query_price', 'query_brand_clean', 'query_color', 'query_features', 'query_material', 'query_product_type', 'asin_target', 'target_cat_2', 'target_cat_3', 'target_cat_4', 'target_title_cleaned', 'target_price', 'target_brand_clean', 'target_color', 'target_features', 'target_material', 'target_product_type', 'query_price_imputed', 'target_price_imputed', 'target_node']
+
+===== cell 19 (drop-same-cat)  [312s] =====
+train   2,916,635 ->  2,223,995 rows (dropped 692,640, 23.7%)
+test      270,957 ->    201,197 rows (dropped 69,760, 25.7%)
+
+held out: 8.3%
+target_node paths still present in train: 432 of 448
+
+===== cell 21 (export-code)  [322s] =====
+items: 137,362 unique asins across both slices

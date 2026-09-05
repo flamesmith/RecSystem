@@ -1,0 +1,48 @@
+device: mps
+logQ spans -14.61 to -6.98 (6,243 items never a target)
+training on 2,223,995 pairs over 137,362 items
+
+30 epochs x 543 steps of 4,096
+epoch 0 (untrained)          R@10 0.0000  R@100 0.0000  medRank 66,114
+epoch  1 (543 steps)  loss 0.0054  R@10 0.1556  R@100 0.4658  medRank 114  [82s]  <- best
+epoch  2 (1,086 steps)  loss 0.0050  R@10 0.1720  R@100 0.5050  medRank 96  [150s]  <- best
+epoch  3 (1,629 steps)  loss 0.0045  R@10 0.1868  R@100 0.5270  medRank 85  [222s]  <- best
+epoch  4 (2,172 steps)  loss 0.0046  R@10 0.1982  R@100 0.5446  medRank 78  [290s]  <- best
+epoch  5 (2,715 steps)  loss 0.0046  R@10 0.1998  R@100 0.5488  medRank 76  [356s]  <- best
+epoch  6 (3,258 steps)  loss 0.0042  R@10 0.2042  R@100 0.5598  medRank 72  [401s]  <- best
+epoch  7 (3,801 steps)  loss 0.0042  R@10 0.2058  R@100 0.5682  medRank 70  [430s]  <- best
+epoch  8 (4,344 steps)  loss 0.0040  R@10 0.2092  R@100 0.5750  medRank 69  [458s]  <- best
+epoch  9 (4,887 steps)  loss 0.0042  R@10 0.2140  R@100 0.5782  medRank 69  [484s]  <- best
+epoch 10 (5,430 steps)  loss 0.0043  R@10 0.2124  R@100 0.5766  medRank 68  [510s]
+epoch 11 (5,973 steps)  loss 0.0043  R@10 0.2154  R@100 0.5816  medRank 66  [536s]  <- best
+epoch 12 (6,516 steps)  loss 0.0039  R@10 0.2164  R@100 0.5862  medRank 65  [563s]  <- best
+epoch 13 (7,059 steps)  loss 0.0041  R@10 0.2174  R@100 0.5922  medRank 64  [589s]  <- best
+epoch 14 (7,602 steps)  loss 0.0041  R@10 0.2200  R@100 0.5952  medRank 61  [615s]  <- best
+epoch 15 (8,145 steps)  loss 0.0042  R@10 0.2146  R@100 0.5938  medRank 63  [640s]
+epoch 16 (8,688 steps)  loss 0.0040  R@10 0.2232  R@100 0.5934  medRank 63  [666s]  <- best
+epoch 17 (9,231 steps)  loss 0.0040  R@10 0.2188  R@100 0.5948  medRank 63  [692s]
+epoch 18 (9,774 steps)  loss 0.0038  R@10 0.2190  R@100 0.5956  medRank 61  [718s]
+epoch 19 (10,317 steps)  loss 0.0041  R@10 0.2168  R@100 0.5922  medRank 62  [744s]
+epoch 20 (10,860 steps)  loss 0.0039  R@10 0.2188  R@100 0.5968  medRank 62  [770s]
+epoch 21 (11,403 steps)  loss 0.0038  R@10 0.2204  R@100 0.5968  medRank 61  [795s]
+
+no improvement in 5 epochs -- stopping at epoch 21
+restored epoch 16 (test R@10 0.2232)
+
+30 epochs / 11,403 steps in 795s (83,889 pairs/s)
+
+train  Recall@10 0.2221  NDCG@10 0.1237  Recall@20 0.3186  NDCG@20 0.1480  Recall@50 0.4746  NDCG@50 0.1790  Recall@100 0.6067  NDCG@100 0.2004  MedianRank 56
+test   Recall@10 0.2209  NDCG@10 0.1244  Recall@20 0.3062  NDCG@20 0.1460  Recall@50 0.4591  NDCG@50 0.1762  Recall@100 0.5934  NDCG@100 0.1980  MedianRank 62  Recall@10_lenient 0.4186
+
+baseline  random over the whole catalogue            0.0001
+baseline  random within the asked-for category       0.0253
+baseline  popularity within the category             0.2136
+baseline  popularity within the category (lenient)   0.4034
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/run_cell23.py", line 21, in <module>
+    exec(compile(src, "cell23", "exec"), globals())
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "cell23", line 337, in <module>
+  File "/opt/anaconda3/lib/python3.13/pathlib/_local.py", line 385, in relative_to
+    raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+ValueError: '/private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/ttn_v2.pt' is not in the subpath of '/Users/lazr/PycharmProjects/RecSystem'

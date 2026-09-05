@@ -1,0 +1,32 @@
+cat_4_clean rebuilt as in cell 7: 451 distinct
+licensed category pairs: 5,845   [48s]
+
+=== co_purchase_pairs_train (291,503 of 400,000 sampled pairs have categories on both sides) ===
+  licensed in EITHER direction :   20.6%
+  DROPPED by the whitelist     :   79.4%
+
+  per query item with >=2 distinct target cat_3 (37,914 items):
+    mean share of its target categories licensed :  18.5%
+    items with NONE licensed                     :  46.1%
+    items with ALL licensed                      :   1.5%
+
+  biggest category pairs the whitelist discards (cat_3 level):
+                        qc                         tc  edges
+Kitchen Utensils & Gadgets      Dining & Entertaining   2358
+     Dining & Entertaining Kitchen Utensils & Gadgets   2272
+Kitchen Utensils & Gadgets     Storage & Organization   1979
+Kitchen Utensils & Gadgets                   Bakeware   1638
+     Dining & Entertaining     Storage & Organization   1416
+    Storage & Organization Kitchen Utensils & Gadgets   1406
+                  Bakeware Kitchen Utensils & Gadgets   1399
+Kitchen Utensils & Gadgets Kitchen Utensils & Gadgets   1367
+Kitchen Utensils & Gadgets       Bathroom Accessories   1330
+Kitchen Utensils & Gadgets           Small Appliances   1230
+    Storage & Organization      Dining & Entertaining   1140
+Kitchen Utensils & Gadgets                   Cookware   1123
+
+=== co_purchase_pairs_test (295,393 of 400,000 sampled pairs have categories on both sides) ===
+  licensed in EITHER direction :   21.3%
+  DROPPED by the whitelist     :   78.7%
+
+[52s]

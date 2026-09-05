@@ -1,0 +1,35 @@
+directed behavioural edges with categories: 15,459,872  [31s]
+
+behavioural category pairs: 171,720
+  pass lift>=2 & edges>=5 (cross-category) : 10,030
+  of those, already licensed by also_buy   : 2,358 (23.5%)
+  MISSED by also_buy                       : 7,672
+
+edge coverage:
+  share of behavioural edges licensed today          : 18.9%
+  share licensed if the rule were run on behaviour   : 7.3%
+
+Biggest category pairs behaviour endorses but also_buy excludes:
+                                            frm                                              to  edges  lift
+               Bakeware > Candy Making Supplies               Bakeware > Baking Tools & Accesso   5844   3.8
+              Bakeware > Baking Tools & Accesso                Bakeware > Candy Making Supplies   5844   3.8
+              Bakeware > Baking Tools & Accesso                            Bakeware > Cake Pans   5315   3.2
+                           Bakeware > Cake Pans               Bakeware > Baking Tools & Accesso   5315   3.2
+                     Posters & Prints > Missing      Home Dcor Accents > Decorative Accessories   4284   2.5
+     Home Dcor Accents > Decorative Accessories                      Posters & Prints > Missing   4284   2.5
+                  Home Dcor Accents > Ornaments       Home Dcor Accents > Collectible Figurines   3227   3.5
+      Home Dcor Accents > Collectible Figurines                   Home Dcor Accents > Ornaments   3227   3.5
+                    Candles & Holders > Candles         Home Fragrance > Incense & Incense Hold   3122   2.6
+        Home Fragrance > Incense & Incense Hold                     Candles & Holders > Candles   3122   2.6
+                 Living Room Furniture > Tables              Area Rugs, Runners & P > Area Rugs   2889   2.5
+      Home Dcor Accents > Collectible Figurines      Home Dcor Accents > Decorative Accessories   2795   2.0
+     Home Dcor Accents > Decorative Accessories       Home Dcor Accents > Collectible Figurines   2795   2.0
+Indoor Fountains & Acc > Indoor Fountain Access         Home Fragrance > Incense & Incense Hold   2719   7.9
+        Home Fragrance > Incense & Incense Hold Indoor Fountains & Acc > Indoor Fountain Access   2719   7.9
+Kitchen Utensils & Gad > Specialty Tools & Gadg                Bakeware > Candy Making Supplies   2593   2.2
+                 Home Dcor Accents > Sculptures      Home Dcor Accents > Decorative Accessories   2358   2.8
+     Home Dcor Accents > Decorative Accessories                  Home Dcor Accents > Sculptures   2358   2.8
+           Bed Pillows & Position > Bed Pillows   Sheets & Pillowcases > Sheet & Pillowcase Set   2290   2.2
+                 Home Dcor Accents > Sculptures                      Posters & Prints > Missing   2244   3.0
+
+[42s]
