@@ -36,6 +36,7 @@ data/meta_Home_and_Kitchen.json
 # committed. It is still a generated data table and still stays local.
 *.pkl
 *.csv
+*.parquet
 
 # IDE
 .idea/
