@@ -1,0 +1,6 @@
+strategy,natural_exact_r1_mean,natural_exact_r10_mean,catalog_exact_r1_mean,catalog_exact_r10_mean,query_image_precision@10,query_description_precision@10,image_neighbor_category@1,cross_neighbor_category@1,mean_rank
+multichunk64,2.5000,1.5000,3.0000,1.0000,1.0000,1.0000,4.0000,1.0000,1.8750
+dual64,4.0000,3.0000,2.0000,2.0000,3.0000,3.0000,3.0000,2.0000,2.7500
+compact64,1.0000,1.5000,4.0000,4.0000,2.0000,2.0000,5.0000,3.0000,2.8125
+baseline64,2.5000,4.0000,1.0000,3.0000,4.0000,4.0000,1.0000,4.0000,2.9375
+extended128,5.0000,5.0000,5.0000,5.0000,5.0000,5.0000,2.0000,5.0000,4.6250

@@ -1,0 +1,7 @@
+,pretrained,trained_original,trained_taxonomy,taxonomy_minus_original
+image_to_text_recall@1,0.546875,0.515625,0.515625,0.0
+text_to_image_recall@1,0.5,0.5,0.484375,-0.015625
+image_to_text_recall@5,0.671875,0.71875,0.71875,0.0
+text_to_image_recall@5,0.703125,0.703125,0.703125,0.0
+image_to_text_recall@10,0.765625,0.765625,0.796875,0.03125
+text_to_image_recall@10,0.78125,0.78125,0.78125,0.0

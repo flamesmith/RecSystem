@@ -1,0 +1,13 @@
+,trained_original,trained_taxonomy,taxonomy_minus_original
+image_to_text_same_subcategory@1,0.64,0.648,0.008000000000000007
+image_to_text_same_subcategory@5,0.868,0.872,0.0040000000000000036
+image_to_text_same_subcategory@10,0.932,0.92,-0.01200000000000001
+text_to_image_same_subcategory@1,0.568,0.564,-0.0040000000000000036
+text_to_image_same_subcategory@5,0.804,0.8,-0.0040000000000000036
+text_to_image_same_subcategory@10,0.868,0.864,-0.0040000000000000036
+image_to_image_same_subcategory@1,0.688,0.688,0.0
+image_to_image_same_subcategory@5,0.884,0.884,0.0
+image_to_image_same_subcategory@10,0.92,0.916,-0.0040000000000000036
+text_to_text_same_subcategory@1,0.384,0.384,0.0
+text_to_text_same_subcategory@5,0.78,0.784,0.0040000000000000036
+text_to_text_same_subcategory@10,0.868,0.868,0.0

@@ -1,0 +1,114 @@
+{
+  "model_id": "google/siglip2-base-patch16-224",
+  "seed": 42,
+  "train_rows_per_model": 64,
+  "evaluation_rows": 64,
+  "catalog_rows": 250,
+  "epochs": 1,
+  "batch_size": 4,
+  "learning_rate": 1e-05,
+  "max_text_length": 64,
+  "text_query": "mid-century modern walnut coffee table for a living room",
+  "baseline_original_metrics": {
+    "image_to_text_recall@1": 0.546875,
+    "text_to_image_recall@1": 0.5,
+    "image_to_text_recall@5": 0.671875,
+    "text_to_image_recall@5": 0.703125,
+    "image_to_text_recall@10": 0.765625,
+    "text_to_image_recall@10": 0.78125
+  },
+  "baseline_enriched_metrics": {
+    "image_to_text_recall@1": 0.421875,
+    "text_to_image_recall@1": 0.40625,
+    "image_to_text_recall@5": 0.609375,
+    "text_to_image_recall@5": 0.640625,
+    "image_to_text_recall@10": 0.671875,
+    "text_to_image_recall@10": 0.65625
+  },
+  "original_category_neighbor_metrics": {
+    "image_to_text_same_subcategory@1": 0.64,
+    "image_to_text_same_subcategory@5": 0.868,
+    "image_to_text_same_subcategory@10": 0.932,
+    "text_to_image_same_subcategory@1": 0.568,
+    "text_to_image_same_subcategory@5": 0.804,
+    "text_to_image_same_subcategory@10": 0.868,
+    "image_to_image_same_subcategory@1": 0.688,
+    "image_to_image_same_subcategory@5": 0.884,
+    "image_to_image_same_subcategory@10": 0.92,
+    "text_to_text_same_subcategory@1": 0.384,
+    "text_to_text_same_subcategory@5": 0.78,
+    "text_to_text_same_subcategory@10": 0.868
+  },
+  "taxonomy_category_neighbor_metrics": {
+    "image_to_text_same_subcategory@1": 0.648,
+    "image_to_text_same_subcategory@5": 0.872,
+    "image_to_text_same_subcategory@10": 0.92,
+    "text_to_image_same_subcategory@1": 0.564,
+    "text_to_image_same_subcategory@5": 0.8,
+    "text_to_image_same_subcategory@10": 0.864,
+    "image_to_image_same_subcategory@1": 0.688,
+    "image_to_image_same_subcategory@5": 0.884,
+    "image_to_image_same_subcategory@10": 0.916,
+    "text_to_text_same_subcategory@1": 0.384,
+    "text_to_text_same_subcategory@5": 0.784,
+    "text_to_text_same_subcategory@10": 0.868
+  },
+  "original_variant": {
+    "training_text_column": "description_original",
+    "trainable_parameters": 7677698,
+    "history": [
+      {
+        "epoch": 1,
+        "mean_loss": 3.931115709245205,
+        "first_loss": 9.680282592773438,
+        "last_loss": 1.5064527988433838
+      }
+    ],
+    "elapsed_seconds": 5.170717369997874,
+    "original_metrics": {
+      "image_to_text_recall@1": 0.515625,
+      "text_to_image_recall@1": 0.5,
+      "image_to_text_recall@5": 0.71875,
+      "text_to_image_recall@5": 0.703125,
+      "image_to_text_recall@10": 0.765625,
+      "text_to_image_recall@10": 0.78125
+    },
+    "enriched_metrics": {
+      "image_to_text_recall@1": 0.40625,
+      "text_to_image_recall@1": 0.421875,
+      "image_to_text_recall@5": 0.625,
+      "text_to_image_recall@5": 0.65625,
+      "image_to_text_recall@10": 0.65625,
+      "text_to_image_recall@10": 0.703125
+    }
+  },
+  "taxonomy_variant": {
+    "training_text_column": "description_enriched",
+    "trainable_parameters": 7677698,
+    "history": [
+      {
+        "epoch": 1,
+        "mean_loss": 4.59068357758224,
+        "first_loss": 12.33736801147461,
+        "last_loss": 2.293826103210449
+      }
+    ],
+    "elapsed_seconds": 4.175421550986357,
+    "original_metrics": {
+      "image_to_text_recall@1": 0.515625,
+      "text_to_image_recall@1": 0.484375,
+      "image_to_text_recall@5": 0.71875,
+      "text_to_image_recall@5": 0.703125,
+      "image_to_text_recall@10": 0.796875,
+      "text_to_image_recall@10": 0.78125
+    },
+    "enriched_metrics": {
+      "image_to_text_recall@1": 0.40625,
+      "text_to_image_recall@1": 0.421875,
+      "image_to_text_recall@5": 0.609375,
+      "text_to_image_recall@5": 0.671875,
+      "image_to_text_recall@10": 0.6875,
+      "text_to_image_recall@10": 0.703125
+    }
+  }
+}

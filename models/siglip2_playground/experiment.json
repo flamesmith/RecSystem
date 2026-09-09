@@ -1,0 +1,33 @@
+{
+  "model_id": "google/siglip2-base-patch16-224",
+  "training_mode": "heads",
+  "train_rows": 64,
+  "evaluation_rows": 64,
+  "catalog_rows": 250,
+  "epochs": 1,
+  "learning_rate": 1e-05,
+  "training_history": [
+    {
+      "epoch": 1,
+      "mean_loss": 4.186047933995724,
+      "first_loss": 3.7578206062316895,
+      "last_loss": 1.3860057592391968
+    }
+  ],
+  "baseline_metrics": {
+    "image_to_text_recall@1": 0.578125,
+    "text_to_image_recall@1": 0.5625,
+    "image_to_text_recall@5": 0.78125,
+    "text_to_image_recall@5": 0.75,
+    "image_to_text_recall@10": 0.84375,
+    "text_to_image_recall@10": 0.796875
+  },
+  "trained_metrics": {
+    "image_to_text_recall@1": 0.640625,
+    "text_to_image_recall@1": 0.59375,
+    "image_to_text_recall@5": 0.78125,
+    "text_to_image_recall@5": 0.71875,
+    "image_to_text_recall@10": 0.828125,
+    "text_to_image_recall@10": 0.8125
+  }
+}

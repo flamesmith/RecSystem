@@ -1,0 +1,33 @@
+# Model artifacts — serialized by joblib, not tracked in source control
+models/*.joblib
+models/siglip2_playground/
+models/siglip2_furniture_playground/
+models/siglip2_furniture_taxonomy_ab/
+models/siglip2_furniture_text_strategy_benchmark/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv-siglip2/
+.env
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data files — stored locally, not committed
+data/*.csv
+data/*.json
+data/*.jsonl
+data/*.gz
+data/*.parquet
+data/images/
+data/images_furniture/
+full_metadata/
+
+# OS
+.DS_Store

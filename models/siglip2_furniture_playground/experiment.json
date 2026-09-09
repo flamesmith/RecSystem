@@ -1,0 +1,35 @@
+{
+  "model_id": "google/siglip2-base-patch16-224",
+  "dataset": "data/meta_Home_and_Kitchen_furniture_siglip2_pairs_20k.csv",
+  "split_map": "data/meta_Home_and_Kitchen_furniture_siglip2_splits_20k.csv",
+  "training_mode": "heads",
+  "train_rows": 64,
+  "evaluation_rows": 64,
+  "catalog_rows": 250,
+  "epochs": 1,
+  "learning_rate": 1e-05,
+  "training_history": [
+    {
+      "epoch": 1,
+      "mean_loss": 3.908190470188856,
+      "first_loss": 2.8229360580444336,
+      "last_loss": 1.6853618621826172
+    }
+  ],
+  "baseline_metrics": {
+    "image_to_text_recall@1": 0.546875,
+    "text_to_image_recall@1": 0.5,
+    "image_to_text_recall@5": 0.671875,
+    "text_to_image_recall@5": 0.703125,
+    "image_to_text_recall@10": 0.765625,
+    "text_to_image_recall@10": 0.78125
+  },
+  "trained_metrics": {
+    "image_to_text_recall@1": 0.515625,
+    "text_to_image_recall@1": 0.515625,
+    "image_to_text_recall@5": 0.71875,
+    "text_to_image_recall@5": 0.703125,
+    "image_to_text_recall@10": 0.78125,
+    "text_to_image_recall@10": 0.765625
+  }
+}
