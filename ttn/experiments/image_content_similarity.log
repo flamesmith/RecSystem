@@ -1,0 +1,46 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+items: 137,362 | test pairs: 201,197 | loaded in 1s
+description present: 91.0%   image present: 71.5%
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 8779.33it/s]
+colour present: 54.9%   material present: 73.1%
+encoded colour/material in 9s total
+
+sampled 20,000 test pairs (seed 0)
+bucket
+never      668
+1-5       2176
+6-25      4595
+26-100    5722
+>100      6839
+Name: count, dtype: int64
+  node 50/363  [1s]
+  node 100/363  [1s]
+  node 150/363  [1s]
+  node 200/363  [2s]
+  node 250/363  [2s]
+  node 300/363  [3s]
+  node 350/363  [3s]
+  node 363/363  [4s]
+
+content-similarity scoring: 4s
+TTN checkpoint scored (best_epoch 14, use_description=True)
+
+Recall@10  (n=20,000 sampled test pairs, seed 0)
+target freq    pairs            DESC           IMAGE         CONTENT   CONTENT+IMAGE             TTN             POP
+never            668          0.0554          0.0674          0.0554          0.0599          0.0389          0.0000
+1-5             2176          0.0680          0.0703          0.0648          0.0712          0.0133          0.0051
+6-25            4595          0.0672          0.0679          0.0605          0.0679          0.0276          0.0324
+26-100          5722          0.0640          0.0703          0.0617          0.0650          0.1075          0.1003
+>100            6839          0.0469          0.0518          0.0453          0.0474          0.5210          0.5207
+all            20000          0.0590          0.0633          0.0559          0.0602          0.2180          0.2147
+
+Recall@100  (n=20,000 sampled test pairs, seed 0)
+target freq    pairs            DESC           IMAGE         CONTENT   CONTENT+IMAGE             TTN             POP
+never            668          0.2380          0.2365          0.2500          0.2470          0.2216          0.0000
+1-5             2176          0.2284          0.2619          0.2730          0.2849          0.1576          0.0974
+6-25            4595          0.2420          0.2642          0.2921          0.3025          0.2346          0.2520
+26-100          5722          0.2426          0.2922          0.2842          0.3095          0.6003          0.6276
+>100            6839          0.2193          0.2704          0.2620          0.2704          0.9338          0.9781
+all            20000          0.2328          0.2732          0.2761          0.2898          0.5695          0.5825
+
+total runtime: 24s

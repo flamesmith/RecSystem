@@ -1,35 +1,51 @@
-# Experiments behind §13 of `ttn/ttn_complementary.ipynb`
+# Experiments behind the similarity baselines
 
-Raw logs and the scripts that produced them. Kept so the dead ends do not get
-re-run. Every script reads the artifacts in `data/tower/` and, where it needs the
-model, the cell source straight out of the notebook — so none of them can drift
-away from what the notebook actually says.
+No model is trained by anything in this folder on the `similarity_model`
+branch -- every script here scores a retrieval candidate by cosine similarity
+over frozen embeddings (SBERT text, SigLIP2 image) or by training-set
+popularity, and compares the result against the committed TTN checkpoint
+(`data/tower/ttn_complementary.pt`, read-only, for reference -- never
+retrained here). The model-training counterpart of this work lives on the
+`ttn_model` branch. `final_capacity_comparison_similarity.py` and
+`image_augmented_similarity.py` are each one half of a script that used to
+also train TTN (`final_capacity_comparison.py`, `image_augmented_models.py`);
+the other half is over there. Neither split script has been re-run yet, so
+there's no log of its own -- `final_capacity_comparison.log` and
+`image_augmented_models.log` are the original combined runs (same
+computation, same numbers, just also carrying the TTN columns this branch
+dropped).
 
 | file | question it answers | headline |
 | --- | --- | --- |
-| `negative_sampling_sweep.*` | do negatives mined from the model's own in-node top-K help? | no: R@10 0.1240 → 0.0636; temperature and LayerNorm do not rescue it |
-| `why_mining_fails.py` | why not? | mined negatives sit at popularity percentile 0.836; the true targets sit at 0.832 |
-| `all_six_changes.log` | the first attempt, six changes at once | R@10 0.0477 — the run that prompted the ablation |
-| `negatives_count_sweep.*` | does the *number* of uniform in-node negatives matter? | no: 1/4/16/64 gives 0.1191/0.1159/0.1143/0.1205, diversity flat at 0.042–0.044 |
-| `remove_target_category.*` | is the query tower better off without the node embedding? | no: R@10 0.0037, median rank 4,058, only 7.2% of the top-10 in the asked-for category |
-| `feature_variance.*` | do item features discriminate *within* a category? | yes: title cosine 0.390 within a category vs 0.187 across; 142–533 brands per category |
-| `query_conditional_signal.*` | does conditioning on the query beat category popularity? | flat (0.2147 → 0.2039) — but the test is sparsity-limited, see §13 |
-| `brand_signal.*` | is the query-conditional signal in `also_buy` learnable? | yes: 36.8% of raw edges are same-brand at 161x chance; §19 filtering cuts it to 9.2% |
-| `same_category_by_product.*` | does the same-category rate depend on the product? | enormously: 0.136 (Knife Sets) to 0.961 (Incense); price effect is real but small (r = −0.123) |
+| `image_content_similarity.py` | does adding SigLIP image similarity to CONTENT (desc+colour+material) help? | yes, in every bucket; IMAGE alone also beats DESC alone |
+| `reproduce_section19.py` | does the notebook's §19 table (TTN / DESC / POP / CONTENT by target frequency) still reproduce on current data? | TTN/POP/DESC close; CONTENT (desc+colour+material) ~30% lower than originally reported |
+| `content_desc_title_features.py` | redefine CONTENT as desc+title+features instead of desc+colour+material -- does it do better? | yes, beats desc+colour+material in every bucket (R@10 all: 0.0688 vs 0.0559) |
+| `feature_variance.py` | do item features discriminate *within* a category? | yes: title cosine 0.390 within a category vs 0.187 across -- the reason title/features are useful CONTENT components |
+| `final_capacity_comparison_similarity.py` | §13's never-executed "~20k pairs" test, similarity half -- DESC+TITLE+FEAT(+IMG) and POP, matched to the 20k-pair training-sample regime | see `final_capacity_comparison.log` (combined run) |
+| `image_augmented_similarity.py` | add image to CONTENT (desc+title+features+image, 0.25 weight each) -- does it help further? | yes, in every bucket (R@10 all: 0.0775 vs 0.0688); see `image_augmented_models.log` (combined run) |
 
-`parse_sweep.py` renders `negative_sampling_sweep.log` as a comparison table.
+## What CONTENT means, and why it changed twice
 
-Scripts load pair tables from a scratch `.npz`; point `_ld` at
-`data/tower/pairs_{train,test}.parquet` to run them against the repo directly.
+The notebook's own §19 defines `CONTENT` as description + colour + material.
+This session redefined it as **description + title + features** instead
+(`content_desc_title_features.py`), which scored higher in every bucket, then
+added a fourth, optional component -- SigLIP2 image similarity
+(`image_augmented_similarity.py`) -- for a further gain everywhere except the
+`never`-frequency bucket at R@100, where it's flat. All four scripts share
+one scoring discipline, carried over unchanged from the notebook's §19
+writeup:
 
-## The one that worked
-
-| file | question | headline |
-| --- | --- | --- |
-| `overfit_capacity_test.*` | can the model fit 5,000 pairs it sees 150 times? | no — R@10 0.0398 against a 0.0964 ceiling for a *constant*; loss fell while recall reversed |
-| `temperature_overfit_sweep.log` | is score compression the cause? | yes — same setup, TAU 0.1 reaches 0.5158, a 13x gain, inverted-U with 0.05 over-sharpening |
-| `temperature_full_sweep.log` | does it transfer to 2.2M pairs? | yes — R@10 0.1218 (TAU 1.0) → 0.1916 (TAU 0.1) at 3 epochs |
-| `temperature_final_run.log` | 30 epochs with early stopping | best epoch 9: **R@10 0.2174, lenient 0.4115**, both above the popularity baseline (0.2136 / 0.4034) |
-
-Diversity did **not** improve (distinct share 0.048 against 0.044). Temperature
-fixed ranking, not collapse.
+- Every ranker is scored **inside the pair's target category** (candidates
+  restricted to `node_of_item == target_node_id`, self excluded).
+- Hit@k is **top-k membership** (`target in topk(scores)`), never
+  `(scores > true_score).sum()` -- that rank-based rule is what inflated the
+  original description-similarity number ~3x, by giving a free hit@10/@100 to
+  every zero-vector-vs-zero-vector tie (roughly 15% of test queries have no
+  description text).
+- Recall is reported **by the target's training frequency** (`never`, `1-5`,
+  `6-25`, `26-100`, `>100`), because a cold target with a real description
+  needs a completely different signal than a target the model has already
+  seen 200 times -- CONTENT wins below ~25 observations, TTN and popularity
+  dominate above it, and the "which signal, when" call this data supports is
+  routing by frequency at serving time, not blending scores (an RRF blend of
+  TTN and DESC scored *below* either alone -- see the notebook's §19).
