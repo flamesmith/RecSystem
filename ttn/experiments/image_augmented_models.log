@@ -1,0 +1,88 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+loaded in 1s | train 2,223,995 | test 201,197
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 8809.41it/s]
+title present: 100.0%  desc present: 91.0%  features present: 62.5%  image present: 71.5%
+
+test sample: 20,000 pairs (seed 0)
+bucket
+never      668
+1-5       2176
+6-25      4595
+26-100    5722
+>100      6839
+Name: count, dtype: int64
+  content/pop node 100/363  [0s]
+  content/pop node 200/363  [1s]
+  content/pop node 300/363  [1s]
+  content/pop node 363/363  [1s]
+content+pop scoring done in 1s
+
+======================================================================
+### TTN+IMAGE  (full training set, 2,223,995 pairs)
+======================================================================
+device: mps
+description block: on
+image block: on
+logQ spans -14.61 to -6.98 (6,243 items never a target)
+training on 2,223,995 pairs over 137,362 items
+
+30 epochs x 543 steps of 4,096
+epoch 0 (untrained)          R@10 0.0000  R@100 0.0012  medRank 68,274
+epoch  1 (543 steps)  loss 0.0052  R@10 0.1770  R@100 0.5082  medRank 95  [62s]  <- best
+epoch  2 (1,086 steps)  loss 0.0048  R@10 0.1980  R@100 0.5496  medRank 76  [124s]  <- best
+epoch  3 (1,629 steps)  loss 0.0044  R@10 0.2060  R@100 0.5606  medRank 72  [186s]  <- best
+epoch  4 (2,172 steps)  loss 0.0045  R@10 0.2104  R@100 0.5738  medRank 67  [247s]  <- best
+epoch  5 (2,715 steps)  loss 0.0044  R@10 0.2160  R@100 0.5828  medRank 67  [314s]  <- best
+epoch  6 (3,258 steps)  loss 0.0041  R@10 0.2160  R@100 0.5862  medRank 64  [383s]
+epoch  7 (3,801 steps)  loss 0.0041  R@10 0.2190  R@100 0.5920  medRank 63  [454s]  <- best
+epoch  8 (4,344 steps)  loss 0.0039  R@10 0.2168  R@100 0.5982  medRank 62  [523s]
+epoch  9 (4,887 steps)  loss 0.0041  R@10 0.2188  R@100 0.6016  medRank 61  [593s]
+epoch 10 (5,430 steps)  loss 0.0041  R@10 0.2170  R@100 0.5984  medRank 60  [664s]
+epoch 11 (5,973 steps)  loss 0.0042  R@10 0.2208  R@100 0.6086  medRank 59  [732s]  <- best
+epoch 12 (6,516 steps)  loss 0.0038  R@10 0.2214  R@100 0.5974  medRank 60  [801s]  <- best
+epoch 13 (7,059 steps)  loss 0.0040  R@10 0.2220  R@100 0.6056  medRank 58  [870s]  <- best
+epoch 14 (7,602 steps)  loss 0.0039  R@10 0.2268  R@100 0.6042  medRank 58  [950s]  <- best
+epoch 15 (8,145 steps)  loss 0.0041  R@10 0.2206  R@100 0.6034  medRank 58  [1020s]
+epoch 16 (8,688 steps)  loss 0.0039  R@10 0.2192  R@100 0.5994  medRank 58  [1101s]
+epoch 17 (9,231 steps)  loss 0.0039  R@10 0.2250  R@100 0.6090  medRank 58  [1181s]
+epoch 18 (9,774 steps)  loss 0.0037  R@10 0.2180  R@100 0.5996  medRank 59  [1252s]
+epoch 19 (10,317 steps)  loss 0.0040  R@10 0.2196  R@100 0.6084  medRank 58  [1323s]
+
+no improvement in 5 epochs -- stopping at epoch 19
+restored epoch 14 (test R@10 0.2268)
+
+30 epochs / 10,317 steps in 1323s (50,434 pairs/s)
+
+train  Recall@10 0.2296  NDCG@10 0.1262  Recall@20 0.3248  NDCG@20 0.1502  Recall@50 0.4879  NDCG@50 0.1826  Recall@100 0.6185  NDCG@100 0.2038  MedianRank 53
+test   Recall@10 0.2256  NDCG@10 0.1272  Recall@20 0.3147  NDCG@20 0.1495  Recall@50 0.4722  NDCG@50 0.1806  Recall@100 0.6027  NDCG@100 0.2018  MedianRank 58  Recall@10_lenient 0.4222
+
+baseline  random over the whole catalogue            0.0001
+baseline  random within the asked-for category       0.0253
+baseline  popularity within the category             0.2136
+baseline  popularity within the category (lenient)   0.4034
+
+saved -> /Users/lazr/PycharmProjects/RecSystem/data/tower/ttn_complementary_image.pt (4.5 MB)
+reloaded checkpoint reproduces R@10 exactly: 0.2268
+[TTN+IMAGE] wall time 1331s
+TTN+IMAGE scored on test sample
+TTN (original checkpoint) scored on test sample
+
+Recall@10  (test sample 20,000 pairs, seed 0) -- CONTENT = desc+title+features+image, 0.25 each
+target freq    pairs             TTN       TTN+IMAGE            DESC             POP         CONTENT
+never            668          0.0389          0.0359          0.0554          0.0000          0.0823
+1-5             2176          0.0133          0.0119          0.0680          0.0051          0.0864
+6-25            4595          0.0276          0.0276          0.0672          0.0324          0.0899
+26-100          5722          0.1075          0.1174          0.0640          0.1003          0.0869
+>100            6839          0.5210          0.5325          0.0469          0.5207          0.0580
+all            20000          0.2180          0.2245          0.0590          0.2147          0.0775
+
+Recall@100  (test sample 20,000 pairs, seed 0) -- CONTENT = desc+title+features+image, 0.25 each
+target freq    pairs             TTN       TTN+IMAGE            DESC             POP         CONTENT
+never            668          0.2216          0.2305          0.2380          0.0000          0.2620
+1-5             2176          0.1576          0.1494          0.2284          0.0974          0.2987
+6-25            4595          0.2346          0.2479          0.2420          0.2520          0.3197
+26-100          5722          0.6003          0.6111          0.2426          0.6276          0.3268
+>100            6839          0.9338          0.9323          0.2193          0.9781          0.2948
+all            20000          0.5695          0.5746          0.2328          0.5825          0.3090
+
+total runtime: 1353s
