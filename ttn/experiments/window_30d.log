@@ -1,0 +1,136 @@
+
+===== cell 1 (c03ea61068ae347c)  [0s] =====
+
+===== cell 3 (load-code)  [1s] =====
+df_reviews              (6898955, 11)
+df_features             (1134566, 92)
+co_pairs[train]          (7328337, 2)
+co_pairs[test]            (720318, 2)
+comp_cat                   (5845, 11)
+meta_catalogue           (1300540, 5)
+
+unique users: 777,242 | unique items: 189,172
+items described by df_features : 1,134,566
+items described by the catalogue: 1,285,392
+split point (ttn/constants.json): 2017-12-09
+
+===== cell 5 (validate-code)  [85s] =====
+1,134,566 rows x 92 columns — 1 failure(s), 0 warning(s)
+     check level   subject                                        detail
+0  columns  FAIL  also_buy  present in the table but not in the contract
+
+===== cell 7 (clean-cat-code)  [90s] =====
+taxonomy: 7 cat_2 | 69 cat_3 | 521 valid cat_4 slots
+
+distinct cat_4 : 921 -> 451
+items folded into '<cat_3>_Other': 1,099 (0.10% of the catalog)
+
+===== cell 9 (tower-join)  [92s] =====
+train    7,328,337 pairs ->   5,368,891 with features both ends (73.3%) ->  2,238,805 directed rows
+test       720,318 pairs ->     531,953 with features both ends (73.8%) ->    223,849 directed rows
+
+held out: 9.1%
+
+===== cell 11 (14b6350b40948daf)  [122s] =====
+counted on   : brand, over 141,877 training items
+brands kept  : 2,247 of 24,893 seen in training
+all items    : 51.5% in other_brands, 5.7% missing (left as NaN for §7)
+
+brand_clean
+other_brands     583815
+3dRose             8569
+CafePress          7489
+Disney             6249
+Unknown            5594
+Hallmark           4720
+Generic            4500
+Department 56      3416
+Safavieh           3227
+Kurt Adler         3124
+Name: count, dtype: int64
+
+===== cell 13 (55ce47cefdbb3a0c)  [125s] =====
+price parsed : 515,980 of 1,134,566 items (45.5%)
+
+vocabularies fitted on 2,238,805 training rows:
+  cat_2                 7 levels
+  cat_3                69 levels
+  cat_4               395 levels
+  brand_clean       2,248 levels
+  color                63 levels
+  features            536 levels
+  material            211 levels
+  product_type      1,102 levels
+
+===== cell 15 (impute-code)  [137s] =====
+median population : 193,265 items reviewed before 2017-12-09 (120,916 priced)
+median tables     : 584 cat_4 paths | 159 cat_3 | 13 cat_2 | global $16.45
+
+--- train ---
+  query     544,518 missing (24.3%) -> cat_4 544,518 | cat_3 0 | cat_2 0 | global 0 | still NaN 0
+  target    541,094 missing (24.2%) -> cat_4 541,094 | cat_3 0 | cat_2 0 | global 0 | still NaN 0
+  values outside the training vocabulary: 0 (0.0000% of slots)
+
+--- test ---
+  query      32,205 missing (14.4%) -> cat_4 32,205 | cat_3 0 | cat_2 0 | global 0 | still NaN 0
+  target     31,827 missing (14.2%) -> cat_4 31,827 | cat_3 0 | cat_2 0 | global 0 | still NaN 0
+  values outside the training vocabulary: 21 (0.0006% of slots)  {'features': 20, 'product_type': 1}
+
+===== cell 16 (fill-cats-code)  [169s] =====
+train  filled 5,450,993 categorical values with 'Missing' (15.22% of slots)
+test   filled   486,629 categorical values with 'Missing' (13.59% of slots)
+
+vocabularies identical across towers and slices:
+  cat_2          True  (8 levels, 'Missing' present: True)
+  cat_3          True  (70 levels, 'Missing' present: True)
+  cat_4          True  (395 levels, 'Missing' present: True)
+  brand_clean    True  (2,249 levels, 'Missing' present: True)
+  color          True  (64 levels, 'Missing' present: True)
+  features       True  (537 levels, 'Missing' present: True)
+  material       True  (212 levels, 'Missing' present: True)
+  product_type   True  (1,103 levels, 'Missing' present: True)
+
+===== cell 18 (node-code)  [169s] =====
+target_node vocabulary: 448 paths, fitted on 2,238,805 training rows
+  train   448 distinct | outside the training vocabulary: 0
+  test    424 distinct | outside the training vocabulary: 0
+
+train     (2238805, 25) |    921 MB | price complete: True
+
+test       (223849, 25) |     96 MB | price complete: True
+
+columns (25): ['asin_query', 'query_cat_2', 'query_cat_3', 'query_cat_4', 'query_title_cleaned', 'query_price', 'query_brand_clean', 'query_color', 'query_features', 'query_material', 'query_product_type', 'asin_target', 'target_cat_2', 'target_cat_3', 'target_cat_4', 'target_title_cleaned', 'target_price', 'target_brand_clean', 'target_color', 'target_features', 'target_material', 'target_product_type', 'query_price_imputed', 'target_price_imputed', 'target_node']
+
+===== cell 19 (drop-same-cat)  [180s] =====
+train   2,238,805 ->  1,666,259 rows (dropped 572,546, 25.6%)
+test      223,849 ->    163,041 rows (dropped 60,808, 27.2%)
+
+held out: 8.9%
+target_node paths still present in train: 432 of 448
+
+===== cell 21 (export-code)  [181s] =====
+items: 130,324 unique asins across both slices
+title vectors: 130,324 matched, 0 missing (left as zeros)
+descriptions: 118,552 non-empty, 11,772 blank (left as zeros)
+  share sharing their text with another item: 17.1% -- boilerplate cannot separate items, so read that as a ceiling on what this adds
+  no cache, and ALLOW_INLINE_ENCODE is False — skipping.
+  Build it once in a lean process, then re-run this cell:
+      python ttn/encode_descriptions.py
+  (§10 detects the absence and trains without the block.)
+
+items 130,324 | train 1,666,259 | test 163,041
+title_emb (130324, 384) | cat_ids (130324, 8) | numeric (130324, 3)
+vocab sizes: {'cat_2': 7, 'cat_3': 69, 'cat_4': 386, 'brand': 2236, 'color': 64, 'material': 209, 'product_type': 1092, 'features': 534, 'target_node': 432}
+test-only items                              : 3,130
+  their categorical slots on the reserved id 0: 2 of 25,040
+items with no node in the training vocabulary : 189
+test pairs whose target node is unseen       : 0
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/run_window_variant.py", line 44, in <module>
+    exec(compile(src, f"cell{i}", "exec"), g)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "cell21", line 224, in <module>
+  File "/opt/anaconda3/lib/python3.13/pathlib/_local.py", line 385, in relative_to
+    raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+ValueError: '/private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/4d057b13-3828-4b13-bed8-0ded1333e1f6/scratchpad/tower_30d' is not in the subpath of '/Users/lazr/PycharmProjects/RecSystem'
+FAILED AT CELL 21 (export-code)
