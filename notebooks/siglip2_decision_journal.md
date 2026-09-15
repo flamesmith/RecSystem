@@ -556,3 +556,11 @@ What this optimizes: reproducibility without treating generated product-level da
 Taxonomy agreement is not ground-truth substitute quality. Two products in the same leaf can differ substantially in size, price, material, or style; taxonomy siblings may be complements rather than substitutes. The next reliable evaluation should label a representative sample of query-candidate pairs with a three-level human rubric: direct substitute, related but not a substitute, or irrelevant. Human precision@10 and NDCG@10 can then show where the taxonomy proxy is too strict or too generous.
 
 For the full 20,000-product catalog, embeddings should be indexed with FAISS or a similar nearest-neighbor library. The exact 500-by-500 matrix used here is ideal for evaluation but should not be the production retrieval architecture.
+
+### Presentation revision: separate the original image and define every metric
+
+The visual example function now renders the original query product as its own larger figure before showing the ten retrieved neighbors. Previously the query occupied the first tile in the same grid, which made it too easy to mistake for a result.
+
+The notebook also includes a ten-row metric glossary covering visual similarity, the taxonomy relevance grade, strict/family/context precision@K, strict hit@10, strict MRR@10, graded NDCG@10, random expectation, and lift over random. Each row explains the definition, calculation, range, and practical interpretation.
+
+What this optimizes: visual comparison clarity and the ability to interpret the reported numbers without referring to implementation code.
