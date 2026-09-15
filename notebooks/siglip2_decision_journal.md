@@ -491,3 +491,68 @@ What this optimizes: useful visual inspection without hiding the underlying retr
 The current method does not learn that two items are purchased together or fit the same style, dimensions, price range, or use case. A taxonomy label difference may also allow a near-substitute, such as a chaise lounge for a sofa. The notebook labels the method `taxonomy-constrained similarity` for this reason.
 
 The next architectural improvement should introduce category-pair priors or rules, such as `Sofas & Couches -> Coffee Tables, Ottomans, End Tables`, before ranking with SigLIP2. Later, co-view, co-cart, or co-purchase signals can be used to learn real complementarity and to evaluate whether the retrieved pairs improve user behavior.
+
+## 2026-09-14 — SigLIP2 visual substitute analysis
+
+### Decision: evaluate every product's raw top-10 image neighbors
+
+I created `siglip2_furniture_visual_substitute_analysis.ipynb`. It uses the 500 held-out products and the image embeddings from the winning `multichunk64` benchmark arm. For each query it calculates cosine similarity against all other catalog images, removes the query itself, and retains the exact top 10. Taxonomy is not used to influence retrieval; it is applied only afterward for evaluation.
+
+What this optimizes: an honest measurement of what the visual model already retrieves, without improving the answer by filtering candidates with the label used to score it.
+
+### Decision: use three cumulative taxonomy thresholds
+
+Substitute quality is measured at three strengths:
+
+- Strict: candidate and query have the same exact leaf category.
+- Relaxed family: strict match or the same immediate taxonomy parent.
+- Contextual: relaxed family match or the same room-level furniture category.
+
+The levels are cumulative because the same leaf label can appear beneath different room paths. For example, an exact `Chairs` match remains a strict substitute even if the catalog assigns the two chairs to different room branches.
+
+What this optimizes: a conservative primary measure plus interpretable fallback measures. A sofa-to-sofa result receives more credit than sofa-to-chair, while sofa-to-chair receives more credit than sofa-to-media-cabinet.
+
+### Decision: add graded NDCG and random-baseline lift
+
+The graded relevance score is 3 for the same leaf, 2 for a sibling under the same immediate parent, 1 for the same room, and 0 otherwise. NDCG@10 rewards stronger taxonomy matches appearing earlier. Precision results are compared with the expected rate from uniformly random non-self retrieval, which accounts for category imbalance.
+
+What this optimizes: ranking quality and context. A common category should not look impressive merely because it occupies a large fraction of the catalog.
+
+### Observed aggregate results on 500 held-out products
+
+The notebook produced exactly 5,000 neighbor rows: ten per query, ranks 1 through 10, no self-matches, and only finite similarity values.
+
+- Strict same-leaf precision@1: 0.5440.
+- Strict same-leaf precision@5: 0.4584.
+- Strict same-leaf precision@10: 0.3884.
+- Relaxed-family precision@10: 0.5238.
+- Contextual precision@10: 0.6130.
+- At least one strict same-leaf result in the top 10: 0.8500.
+- Strict mean reciprocal rank within the top 10: 0.6498.
+- Graded taxonomy NDCG@10: 0.5356.
+
+The random expected rates are 0.0339 for strict, 0.0930 for relaxed family, and 0.2137 for contextual matching. The model therefore achieves approximately 11.45 times random strict precision@10, 5.63 times random relaxed-family precision@10, and 2.87 times random contextual precision@10.
+
+What this suggests: the SigLIP2 image space contains substantial product-type information, especially at the first few ranks. Quality decays as more neighbors are requested, which is visible in the strict precision drop from 54.4% at rank 1 to 38.8% across ten results.
+
+### Category-level findings
+
+Performance is uneven. Among categories with at least five products, strict precision@10 is strong for Barstools at 0.8353, Chairs at 0.7204, Table & Chair Sets at 0.6625, Mattresses at 0.6636, and Home Office Desk Chairs at 0.6455. It is weaker for Coffee Tables at 0.2062, Bookcases at 0.1333, Video Game Chairs at 0.1125, and broad or ambiguous taxonomy leaves such as `Furniture` and `Kids' Furniture`.
+
+The three curated examples reinforce the distinction between strict and relaxed quality:
+
+- Sofa: strict precision@10 0.40, relaxed-family precision@10 1.00, NDCG@10 0.7133.
+- Coffee table: strict precision@10 0.20, relaxed-family precision@10 0.80, NDCG@10 0.4720.
+- Chair: strict precision@10 0.80, relaxed-family precision@10 1.00, NDCG@10 0.9258.
+
+### Decision: keep product-level outputs local and track aggregate summaries only
+
+The complete top-10 table is approximately 8 MB and contains product descriptions and paths. It remains under the ignored `models/siglip2_furniture_visual_substitute_analysis` directory. Only the notebook and small aggregate/category summaries should be committed.
+
+What this optimizes: reproducibility without treating generated product-level data or embeddings as source code.
+
+### Limitation and next evaluation
+
+Taxonomy agreement is not ground-truth substitute quality. Two products in the same leaf can differ substantially in size, price, material, or style; taxonomy siblings may be complements rather than substitutes. The next reliable evaluation should label a representative sample of query-candidate pairs with a three-level human rubric: direct substitute, related but not a substitute, or irrelevant. Human precision@10 and NDCG@10 can then show where the taxonomy proxy is too strict or too generous.
+
+For the full 20,000-product catalog, embeddings should be indexed with FAISS or a similar nearest-neighbor library. The exact 500-by-500 matrix used here is ideal for evaluation but should not be the production retrieval architecture.

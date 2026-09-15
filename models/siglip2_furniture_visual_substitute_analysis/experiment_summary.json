@@ -1,0 +1,18 @@
+{
+  "source_model_strategy": "multichunk64",
+  "catalog_products": 500,
+  "neighbors_per_product": 10,
+  "strict_precision@1": 0.544,
+  "strict_precision@5": 0.4584,
+  "strict_precision@10": 0.3884,
+  "family_precision@10": 0.5238,
+  "context_precision@10": 0.613,
+  "strict_hit@10": 0.85,
+  "strict_mrr@10": 0.6497777777777778,
+  "graded_ndcg@10": 0.5356179504643304,
+  "random_expectations": {
+    "strict": 0.03390781563126252,
+    "family": 0.0929939879759519,
+    "context": 0.2136993987975952
+  }
+}

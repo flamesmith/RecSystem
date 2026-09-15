@@ -4,6 +4,7 @@ models/siglip2_playground/
 models/siglip2_furniture_playground/
 models/siglip2_furniture_taxonomy_ab/
 models/siglip2_furniture_text_strategy_benchmark/
+models/siglip2_furniture_visual_substitute_analysis/
 
 # Python
 __pycache__/
