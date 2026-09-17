@@ -1,8 +1,14 @@
 """Encode `description_cleaned` for the tower's items, in a lean process.
 
-Run AFTER §9 of ttn_complementary.ipynb has written data/tower/item_asins.npy:
+Run AFTER build_ttn.py's §9 has written data/tower/item_asins.npy, and
+BEFORE build_ttn.py's §10 trains the model -- §10 detects whether
+data/tower/desc_emb.npy exists and trains without the description block if
+it doesn't, so running this in between is what gives the model description
+signal at all:
 
-    python ttn/encode_descriptions.py
+    python TTN/build_ttn.py        # through §9, produces item_asins.npy
+    python TTN/encode_descriptions.py
+    python TTN/build_ttn.py        # re-run: §10 now finds desc_emb.npy
 
 Doing this inside §9 holds df_features (2.9 GB) and the embeddings pickle
 (4.3 GB) in memory alongside SBERT; on 16 GB the batches stall for minutes at a

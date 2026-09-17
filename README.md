@@ -2,33 +2,23 @@
 
 ## v1-recommendations structure
 
-This branch organizes the project's recommendation models by which product
-carousel each one backs:
-
 ```
 v1-recommendations
 │
-├── TTN/                    Complete the Look
-│    Two-tower neural network, complementary products (what goes WITH this).
-│
-├── SigLIP2/                 Visually Similar Products
-│    Frozen image-embedding cosine similarity, substitute products (what
-│    looks LIKE this).
-│
-├── Popularity/               baseline / fallback for Complete the Look
-│    Documentation only — see Popularity/README.md for where the existing
-│    popularity-scoring logic actually lives and how it backs up TTN.
-│
-└── analysis/                 (not part of the diagram above)
-     Cross-model comparisons that score TTN, SigLIP2/CONTENT, and Popularity
-     together — where "which one wins for this item" and "does combining
-     them help" get answered.
+├── TTN/                Complete the Look (complementary products)
+├── SigLIP2/             Visually Similar Products (substitutes)
+└── Popularity/           baseline / fallback for Complete the Look
 ```
 
-Each folder has its own `README.md` with the detail. The shared data
-pipeline both TTN and SigLIP2 read from — `feature_extraction_workflow/`,
-`embedding_analysis/`, `complementary_cats_pairs/` — is unchanged at the
-repo root and documented in its own folders as before.
+Each folder has a `README.md` with what it does and the exact commands to
+run it. Build order: `TTN/build_data.py` first (both `SigLIP2/` and
+`Popularity/` read what it produces), then the rest in any order. Once all
+three have been built, `results.ipynb` (this directory) loads them and
+reports Recall@10/@100.
+
+The shared data pipeline TTN and SigLIP2 both read from —
+`feature_extraction_workflow/`, `embedding_analysis/`,
+`complementary_cats_pairs/` — is unchanged at the repo root.
 
 ## Setup
 
