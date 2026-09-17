@@ -1,0 +1,44 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+loaded in 1s | train 2,223,995 | test 201,197
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 6679.65it/s]
+title present: 100.0%  desc present: 91.0%  features present: 62.5%  image present: 71.5%
+
+test sample: 20,000 pairs (seed 0)
+bucket
+never      668
+1-5       2176
+6-25      4595
+26-100    5722
+>100      6839
+Name: count, dtype: int64
+TTN+IMAGE checkpoint loaded (best_epoch 14)
+  node 50/363  [2s]
+  node 100/363  [4s]
+  node 150/363  [5s]
+  node 200/363  [6s]
+  node 250/363  [8s]
+  node 300/363  [10s]
+  node 350/363  [13s]
+  node 363/363  [14s]
+
+scoring done in 14s
+
+Recall@10  (test sample 20,000 pairs, seed 0) -- TTN=TTN+IMAGE, CONTENT=desc+title+features+image
+target freq    pairs         TTN     CONTENT         POP     ROUTE@5    ROUTE@10    ROUTE@25    ROUTE@50   ROUTE@100
+never            668      0.0359      0.0823      0.0000      0.0928      0.0898      0.0838      0.0823      0.0808
+1-5             2176      0.0119      0.0864      0.0051      0.0763      0.0901      0.0901      0.0887      0.0869
+6-25            4595      0.0276      0.0899      0.0324      0.0137      0.0309      0.0894      0.0910      0.0914
+26-100          5722      0.1174      0.0869      0.1003      0.0666      0.0388      0.0115      0.0451      0.0884
+>100            6839      0.5325      0.0580      0.5207      0.4555      0.3729      0.2369      0.1491      0.0632
+all            20000      0.2245      0.0775      0.2147      0.1893      0.1585      0.1174      0.0972      0.0800
+
+Recall@100  (test sample 20,000 pairs, seed 0)
+target freq    pairs         TTN     CONTENT         POP     ROUTE@5    ROUTE@10    ROUTE@25    ROUTE@50   ROUTE@100
+never            668      0.2620      0.3084      0.0000      0.3249      0.3249      0.3219      0.3129      0.3129
+1-5             2176      0.1498      0.3134      0.0974      0.2904      0.3240      0.3171      0.3162      0.3139
+6-25            4595      0.2511      0.3319      0.2520      0.1661      0.1785      0.3295      0.3358      0.3336
+26-100          5722      0.6603      0.3362      0.6276      0.5246      0.3880      0.1873      0.2165      0.3369
+>100            6839      0.9586      0.2983      0.9781      0.9355      0.8877      0.7361      0.5755      0.3819
+all            20000      0.5995      0.3189      0.5825      0.5506      0.5017      0.4263      0.3807      0.3483
+
+total runtime: 25s

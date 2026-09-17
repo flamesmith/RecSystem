@@ -1,0 +1,63 @@
+training sample: 444,799 of 2,223,995 pairs (20%) | test: 201,197
+
+======================================================================
+### baseline  (image block OFF)
+======================================================================
+device: mps
+description block: on
+image block: OFF — no img_emb in items.npz
+logQ spans -13.01 to -6.97 (50,064 items never a target)
+training on 444,799 pairs over 137,362 items
+
+30 epochs x 109 steps of 4,096
+epoch 0 (untrained)          R@10 0.0000  R@100 0.0004  medRank 68,789
+epoch  1 (109 steps)  loss 0.0082  R@10 0.0956  R@100 0.3766  medRank 183  [12s]  <- best
+epoch  2 (218 steps)  loss 0.0066  R@10 0.1252  R@100 0.4236  medRank 144  [22s]  <- best
+epoch  3 (327 steps)  loss 0.0059  R@10 0.1444  R@100 0.4450  medRank 131  [32s]  <- best
+epoch  4 (436 steps)  loss 0.0053  R@10 0.1530  R@100 0.4648  medRank 121  [42s]  <- best
+epoch  5 (545 steps)  loss 0.0053  R@10 0.1548  R@100 0.4768  medRank 112  [52s]  <- best
+epoch  6 (654 steps)  loss 0.0051  R@10 0.1606  R@100 0.4768  medRank 110  [63s]  <- best
+epoch  7 (763 steps)  loss 0.0051  R@10 0.1682  R@100 0.4874  medRank 106  [73s]  <- best
+epoch  8 (872 steps)  loss 0.0048  R@10 0.1742  R@100 0.4926  medRank 104  [83s]  <- best
+epoch  9 (981 steps)  loss 0.0051  R@10 0.1788  R@100 0.4990  medRank 100  [93s]  <- best
+epoch 10 (1,090 steps)  loss 0.0048  R@10 0.1792  R@100 0.5070  medRank 96  [103s]  <- best
+epoch 11 (1,199 steps)  loss 0.0044  R@10 0.1832  R@100 0.5142  medRank 93  [113s]  <- best
+epoch 12 (1,308 steps)  loss 0.0046  R@10 0.1880  R@100 0.5198  medRank 90  [123s]  <- best
+epoch 13 (1,417 steps)  loss 0.0046  R@10 0.1860  R@100 0.5228  medRank 89  [134s]
+epoch 14 (1,526 steps)  loss 0.0043  R@10 0.1848  R@100 0.5276  medRank 88  [144s]
+epoch 15 (1,635 steps)  loss 0.0043  R@10 0.1890  R@100 0.5300  medRank 86  [154s]  <- best
+epoch 16 (1,744 steps)  loss 0.0044  R@10 0.1878  R@100 0.5282  medRank 85  [164s]
+epoch 17 (1,853 steps)  loss 0.0045  R@10 0.1912  R@100 0.5332  medRank 84  [174s]  <- best
+epoch 18 (1,962 steps)  loss 0.0044  R@10 0.1936  R@100 0.5354  medRank 85  [185s]  <- best
+epoch 19 (2,071 steps)  loss 0.0044  R@10 0.1926  R@100 0.5332  medRank 85  [195s]
+epoch 20 (2,180 steps)  loss 0.0042  R@10 0.1916  R@100 0.5392  medRank 81  [205s]
+epoch 21 (2,289 steps)  loss 0.0040  R@10 0.1958  R@100 0.5370  medRank 82  [215s]  <- best
+epoch 22 (2,398 steps)  loss 0.0042  R@10 0.1958  R@100 0.5400  medRank 81  [225s]
+epoch 23 (2,507 steps)  loss 0.0042  R@10 0.1866  R@100 0.5426  medRank 79  [236s]
+epoch 24 (2,616 steps)  loss 0.0042  R@10 0.1960  R@100 0.5408  medRank 80  [246s]  <- best
+epoch 25 (2,725 steps)  loss 0.0044  R@10 0.1918  R@100 0.5460  medRank 78  [256s]
+epoch 26 (2,834 steps)  loss 0.0042  R@10 0.1946  R@100 0.5480  medRank 76  [266s]
+epoch 27 (2,943 steps)  loss 0.0042  R@10 0.1950  R@100 0.5482  medRank 77  [277s]
+epoch 28 (3,052 steps)  loss 0.0041  R@10 0.1954  R@100 0.5490  medRank 78  [287s]
+epoch 29 (3,161 steps)  loss 0.0039  R@10 0.1956  R@100 0.5442  medRank 79  [297s]
+
+no improvement in 5 epochs -- stopping at epoch 29
+restored epoch 24 (test R@10 0.1960)
+
+30 epochs / 3,161 steps in 297s (44,898 pairs/s)
+
+train  Recall@10 0.1907  NDCG@10 0.1046  Recall@20 0.2760  NDCG@20 0.1260  Recall@50 0.4239  NDCG@50 0.1553  Recall@100 0.5553  NDCG@100 0.1766  MedianRank 76
+test   Recall@10 0.1938  NDCG@10 0.1112  Recall@20 0.2744  NDCG@20 0.1315  Recall@50 0.4128  NDCG@50 0.1589  Recall@100 0.5443  NDCG@100 0.1803  MedianRank 79  Recall@10_lenient 0.3835
+
+baseline  random over the whole catalogue            0.0001
+baseline  random within the asked-for category       0.0253
+baseline  popularity within the category             0.2086
+baseline  popularity within the category (lenient)   0.3999
+
+saved -> /private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/be4f830b-9fa8-49ab-9da9-6eb8a3a7f9c2/scratchpad/ttn_image_baseline.pt (3.5 MB)
+reloaded checkpoint reproduces R@10 exactly: 0.1960
+[baseline] wall time 305s
+
+======================================================================
+### with_img  (image block ON)
+======================================================================
