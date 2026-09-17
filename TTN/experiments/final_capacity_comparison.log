@@ -1,0 +1,197 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+loaded in 1s | full train 2,223,995 | test 201,197
+training sample: 20,000 pairs (seed 0)
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 10945.91it/s]
+title present: 100.0%  desc present: 91.0%  features present: 62.5%  image present: 71.5%
+
+test sample: 20,000 pairs (seed 0)
+bucket
+never     11404.0
+1-5        7544.0
+6-25       1052.0
+26-100        NaN
+>100          NaN
+Name: count, dtype: float64
+  content/pop node 100/363  [0s]
+  content/pop node 200/363  [1s]
+  content/pop node 300/363  [1s]
+  content/pop node 363/363  [2s]
+content+pop scoring done in 2s
+
+======================================================================
+### TTN baseline  (image block OFF, 20,000 pairs, 50 epochs)
+======================================================================
+device: mps
+description block: on
+image block: OFF — no img_emb in items.npz
+logQ spans -9.90 to -6.77 (123,213 items never a target)
+training on 20,000 pairs over 137,362 items
+
+50 epochs x 5 steps of 4,096
+epoch 0 (untrained)          R@10 0.0000  R@100 0.0004  medRank 68,701
+epoch  1 (5 steps)  loss 0.1433  R@10 0.0114  R@100 0.0752  medRank 1,800  [1s]  <- best
+epoch  2 (10 steps)  loss 0.0465  R@10 0.0212  R@100 0.1250  medRank 815  [2s]  <- best
+epoch  3 (15 steps)  loss 0.0285  R@10 0.0256  R@100 0.1420  medRank 649  [2s]  <- best
+epoch  4 (20 steps)  loss 0.0209  R@10 0.0320  R@100 0.1614  medRank 514  [3s]  <- best
+epoch  5 (25 steps)  loss 0.0157  R@10 0.0324  R@100 0.1748  medRank 473  [4s]  <- best
+epoch  6 (30 steps)  loss 0.0131  R@10 0.0338  R@100 0.1892  medRank 420  [5s]  <- best
+epoch  7 (35 steps)  loss 0.0110  R@10 0.0376  R@100 0.2016  medRank 392  [5s]  <- best
+epoch  8 (40 steps)  loss 0.0096  R@10 0.0406  R@100 0.2098  medRank 375  [6s]  <- best
+epoch  9 (45 steps)  loss 0.0091  R@10 0.0460  R@100 0.2232  medRank 348  [7s]  <- best
+epoch 10 (50 steps)  loss 0.0084  R@10 0.0494  R@100 0.2330  medRank 333  [8s]  <- best
+epoch 11 (55 steps)  loss 0.0079  R@10 0.0506  R@100 0.2420  medRank 320  [8s]  <- best
+epoch 12 (60 steps)  loss 0.0077  R@10 0.0522  R@100 0.2472  medRank 307  [9s]  <- best
+epoch 13 (65 steps)  loss 0.0073  R@10 0.0552  R@100 0.2538  medRank 296  [10s]  <- best
+epoch 14 (70 steps)  loss 0.0068  R@10 0.0542  R@100 0.2572  medRank 289  [11s]
+epoch 15 (75 steps)  loss 0.0067  R@10 0.0544  R@100 0.2616  medRank 282  [11s]
+epoch 16 (80 steps)  loss 0.0066  R@10 0.0570  R@100 0.2656  medRank 277  [12s]  <- best
+epoch 17 (85 steps)  loss 0.0064  R@10 0.0588  R@100 0.2688  medRank 271  [13s]  <- best
+epoch 18 (90 steps)  loss 0.0064  R@10 0.0586  R@100 0.2712  medRank 265  [13s]
+epoch 19 (95 steps)  loss 0.0061  R@10 0.0610  R@100 0.2764  medRank 262  [14s]  <- best
+epoch 20 (100 steps)  loss 0.0060  R@10 0.0624  R@100 0.2774  medRank 258  [15s]  <- best
+epoch 21 (105 steps)  loss 0.0057  R@10 0.0656  R@100 0.2822  medRank 255  [16s]  <- best
+epoch 22 (110 steps)  loss 0.0059  R@10 0.0676  R@100 0.2870  medRank 251  [16s]  <- best
+epoch 23 (115 steps)  loss 0.0059  R@10 0.0682  R@100 0.2904  medRank 250  [17s]  <- best
+epoch 24 (120 steps)  loss 0.0057  R@10 0.0714  R@100 0.2926  medRank 247  [18s]  <- best
+epoch 25 (125 steps)  loss 0.0055  R@10 0.0734  R@100 0.2940  medRank 243  [19s]  <- best
+epoch 26 (130 steps)  loss 0.0054  R@10 0.0730  R@100 0.2976  medRank 241  [19s]
+epoch 27 (135 steps)  loss 0.0056  R@10 0.0752  R@100 0.3006  medRank 241  [20s]  <- best
+epoch 28 (140 steps)  loss 0.0053  R@10 0.0752  R@100 0.3000  medRank 239  [21s]
+epoch 29 (145 steps)  loss 0.0054  R@10 0.0778  R@100 0.3064  medRank 237  [22s]  <- best
+epoch 30 (150 steps)  loss 0.0054  R@10 0.0766  R@100 0.3060  medRank 237  [22s]
+epoch 31 (155 steps)  loss 0.0054  R@10 0.0760  R@100 0.3094  medRank 235  [23s]
+epoch 32 (160 steps)  loss 0.0053  R@10 0.0780  R@100 0.3100  medRank 234  [24s]  <- best
+epoch 33 (165 steps)  loss 0.0052  R@10 0.0792  R@100 0.3116  medRank 235  [25s]  <- best
+epoch 34 (170 steps)  loss 0.0052  R@10 0.0802  R@100 0.3138  medRank 233  [25s]  <- best
+epoch 35 (175 steps)  loss 0.0050  R@10 0.0788  R@100 0.3156  medRank 233  [26s]
+epoch 36 (180 steps)  loss 0.0051  R@10 0.0808  R@100 0.3174  medRank 230  [27s]  <- best
+epoch 37 (185 steps)  loss 0.0052  R@10 0.0810  R@100 0.3166  medRank 232  [28s]  <- best
+epoch 38 (190 steps)  loss 0.0053  R@10 0.0826  R@100 0.3172  medRank 229  [28s]  <- best
+epoch 39 (195 steps)  loss 0.0050  R@10 0.0838  R@100 0.3180  medRank 229  [29s]  <- best
+epoch 40 (200 steps)  loss 0.0051  R@10 0.0844  R@100 0.3212  medRank 227  [30s]  <- best
+epoch 41 (205 steps)  loss 0.0049  R@10 0.0856  R@100 0.3214  medRank 224  [31s]  <- best
+epoch 42 (210 steps)  loss 0.0049  R@10 0.0858  R@100 0.3224  medRank 227  [32s]  <- best
+epoch 43 (215 steps)  loss 0.0048  R@10 0.0874  R@100 0.3230  medRank 224  [32s]  <- best
+epoch 44 (220 steps)  loss 0.0048  R@10 0.0884  R@100 0.3236  medRank 223  [33s]  <- best
+epoch 45 (225 steps)  loss 0.0048  R@10 0.0886  R@100 0.3246  medRank 223  [34s]  <- best
+epoch 46 (230 steps)  loss 0.0048  R@10 0.0904  R@100 0.3246  medRank 223  [35s]  <- best
+epoch 47 (235 steps)  loss 0.0047  R@10 0.0896  R@100 0.3252  medRank 223  [35s]
+epoch 48 (240 steps)  loss 0.0046  R@10 0.0884  R@100 0.3254  medRank 225  [36s]
+epoch 49 (245 steps)  loss 0.0046  R@10 0.0902  R@100 0.3244  medRank 219  [37s]
+epoch 50 (250 steps)  loss 0.0048  R@10 0.0892  R@100 0.3274  medRank 223  [38s]
+restored epoch 46 (test R@10 0.0904)
+
+50 epochs / 250 steps in 38s (26,637 pairs/s)
+
+train  Recall@10 0.1506  NDCG@10 0.0906  Recall@20 0.2032  NDCG@20 0.1038  Recall@50 0.3113  NDCG@50 0.1252  Recall@100 0.4311  NDCG@100 0.1445  MedianRank 141
+test   Recall@10 0.0909  NDCG@10 0.0518  Recall@20 0.1316  NDCG@20 0.0620  Recall@50 0.2173  NDCG@50 0.0788  Recall@100 0.3215  NDCG@100 0.0957  MedianRank 227  Recall@10_lenient 0.2061
+
+baseline  random over the whole catalogue            0.0001
+baseline  random within the asked-for category       0.0253
+baseline  popularity within the category             0.1434
+baseline  popularity within the category (lenient)   0.3098
+
+saved -> /private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/9f5de6c8-4072-4157-bc73-973c9dc7569b/scratchpad/ttn_capacity_baseline.pt (3.5 MB)
+reloaded checkpoint reproduces R@10 exactly: 0.0904
+[baseline] wall time 44s
+
+======================================================================
+### TTN with_img  (image block ON, 20,000 pairs, 50 epochs)
+======================================================================
+/Users/lazr/PycharmProjects/RecSystem/venv/lib/python3.13/site-packages/numpy/_core/_methods.py:142: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+device: mps
+description block: on
+image block: on
+logQ spans -9.90 to -6.77 (123,213 items never a target)
+training on 20,000 pairs over 137,362 items
+
+50 epochs x 5 steps of 4,096
+epoch 0 (untrained)          R@10 0.0000  R@100 0.0012  medRank 68,583
+epoch  1 (5 steps)  loss 0.2619  R@10 0.0132  R@100 0.0620  medRank 1,958  [1s]  <- best
+epoch  2 (10 steps)  loss 0.0679  R@10 0.0184  R@100 0.1000  medRank 1,111  [2s]  <- best
+epoch  3 (15 steps)  loss 0.0366  R@10 0.0200  R@100 0.1260  medRank 772  [3s]  <- best
+epoch  4 (20 steps)  loss 0.0251  R@10 0.0240  R@100 0.1372  medRank 622  [4s]  <- best
+epoch  5 (25 steps)  loss 0.0187  R@10 0.0280  R@100 0.1482  medRank 551  [4s]  <- best
+epoch  6 (30 steps)  loss 0.0155  R@10 0.0318  R@100 0.1716  medRank 492  [5s]  <- best
+epoch  7 (35 steps)  loss 0.0129  R@10 0.0346  R@100 0.1866  medRank 452  [6s]  <- best
+epoch  8 (40 steps)  loss 0.0110  R@10 0.0384  R@100 0.1966  medRank 431  [7s]  <- best
+epoch  9 (45 steps)  loss 0.0103  R@10 0.0414  R@100 0.2096  medRank 395  [8s]  <- best
+epoch 10 (50 steps)  loss 0.0094  R@10 0.0442  R@100 0.2174  medRank 383  [9s]  <- best
+epoch 11 (55 steps)  loss 0.0087  R@10 0.0454  R@100 0.2234  medRank 357  [10s]  <- best
+epoch 12 (60 steps)  loss 0.0085  R@10 0.0482  R@100 0.2306  medRank 345  [11s]  <- best
+epoch 13 (65 steps)  loss 0.0080  R@10 0.0514  R@100 0.2376  medRank 330  [12s]  <- best
+epoch 14 (70 steps)  loss 0.0074  R@10 0.0544  R@100 0.2474  medRank 320  [13s]  <- best
+epoch 15 (75 steps)  loss 0.0072  R@10 0.0554  R@100 0.2530  medRank 312  [13s]  <- best
+epoch 16 (80 steps)  loss 0.0071  R@10 0.0558  R@100 0.2602  medRank 307  [14s]  <- best
+epoch 17 (85 steps)  loss 0.0067  R@10 0.0580  R@100 0.2644  medRank 301  [15s]  <- best
+epoch 18 (90 steps)  loss 0.0068  R@10 0.0596  R@100 0.2664  medRank 295  [16s]  <- best
+epoch 19 (95 steps)  loss 0.0065  R@10 0.0596  R@100 0.2684  medRank 288  [17s]
+epoch 20 (100 steps)  loss 0.0064  R@10 0.0626  R@100 0.2722  medRank 284  [18s]  <- best
+epoch 21 (105 steps)  loss 0.0060  R@10 0.0636  R@100 0.2744  medRank 277  [19s]  <- best
+epoch 22 (110 steps)  loss 0.0062  R@10 0.0676  R@100 0.2798  medRank 275  [20s]  <- best
+epoch 23 (115 steps)  loss 0.0062  R@10 0.0688  R@100 0.2838  medRank 269  [21s]  <- best
+epoch 24 (120 steps)  loss 0.0060  R@10 0.0706  R@100 0.2866  medRank 268  [22s]  <- best
+epoch 25 (125 steps)  loss 0.0057  R@10 0.0718  R@100 0.2910  medRank 265  [22s]  <- best
+epoch 26 (130 steps)  loss 0.0056  R@10 0.0726  R@100 0.2910  medRank 260  [23s]  <- best
+epoch 27 (135 steps)  loss 0.0058  R@10 0.0742  R@100 0.2922  medRank 256  [24s]  <- best
+epoch 28 (140 steps)  loss 0.0055  R@10 0.0756  R@100 0.2956  medRank 253  [25s]  <- best
+epoch 29 (145 steps)  loss 0.0056  R@10 0.0756  R@100 0.2932  medRank 249  [26s]
+epoch 30 (150 steps)  loss 0.0055  R@10 0.0772  R@100 0.2948  medRank 245  [27s]  <- best
+epoch 31 (155 steps)  loss 0.0056  R@10 0.0792  R@100 0.2980  medRank 242  [28s]  <- best
+epoch 32 (160 steps)  loss 0.0054  R@10 0.0790  R@100 0.2990  medRank 241  [29s]
+epoch 33 (165 steps)  loss 0.0053  R@10 0.0814  R@100 0.3018  medRank 238  [30s]  <- best
+epoch 34 (170 steps)  loss 0.0053  R@10 0.0810  R@100 0.3020  medRank 236  [31s]
+epoch 35 (175 steps)  loss 0.0051  R@10 0.0816  R@100 0.3034  medRank 235  [32s]  <- best
+epoch 36 (180 steps)  loss 0.0051  R@10 0.0820  R@100 0.3056  medRank 235  [32s]  <- best
+epoch 37 (185 steps)  loss 0.0052  R@10 0.0832  R@100 0.3052  medRank 233  [33s]  <- best
+epoch 38 (190 steps)  loss 0.0053  R@10 0.0816  R@100 0.3056  medRank 233  [34s]
+epoch 39 (195 steps)  loss 0.0051  R@10 0.0830  R@100 0.3080  medRank 231  [35s]
+epoch 40 (200 steps)  loss 0.0051  R@10 0.0844  R@100 0.3086  medRank 232  [36s]  <- best
+epoch 41 (205 steps)  loss 0.0050  R@10 0.0842  R@100 0.3100  medRank 229  [37s]
+epoch 42 (210 steps)  loss 0.0050  R@10 0.0864  R@100 0.3120  medRank 229  [38s]  <- best
+epoch 43 (215 steps)  loss 0.0048  R@10 0.0870  R@100 0.3142  medRank 227  [39s]  <- best
+epoch 44 (220 steps)  loss 0.0049  R@10 0.0878  R@100 0.3124  medRank 228  [40s]  <- best
+epoch 45 (225 steps)  loss 0.0048  R@10 0.0882  R@100 0.3166  medRank 228  [41s]  <- best
+epoch 46 (230 steps)  loss 0.0048  R@10 0.0892  R@100 0.3138  medRank 227  [42s]  <- best
+epoch 47 (235 steps)  loss 0.0047  R@10 0.0870  R@100 0.3140  medRank 229  [43s]
+epoch 48 (240 steps)  loss 0.0046  R@10 0.0878  R@100 0.3170  medRank 229  [43s]
+epoch 49 (245 steps)  loss 0.0046  R@10 0.0890  R@100 0.3170  medRank 227  [44s]
+epoch 50 (250 steps)  loss 0.0048  R@10 0.0892  R@100 0.3176  medRank 224  [45s]
+restored epoch 46 (test R@10 0.0892)
+
+50 epochs / 250 steps in 45s (22,136 pairs/s)
+
+train  Recall@10 0.1590  NDCG@10 0.0965  Recall@20 0.2142  NDCG@20 0.1104  Recall@50 0.3206  NDCG@50 0.1314  Recall@100 0.4408  NDCG@100 0.1508  MedianRank 135
+test   Recall@10 0.0910  NDCG@10 0.0520  Recall@20 0.1323  NDCG@20 0.0623  Recall@50 0.2155  NDCG@50 0.0787  Recall@100 0.3146  NDCG@100 0.0948  MedianRank 229  Recall@10_lenient 0.2075
+
+baseline  random over the whole catalogue            0.0001
+baseline  random within the asked-for category       0.0253
+baseline  popularity within the category             0.1434
+baseline  popularity within the category (lenient)   0.3098
+
+saved -> /private/tmp/claude-501/-Users-lazr-PycharmProjects-RecSystem/9f5de6c8-4072-4157-bc73-973c9dc7569b/scratchpad/ttn_capacity_with_img.pt (4.5 MB)
+reloaded checkpoint reproduces R@10 exactly: 0.0892
+[with_img] wall time 52s
+TTN scored on test sample
+TTN+IMAGE scored on test sample
+
+Recall@10  (train sample 20,000 pairs / 50 epochs, test sample 20,000 pairs, seed 0)
+target freq    pairs                   TTN             TTN+IMAGE       DESC+TITLE+FEAT   DESC+TITLE+FEAT+IMG                   POP
+never          11404                0.0296                0.0279                0.0747                0.0847                0.0000
+1-5             7544                0.1039                0.1143                0.0642                0.0721                0.2511
+6-25            1052                0.7918                0.7937                0.0390                0.0380                0.9800
+26-100             0                   nan                   nan                   nan                   nan                   nan
+>100               0                   nan                   nan                   nan                   nan                   nan
+all            20000                0.0977                0.1008                0.0688                0.0775                0.1462
+
+Recall@100  (train sample 20,000 pairs / 50 epochs, test sample 20,000 pairs, seed 0)
+target freq    pairs                   TTN             TTN+IMAGE       DESC+TITLE+FEAT   DESC+TITLE+FEAT+IMG                   POP
+never          11404                0.2382                0.2373                0.2884                0.3105                0.0000
+1-5             7544                0.3986                0.4069                0.2837                0.3148                0.8098
+6-25            1052                0.9838                0.9753                0.2319                0.2510                1.0000
+26-100             0                   nan                   nan                   nan                   nan                   nan
+>100               0                   nan                   nan                   nan                   nan                   nan
+all            20000                0.3379                0.3401                0.2837                0.3090                0.3580
+
+total runtime: 115s

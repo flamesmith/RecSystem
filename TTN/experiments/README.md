@@ -1,9 +1,19 @@
-# Experiments behind §13 of `ttn/ttn_complementary.ipynb`
+# Experiments behind the TTN model ("Complete the Look")
 
 Raw logs and the scripts that produced them. Kept so the dead ends do not get
 re-run. Every script reads the artifacts in `data/tower/` and, where it needs the
-model, the cell source straight out of the notebook — so none of them can drift
-away from what the notebook actually says.
+model, the cell source straight out of `../ttn_complementary.ipynb` — so none
+of them can drift away from what the notebook actually says.
+
+This folder holds only experiments that train or inspect the TTN model
+itself. Scripts that score TTN against SigLIP2/CONTENT and Popularity
+together — the frequency-routing experiments, the Furniture/Bedding and
+query-frequency breakdowns, the `final_capacity_comparison_ttn.py` /
+`image_augmented_ttn.py` files' similarity-scoring counterparts — live in
+[`../../analysis/`](../../analysis/) instead, since they don't belong to just
+this carousel. `final_capacity_comparison.log` and `image_augmented_models.log`
+are duplicated in both folders: the original combined runs, before those two
+scripts were split into a TTN half (here) and an analysis half.
 
 | file | question it answers | headline |
 | --- | --- | --- |
@@ -33,3 +43,11 @@ Scripts load pair tables from a scratch `.npz`; point `_ld` at
 
 Diversity did **not** improve (distinct share 0.048 against 0.044). Temperature
 fixed ranking, not collapse.
+
+## Adding SigLIP2 image embeddings to TTN
+
+| file | question it answers | headline |
+| --- | --- | --- |
+| `image_in_model.py` | does adding a SigLIP image block to the ProductEncoder help, A/B on a subsample? | see `image_in_model.log` |
+| `final_capacity_comparison_ttn.py` | §13's never-executed "~20k pairs, 50 epochs" test — TTN and TTN+IMAGE trained on a 20k-pair sample | see `final_capacity_comparison.log` (combined run, includes the similarity columns now split out to `analysis/`) |
+| `image_augmented_ttn.py` | TTN+IMAGE trained on the FULL training set, same regime as the committed checkpoint | R@10 all buckets: 0.2180 → 0.2245 with image; see `image_augmented_models.log` (combined run). Saves `data/tower/ttn_complementary_image.pt`, separate from the committed `ttn_complementary.pt` |

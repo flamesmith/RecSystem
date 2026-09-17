@@ -1,5 +1,11 @@
 # Two-Tower Model — complementary products
 
+**This is the "Complete the Look" carousel of the `v1-recommendations`
+structure.** SigLIP2's visually-similar carousel and the popularity fallback
+this carousel falls back to live in [`../SigLIP2/`](../SigLIP2/) and
+[`../Popularity/`](../Popularity/) respectively; cross-model comparisons that
+score TTN against both live in [`../analysis/`](../analysis/).
+
 The goal of this folder is to build a **two-tower neural network** in
 **PyTorch** that finds **complementary products** — given an item, retrieve the
 items bought *alongside* it rather than the items most similar to it. A phone
@@ -98,10 +104,10 @@ The paper trains with a **sampled softmax** loss and a mixed negative sampling
 strategy, and the complementary variant adds a **target category reconstruction
 error** to keep the target-category embedding honest.
 
-Because this branch is `add-bpr`, the loss actually used here is **BPR
-(Bayesian Personalized Ranking)** — the same pairwise ranking idea, over the
-same positives. Note the operands change from the classic setup: the anchor is
-a **query item**, not a user.
+The loss actually used here is **BPR (Bayesian Personalized Ranking)** —
+carried over from the `add-bpr` branch this folder was reorganized out of —
+the same pairwise ranking idea, over the same positives. Note the operands
+change from the classic setup: the anchor is a **query item**, not a user.
 
 For a query item `q`, a positive candidate `c⁺` (one actually co-purchased with
 `q`) and a negative candidate `c⁻` (sampled, not co-purchased with it):
