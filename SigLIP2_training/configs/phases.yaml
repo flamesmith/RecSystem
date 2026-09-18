@@ -6,7 +6,7 @@ phase_1:
     - canonical_64
     - multichunk_64
     - multichunk_with_taxonomy_view
-  trainable_scope: projection_heads
+  trainable_scope: post_embedding_adapters
 
 phase_2:
   name: optimization_pilot
@@ -28,5 +28,5 @@ phase_4:
   name: full_catalog
   image_download_passes: 1
   extract_frozen_features: true
-  default_trainable_scope: projection_heads
+  default_trainable_scope: post_embedding_adapters
   optional_partial_unfreeze: true

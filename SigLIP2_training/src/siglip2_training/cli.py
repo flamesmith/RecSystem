@@ -13,6 +13,7 @@ from typing import Any
 
 from .cache import ImageCache
 from .config import config_hash, load_yaml
+from .features import extract_feature_shards
 from .manifest import build_manifest, write_manifest
 from .metadata import amazon_record_to_product, iter_jsonl, open_jsonl_writer
 from .text import DescriptionProcessor
@@ -247,6 +248,39 @@ def command_cache_prefetch(arguments: argparse.Namespace) -> int:
     return 0
 
 
+def command_extract_features(arguments: argparse.Namespace) -> int:
+    project_root = _project_root()
+    feature_config = load_yaml(arguments.config)
+    cache_config = load_yaml(arguments.cache_config)
+    cache = ImageCache.from_config(cache_config, project_root)
+    output_directory = Path(arguments.output).resolve()
+    result = extract_feature_shards(
+        records=iter_jsonl(arguments.input),
+        cache=cache,
+        output_directory=output_directory,
+        config=feature_config,
+        limit=arguments.limit,
+    )
+    statistics = dict(result.__dict__)
+    manifest = build_manifest(
+        project_root=project_root.parent,
+        command=sys.argv,
+        inputs={"processed_metadata": str(Path(arguments.input).resolve())},
+        outputs={"feature_directory": str(output_directory)},
+        configuration={
+            "features_path": str(Path(arguments.config).resolve()),
+            "features_hash": config_hash(feature_config),
+            "cache_path": str(Path(arguments.cache_config).resolve()),
+            "cache_hash": config_hash(cache_config),
+        },
+        statistics=statistics,
+    )
+    manifest_path = output_directory / "manifest.json"
+    write_manifest(manifest_path, manifest)
+    print(json.dumps({"summary": statistics, "manifest": str(manifest_path)}, indent=2))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="SigLIP2 full-catalog training utilities")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -278,6 +312,16 @@ def build_parser() -> argparse.ArgumentParser:
         "--report", default="artifacts/cache_prefetch_manifest.json"
     )
     cache_prefetch.set_defaults(function=command_cache_prefetch)
+
+    extract_features = subparsers.add_parser(
+        "extract-features", help="Stream images and write frozen SigLIP2 embedding shards"
+    )
+    extract_features.add_argument("--input", required=True)
+    extract_features.add_argument("--output", required=True)
+    extract_features.add_argument("--config", required=True)
+    extract_features.add_argument("--cache-config", required=True)
+    extract_features.add_argument("--limit", type=int)
+    extract_features.set_defaults(function=command_extract_features)
     return parser
 
 

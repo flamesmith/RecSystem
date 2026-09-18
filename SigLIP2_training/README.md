@@ -7,7 +7,7 @@ This directory contains the reproducible pipeline for training SigLIP2 on the fu
 - Stream images through a bounded on-disk cache instead of retaining the full image corpus.
 - Transform product descriptions with one deterministic, versioned implementation.
 - Use the same product-text transformation during experiments, catalog ingestion, and production inference.
-- Extract frozen SigLIP2 backbone features once, then perform most head tuning without downloading images again.
+- Extract frozen normalized SigLIP2 embeddings once, then perform most adapter tuning without downloading images again.
 - Record configuration hashes and run manifests with every generated artifact.
 - Keep all generated metadata, caches, image files, features, and checkpoints out of Git.
 
@@ -20,7 +20,9 @@ This directory contains the reproducible pipeline for training SigLIP2 on the fu
 - PyTorch Metal device available as `mps:0` outside the workspace sandbox
 - Approximately 101 GiB free disk space at project initialization
 
-The local design therefore prioritizes frozen-feature extraction and projection-head training. Full-backbone fine-tuning is not the default.
+The local design therefore prioritizes frozen-feature extraction and post-embedding adapter training. Full-backbone fine-tuning is not the default.
+
+The trainable components in the frozen-feature stages are new post-embedding adapters. They are distinct from SigLIP2's native vision pooling head, whose inputs would be prohibitively large to retain for the full catalog.
 
 ## Project structure
 
@@ -71,7 +73,7 @@ Phase limits are ceilings and success gates, not automatic workload commitments.
 
 ## Current status
 
-The reusable foundation is implemented and smoke-tested against the real Home & Kitchen metadata and image URLs. See `docs/foundation_validation.md` for the measured gate. The next workload is a fixed, stratified Phase 1 sample; no full-catalog image download has been started.
+The reusable foundation is implemented and smoke-tested against the real Home & Kitchen metadata and image URLs. A real MPS pass also produced validated 768-dimensional image and text feature shards. See `docs/foundation_validation.md` for the measured gate. The next workload is a fixed, stratified Phase 1 sample; no full-catalog image download has been started.
 
 ## Run locally without installation
 
@@ -108,6 +110,17 @@ PYTHONPATH=src ../.venv-siglip2/bin/python -m siglip2_training cache-prefetch \
   --limit 100 \
   --workers 4 \
   --report artifacts/cache_prefetch_100.manifest.json
+```
+
+Extract pretrained embedding shards while using the same bounded cache:
+
+```bash
+PYTHONPATH=src ../.venv-siglip2/bin/python -m siglip2_training extract-features \
+  --input artifacts/description_v1_tokenized_sample.jsonl.gz \
+  --output features/pilot \
+  --config configs/features_local.yaml \
+  --cache-config configs/cache_local.yaml \
+  --limit 100
 ```
 
 ## Container scope

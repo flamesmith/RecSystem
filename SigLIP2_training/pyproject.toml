@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "Reproducible streaming and preprocessing pipeline for full-catalog SigLIP2 training"
 requires-python = ">=3.11,<3.12"
 dependencies = [
+  "numpy==1.26.4",
   "Pillow==11.3.0",
   "PyYAML==6.0.3",
   "requests==2.34.2",
@@ -16,7 +17,6 @@ dependencies = [
 
 [project.optional-dependencies]
 training = [
-  "numpy==1.26.4",
   "pandas==2.2.3",
   "safetensors==0.8.0",
   "torch==2.2.2",

@@ -16,7 +16,7 @@ The local-first preprocessing and bounded-cache foundation is ready for the Phas
 
 ## Automated checks
 
-Nine unit tests passed. They cover deterministic text output and hashes, conservative sentence cleanup, tail-aware chunk selection, Amazon metadata adaptation, main-image selection, valid image writes, invalid image rejection, and least-recently-used cache eviction.
+Eleven unit tests passed. They cover deterministic text output and hashes, conservative sentence cleanup, tail-aware chunk selection, Amazon metadata adaptation, main-image selection, valid image writes, invalid image rejection, least-recently-used cache eviction, atomic feature shards, and device fallback.
 
 ## Real-data smoke tests
 
@@ -32,6 +32,10 @@ Nine unit tests passed. They cover deterministic text output and hashes, conserv
 | Long-description coverage | selection included later portions instead of retaining only leading chunks. |
 | Real image cache | five unique URLs processed: one hit, four downloads, zero failures. |
 | Cached images after smoke test | five validated JPEG entries, 91,761 bytes total. |
+| MPS feature extraction | five of five records written; zero failures; 23.73 seconds including model load. |
+| Feature contract | image, raw-text, canonical-text, taxonomy-text, and up to four chunk embeddings were all finite float16 arrays with dimension 768. |
+| Normalization | inspected image and text vector norms were approximately 1.0 after float16 conversion. |
+| Five-row retrieval sanity check | paired image/canonical-text cosine similarity averaged 0.0484 versus 0.0372 for off-diagonal pairs; this is only a wiring check, not a quality estimate. |
 
 ## Known data-quality observation
 

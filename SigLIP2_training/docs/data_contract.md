@@ -35,3 +35,17 @@ Catalog products use the complete product transformation. Natural user queries r
 - Duplicate sentences inside one product are removed conservatively.
 - Products with duplicate descriptions or images are retained but must be grouped before train/validation/test splitting.
 - Product variants must not leak near-identical images or text across evaluation boundaries.
+
+## Frozen feature shards
+
+Each `features-*.npz` shard is atomic and contains aligned rows:
+
+- `product_id`: stable product identifiers.
+- `image`: normalized pretrained image embeddings, shape `[N, 768]`.
+- `text_raw`: normalized first-64-token text embeddings, shape `[N, 768]`.
+- `text_canonical`: normalized canonical text embeddings, shape `[N, 768]`.
+- `text_taxonomy`: normalized taxonomy embeddings, shape `[N, 768]`.
+- `text_chunks`: up to four normalized chunk embeddings, shape `[N, 4, 768]`.
+- `text_chunk_mask`: valid-chunk mask, shape `[N, 4]`.
+
+Floating-point arrays are finite `float16` values. The manifest binds each shard set to its source metadata, feature configuration, cache configuration, packages, and Git revision. These are final pretrained embeddings, not the 196 vision patch tokens consumed by SigLIP2's native pooling head.
