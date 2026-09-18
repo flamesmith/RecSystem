@@ -6,7 +6,7 @@ from pathlib import Path
 
 import numpy as np
 
-from siglip2_training.features import _write_npz_atomic, choose_device
+from siglip2_training.features import _completed_shards, _write_npz_atomic, choose_device
 
 
 class FeatureTests(unittest.TestCase):
@@ -26,6 +26,17 @@ class FeatureTests(unittest.TestCase):
 
     def test_device_choice_has_cpu_fallback(self) -> None:
         self.assertEqual(choose_device(["cpu"]), "cpu")
+
+    def test_completed_shards_are_discovered_for_resume(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            directory = Path(temporary_directory)
+            _write_npz_atomic(
+                directory / "features-00000.npz",
+                {"product_id": np.asarray(["A", "B"]), "image": np.eye(2, dtype=np.float16)},
+            )
+            names, completed = _completed_shards(directory)
+            self.assertEqual(names, ["features-00000.npz"])
+            self.assertEqual(completed, {"A", "B"})
 
 
 if __name__ == "__main__":

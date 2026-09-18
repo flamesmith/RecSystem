@@ -1,0 +1,22 @@
+model:
+  id: google/siglip2-base-patch16-224
+  local_files_only: true
+
+runtime:
+  device_preference:
+    - mps
+    - cpu
+  image_batch_size: 8
+  text_batch_size: 32
+  shard_size: 500
+  output_dtype: float16
+  maximum_text_tokens: 64
+  maximum_chunks: 4
+  use_fast_image_processor: false
+  use_fast_tokenizer: true
+
+views:
+  raw_first_64: true
+  canonical_64: true
+  multichunk_64: true
+  taxonomy_64: true

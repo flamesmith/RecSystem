@@ -71,6 +71,8 @@ The cache stores validated image bytes under content-independent URL hashes, use
 
 Phase limits are ceilings and success gates, not automatic workload commitments.
 
+The first pilot uses a deterministic hash sample rather than the first 5,000 rows. Exact duplicate descriptions and shared image URLs are grouped before assigning train, validation, or test membership.
+
 ## Current status
 
 The reusable foundation is implemented and smoke-tested against the real Home & Kitchen metadata and image URLs. A real MPS pass also produced validated 768-dimensional image and text feature shards. See `docs/foundation_validation.md` for the measured gate. The next workload is a fixed, stratified Phase 1 sample; no full-catalog image download has been started.
@@ -121,6 +123,26 @@ PYTHONPATH=src ../.venv-siglip2/bin/python -m siglip2_training extract-features 
   --config configs/features_local.yaml \
   --cache-config configs/cache_local.yaml \
   --limit 100
+```
+
+Create the fixed 5K pilot from the complete metadata file:
+
+```bash
+PYTHONPATH=src ../.venv-siglip2/bin/python -m siglip2_training sample-catalog \
+  --input ../full_metadata/meta_Home_and_Kitchen.jsonl.gz \
+  --output artifacts/pilot_5k.jsonl.gz \
+  --description-config configs/description_v1.yaml \
+  --pilot-config configs/pilot_5k.yaml
+```
+
+The 5K extraction uses `configs/features_pilot_5k.yaml` and supports `--resume`. Train all guarded adapter candidates after the feature index is complete:
+
+```bash
+PYTHONPATH=src ../.venv-siglip2/bin/python -m siglip2_training train-adapters \
+  --features features/pilot_5k \
+  --output checkpoints/pilot_5k \
+  --config configs/adapter_pilot.yaml \
+  --guardrails configs/guardrails.yaml
 ```
 
 ## Container scope

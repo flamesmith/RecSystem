@@ -57,3 +57,27 @@ What this optimizes: catching schema, tokenizer, URL-selection, image-validation
 The feature configuration pins `use_fast_image_processor: false` and `use_fast_tokenizer: true` independently. The locally cached checkpoint was created with the slow image processor, and Transformers warns that a future default will switch to the fast implementation with slightly different outputs. Keeping the cached fast tokenizer avoids adding SentencePiece solely because a shared `use_fast` flag was passed to both components.
 
 What this optimizes: stable preprocessing across runs and library-default changes. A fast processor can be benchmarked later as an explicit versioned experiment.
+
+## 2026-09-18 — Representative deterministic 5K pilot
+
+The pilot takes the 5,000 lowest seeded product-ID hashes from all eligible records rather than the first rows in the source file. The complete 3,735,584-row metadata file is scanned once, while only 5,000 raw candidates remain in memory. Taxonomy-balanced sampling is reserved for a controlled Phase 2 comparison rather than silently changing the production distribution in the first benchmark.
+
+What this optimizes: repeatability and representative catalog coverage without source-order bias.
+
+## 2026-09-18 — Leakage-safe split groups
+
+Products connected by an exact normalized description or shared image URL receive one duplicate group ID and one split assignment. The resulting pilot contains 4,000 train, 512 validation, and 488 test records. Validation selects the strategy; test remains unopened until selection is complete.
+
+What this optimizes: honest retrieval metrics that are not inflated by duplicate listings crossing split boundaries.
+
+## 2026-09-18 — Identity-initialized post-embedding adapters
+
+Each modality receives a small residual bottleneck adapter initialized to produce the unchanged pretrained embedding. Training uses SigLIP's pairwise sigmoid loss, true batches of 256 cached pairs, group-safe batching, validation early stopping, and the checkpoint's learned logit scale and bias.
+
+What this optimizes: measurable learning with large negative sets while retaining a no-regression path back to the pretrained representation.
+
+## 2026-09-18 — Explicit scaling guardrails
+
+The 5K gate compares every candidate against its matched pretrained baseline. Recall regression limits, finite-feature checks, positive-pair margin, download success, supported-category slices, and taxonomy-neighbor metrics are recorded. Notebook metrics are retained as historical context, not direct gates, because their domains and candidate-set sizes differ.
+
+What this optimizes: stopping architectural drift early instead of discovering retrieval deterioration after a 50K or full-catalog run.

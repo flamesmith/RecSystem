@@ -1,0 +1,23 @@
+primary_metrics:
+  - bidirectional_recall_at_1
+  - bidirectional_recall_at_10
+  - mean_positive_cosine
+
+promotion_from_5k:
+  maximum_recall_at_10_regression_percentage_points: 2.0
+  maximum_recall_at_1_regression_percentage_points: 3.0
+  minimum_finite_embedding_fraction: 1.0
+  minimum_successful_feature_fraction: 0.97
+  require_positive_pair_margin: true
+  require_no_supported_slice_regression_over_percentage_points: 5.0
+  minimum_supported_slice_queries: 25
+
+reconsider_at_50k:
+  maximum_recall_at_10_regression_vs_5k_percentage_points: 2.0
+  maximum_taxonomy_precision_at_10_regression_percentage_points: 3.0
+  action: stop_and_review_sampling_text_aggregation_negative_sampling_and_adapter_capacity
+
+historical_context:
+  furniture_text_strategy_summary: ../models/siglip2_furniture_text_strategy_benchmark/strategy_summary.csv
+  furniture_taxonomy_experiment: ../models/siglip2_furniture_taxonomy_ab/experiment.json
+  general_playground_experiment: ../models/siglip2_playground/experiment.json

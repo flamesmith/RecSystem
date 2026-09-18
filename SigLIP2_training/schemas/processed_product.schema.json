@@ -27,6 +27,10 @@
     "pipeline_version": {"const": "1.0.0"},
     "config_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "source_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "sampling_priority": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "duplicate_group_id": {"type": "string", "pattern": "^[a-f0-9]{20}$"},
+    "split": {"enum": ["train", "validation", "test"]},
+    "leaf_category": {"type": "string"},
     "cleaning_stats": {"type": "object"}
   },
   "additionalProperties": false

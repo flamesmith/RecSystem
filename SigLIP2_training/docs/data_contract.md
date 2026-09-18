@@ -26,6 +26,13 @@ Lineage fields are mandatory:
 
 Downstream feature shards and model checkpoints must repeat the pipeline version and configuration hash in their manifests.
 
+Pilot records add deterministic experiment fields:
+
+- `sampling_priority`: seeded catalog-sampling hash.
+- `duplicate_group_id`: connected component formed by exact normalized description or shared image URL.
+- `split`: `train`, `validation`, or `test`; one duplicate group can belong to only one split.
+- `leaf_category`: final source taxonomy level, or an empty string when unavailable.
+
 ## Training versus inference
 
 Catalog products use the complete product transformation. Natural user queries receive only Unicode and whitespace normalization; they must not be assigned invented taxonomy or have query terms removed as marketing boilerplate.
@@ -47,5 +54,7 @@ Each `features-*.npz` shard is atomic and contains aligned rows:
 - `text_taxonomy`: normalized taxonomy embeddings, shape `[N, 768]`.
 - `text_chunks`: up to four normalized chunk embeddings, shape `[N, 4, 768]`.
 - `text_chunk_mask`: valid-chunk mask, shape `[N, 4]`.
+- `taxonomy_mask`: indicates whether a real taxonomy string was present; missing taxonomy is never replaced with an invented label.
+- `split`, `duplicate_group_id`, `category_path`, and `leaf_category`: aligned evaluation metadata.
 
 Floating-point arrays are finite `float16` values. The manifest binds each shard set to its source metadata, feature configuration, cache configuration, packages, and Git revision. These are final pretrained embeddings, not the 196 vision patch tokens consumed by SigLIP2's native pooling head.

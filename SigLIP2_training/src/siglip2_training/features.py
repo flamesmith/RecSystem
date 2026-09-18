@@ -21,6 +21,8 @@ class FeatureExtractionResult:
     shards: tuple[str, ...]
     embedding_dimension: int
     device: str
+    pretrained_logit_scale: float
+    pretrained_logit_bias: float
     elapsed_seconds: float
 
 
@@ -90,6 +92,21 @@ def _safe_text(record: dict[str, Any], key: str) -> str:
     return value if isinstance(value, str) else ""
 
 
+def _completed_shards(output_directory: Path) -> tuple[list[str], set[str]]:
+    names = sorted(path.name for path in output_directory.glob("features-*.npz"))
+    completed: set[str] = set()
+    for expected_index, name in enumerate(names):
+        if name != f"features-{expected_index:05d}.npz":
+            raise ValueError("Existing feature shards are not contiguous")
+        with np.load(output_directory / name, allow_pickle=False) as shard:
+            product_ids = [str(value) for value in shard["product_id"]]
+        overlap = completed.intersection(product_ids)
+        if overlap:
+            raise ValueError(f"Duplicate product IDs across existing shards: {sorted(overlap)[:3]}")
+        completed.update(product_ids)
+    return names, completed
+
+
 def _extract_batch(
     *,
     records: Sequence[dict[str, Any]],
@@ -105,6 +122,13 @@ def _extract_batch(
 ) -> dict[str, np.ndarray]:
     arrays: dict[str, np.ndarray] = {
         "product_id": np.asarray([str(record["product_id"]) for record in records]),
+        "split": np.asarray([str(record.get("split", "")) for record in records]),
+        "duplicate_group_id": np.asarray(
+            [str(record.get("duplicate_group_id", "")) for record in records]
+        ),
+        "category_path": np.asarray([str(record.get("category_path", "")) for record in records]),
+        "leaf_category": np.asarray([str(record.get("leaf_category", "")) for record in records]),
+        "taxonomy_mask": np.asarray([bool(record.get("taxonomy_text")) for record in records]),
         "image": _encode_images(model, image_processor, images, device),
     }
     if enabled_views.get("raw_first_64", True):
@@ -129,7 +153,7 @@ def _extract_batch(
         arrays["text_taxonomy"] = _encode_texts(
             model,
             tokenizer,
-            [_safe_text(record, "taxonomy_text") or _safe_text(record, "title") for record in records],
+            [_safe_text(record, "taxonomy_text") for record in records],
             device,
             text_batch_size,
             maximum_tokens,
@@ -165,11 +189,17 @@ def extract_feature_shards(
     output_directory: Path,
     config: dict[str, Any],
     limit: int | None = None,
+    resume: bool = False,
 ) -> FeatureExtractionResult:
     started = time.perf_counter()
     output_directory.mkdir(parents=True, exist_ok=True)
-    if (output_directory / "index.json").exists() or any(output_directory.glob("features-*.npz")):
-        raise FileExistsError(f"Feature output directory is not empty: {output_directory}")
+    if (output_directory / "index.json").exists():
+        raise FileExistsError(f"Feature output is already complete: {output_directory}")
+    existing_shards, completed_product_ids = _completed_shards(output_directory)
+    if existing_shards and not resume:
+        raise FileExistsError(
+            f"Partial feature output exists; rerun with resume enabled: {output_directory}"
+        )
     model_config = config["model"]
     runtime = config["runtime"]
     local_only = bool(model_config.get("local_files_only", True))
@@ -202,9 +232,9 @@ def extract_feature_shards(
         raise ValueError("image_batch_size and shard_size must be positive")
 
     source_records = 0
-    written_records = 0
+    written_records = len(completed_product_ids)
     failed_records = 0
-    shard_names: list[str] = []
+    shard_names: list[str] = list(existing_shards)
     shard_arrays: dict[str, list[np.ndarray]] = {}
     shard_rows = 0
 
@@ -255,6 +285,8 @@ def extract_feature_shards(
             if limit is not None and source_records >= limit:
                 break
             source_records += 1
+            if str(record.get("product_id")) in completed_product_ids:
+                continue
             try:
                 cached_image = cache.get_or_download(str(record["image_url"]))
                 with Image.open(cached_image.path) as source_image:
@@ -297,6 +329,8 @@ def extract_feature_shards(
         shards=tuple(shard_names),
         embedding_dimension=dimension,
         device=device,
+        pretrained_logit_scale=float(model.logit_scale.detach().exp().cpu()),
+        pretrained_logit_bias=float(model.logit_bias.detach().cpu()),
         elapsed_seconds=round(time.perf_counter() - started, 4),
     )
     (output_directory / "index.json").write_text(

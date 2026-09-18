@@ -1,0 +1,25 @@
+seed: 42
+
+runtime:
+  device_preference:
+    - mps
+    - cpu
+  batch_size: 256
+  epochs: 20
+  early_stopping_patience: 5
+
+adapter:
+  bottleneck_dimension: 128
+  dropout: 0.05
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  maximum_logit_scale: 200.0
+
+strategies:
+  - raw_first_64
+  - canonical_64
+  - multichunk_64
+  - multichunk_with_taxonomy
+
+multichunk_with_taxonomy:
+  taxonomy_weight: 0.20

@@ -16,7 +16,9 @@ from .config import config_hash, load_yaml
 from .features import extract_feature_shards
 from .manifest import build_manifest, write_manifest
 from .metadata import amazon_record_to_product, iter_jsonl, open_jsonl_writer
+from .sampling import select_deterministic_sample, transform_and_split
 from .text import DescriptionProcessor
+from .training import train_adapter_pilot
 
 
 def _project_root() -> Path:
@@ -161,6 +163,80 @@ def command_preprocess(arguments: argparse.Namespace) -> int:
     return 0
 
 
+def command_sample_catalog(arguments: argparse.Namespace) -> int:
+    started = time.perf_counter()
+    project_root = _project_root()
+    description_config = load_yaml(arguments.description_config)
+    pilot_config = load_yaml(arguments.pilot_config)
+    sample_config = pilot_config["sample"]
+    split_config = pilot_config["splits"]
+    tokenizer_config = pilot_config["tokenizer"]
+    input_path = Path(arguments.input).resolve()
+    output_path = Path(arguments.output).resolve()
+    selection = select_deterministic_sample(
+        iter_jsonl(input_path),
+        description_config=description_config,
+        sample_size=int(sample_config["size"]),
+        seed=str(sample_config["seed"]),
+        require_image=bool(sample_config.get("require_image", True)),
+        require_text=bool(sample_config.get("require_text", True)),
+    )
+    if len(selection.records) < int(sample_config["size"]):
+        raise RuntimeError(
+            f"Only {len(selection.records)} eligible records were found for a "
+            f"{sample_config['size']}-record sample"
+        )
+    tokenizer = _load_tokenizer(
+        str(tokenizer_config["model_id"]), bool(tokenizer_config.get("local_files_only", True))
+    )
+    processor = DescriptionProcessor(description_config, tokenizer=tokenizer)
+    transformed, transformed_statistics = transform_and_split(
+        selection.records,
+        description_config=description_config,
+        processor=processor,
+        seed=str(sample_config["seed"]),
+        train_fraction=float(split_config["train"]),
+        validation_fraction=float(split_config["validation"]),
+    )
+    part_path = output_path.with_name(f"{output_path.stem}.part{output_path.suffix}")
+    try:
+        with open_jsonl_writer(part_path) as output:
+            for record in transformed:
+                output.write(json.dumps(record, ensure_ascii=False) + "\n")
+        part_path.replace(output_path)
+    except Exception:
+        part_path.unlink(missing_ok=True)
+        raise
+    statistics = {
+        "source_records": selection.source_records,
+        "eligible_records": selection.eligible_records,
+        "missing_product_id": selection.missing_product_id,
+        "missing_image": selection.missing_image,
+        "missing_text": selection.missing_text,
+        **transformed_statistics,
+        "elapsed_seconds": round(time.perf_counter() - started, 4),
+    }
+    summary_path = output_path.with_name(output_path.name + ".summary.json")
+    manifest_path = output_path.with_name(output_path.name + ".manifest.json")
+    summary_path.write_text(json.dumps(statistics, indent=2), encoding="utf-8")
+    manifest = build_manifest(
+        project_root=project_root.parent,
+        command=sys.argv,
+        inputs={"metadata": str(input_path)},
+        outputs={"pilot_sample": str(output_path), "summary": str(summary_path)},
+        configuration={
+            "description_path": str(Path(arguments.description_config).resolve()),
+            "description_hash": config_hash(description_config),
+            "pilot_path": str(Path(arguments.pilot_config).resolve()),
+            "pilot_hash": config_hash(pilot_config),
+        },
+        statistics=statistics,
+    )
+    write_manifest(manifest_path, manifest)
+    print(json.dumps({"summary": statistics, "output": str(output_path)}, indent=2))
+    return 0
+
+
 def command_cache_status(arguments: argparse.Namespace) -> int:
     config = load_yaml(arguments.config)
     cache = ImageCache.from_config(config, _project_root())
@@ -260,6 +336,7 @@ def command_extract_features(arguments: argparse.Namespace) -> int:
         output_directory=output_directory,
         config=feature_config,
         limit=arguments.limit,
+        resume=arguments.resume,
     )
     statistics = dict(result.__dict__)
     manifest = build_manifest(
@@ -281,6 +358,53 @@ def command_extract_features(arguments: argparse.Namespace) -> int:
     return 0
 
 
+def command_train_adapters(arguments: argparse.Namespace) -> int:
+    project_root = _project_root()
+    training_config = load_yaml(arguments.config)
+    guardrail_config = load_yaml(arguments.guardrails)
+    output_directory = Path(arguments.output).resolve()
+    results = train_adapter_pilot(
+        feature_directory=arguments.features,
+        output_directory=output_directory,
+        training_config=training_config,
+        guardrail_config=guardrail_config,
+    )
+    manifest = build_manifest(
+        project_root=project_root.parent,
+        command=sys.argv,
+        inputs={"feature_directory": str(Path(arguments.features).resolve())},
+        outputs={
+            "checkpoint_directory": str(output_directory),
+            "results": str(output_directory / "results.json"),
+        },
+        configuration={
+            "training_path": str(Path(arguments.config).resolve()),
+            "training_hash": config_hash(training_config),
+            "guardrails_path": str(Path(arguments.guardrails).resolve()),
+            "guardrails_hash": config_hash(guardrail_config),
+        },
+        statistics={
+            "rows": results["rows"],
+            "selection": results["selection"],
+            "elapsed_seconds": results["elapsed_seconds"],
+        },
+    )
+    manifest_path = output_directory / "manifest.json"
+    write_manifest(manifest_path, manifest)
+    print(
+        json.dumps(
+            {
+                "selection": results["selection"],
+                "held_out_test": results["held_out_test"],
+                "elapsed_seconds": results["elapsed_seconds"],
+                "manifest": str(manifest_path),
+            },
+            indent=2,
+        )
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="SigLIP2 full-catalog training utilities")
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -296,6 +420,15 @@ def build_parser() -> argparse.ArgumentParser:
     preprocess.add_argument("--tokenizer")
     preprocess.add_argument("--local-files-only", action="store_true")
     preprocess.set_defaults(function=command_preprocess)
+
+    sample_catalog = subparsers.add_parser(
+        "sample-catalog", help="Create a deterministic leakage-aware catalog pilot"
+    )
+    sample_catalog.add_argument("--input", required=True)
+    sample_catalog.add_argument("--output", required=True)
+    sample_catalog.add_argument("--description-config", required=True)
+    sample_catalog.add_argument("--pilot-config", required=True)
+    sample_catalog.set_defaults(function=command_sample_catalog)
 
     cache_status = subparsers.add_parser("cache-status", help="Inspect the bounded image cache")
     cache_status.add_argument("--config", required=True)
@@ -321,7 +454,17 @@ def build_parser() -> argparse.ArgumentParser:
     extract_features.add_argument("--config", required=True)
     extract_features.add_argument("--cache-config", required=True)
     extract_features.add_argument("--limit", type=int)
+    extract_features.add_argument("--resume", action="store_true")
     extract_features.set_defaults(function=command_extract_features)
+
+    train_adapters = subparsers.add_parser(
+        "train-adapters", help="Train and evaluate guarded post-embedding adapters"
+    )
+    train_adapters.add_argument("--features", required=True)
+    train_adapters.add_argument("--output", required=True)
+    train_adapters.add_argument("--config", required=True)
+    train_adapters.add_argument("--guardrails", required=True)
+    train_adapters.set_defaults(function=command_train_adapters)
     return parser
 
 
