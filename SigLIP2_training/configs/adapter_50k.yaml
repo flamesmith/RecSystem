@@ -1,0 +1,32 @@
+seed: 42
+
+runtime:
+  device_preference:
+    - mps
+    - cpu
+  batch_size: 256
+  epochs: 30
+  early_stopping_patience: 6
+
+adapter:
+  bottleneck_dimension: 128
+  dropout: 0.05
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  maximum_logit_scale: 200.0
+
+strategies:
+  - raw_first_64
+  - multichunk_64
+  - multichunk_with_taxonomy
+
+multichunk_with_taxonomy:
+  taxonomy_weight: 0.20
+
+reference_5k:
+  strategy: multichunk_64
+  checkpoint: checkpoints/pilot_5k_tuned/multichunk_64.pt
+
+evaluation:
+  bootstrap_resamples: 5000
+  confidence_level: 0.95

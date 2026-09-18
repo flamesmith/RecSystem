@@ -2,7 +2,12 @@ from __future__ import annotations
 
 import unittest
 
-from siglip2_training.sampling import select_deterministic_sample, stable_priority, transform_and_split
+from siglip2_training.sampling import (
+    preserve_fixed_evaluation,
+    select_deterministic_sample,
+    stable_priority,
+    transform_and_split,
+)
 from siglip2_training.text import DescriptionProcessor
 
 
@@ -63,6 +68,28 @@ class SamplingTests(unittest.TestCase):
         self.assertEqual(len({record["split"] for record in transformed}), 1)
         self.assertEqual(len({record["duplicate_group_id"] for record in transformed}), 1)
         self.assertEqual(statistics["duplicate_groups"], 1)
+
+    def test_scaled_sample_preserves_evaluation_and_excludes_duplicates(self) -> None:
+        records = [
+            {"product_id": "train", "duplicate_group_id": "g1", "split": "test"},
+            {"product_id": "validation", "duplicate_group_id": "g2", "split": "train"},
+            {"product_id": "new-duplicate", "duplicate_group_id": "g2", "split": "train"},
+            {"product_id": "test", "duplicate_group_id": "g3", "split": "train"},
+            {"product_id": "new", "duplicate_group_id": "g4", "split": "validation"},
+        ]
+        fixed = [
+            {"product_id": "train", "split": "train"},
+            {"product_id": "validation", "split": "validation"},
+            {"product_id": "test", "split": "test"},
+        ]
+        kept, statistics = preserve_fixed_evaluation(records, fixed)
+        split_by_id = {record["product_id"]: record["split"] for record in kept}
+        self.assertEqual(split_by_id["validation"], "validation")
+        self.assertEqual(split_by_id["test"], "test")
+        self.assertEqual(split_by_id["train"], "train")
+        self.assertEqual(split_by_id["new"], "train")
+        self.assertNotIn("new-duplicate", split_by_id)
+        self.assertEqual(statistics["excluded_evaluation_duplicates"], 1)
 
 
 if __name__ == "__main__":

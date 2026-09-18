@@ -29,6 +29,6 @@ image_validation:
   minimum_height: 64
 
 prefetch:
-  download_workers: 4
+  download_workers: 8
   batches_ahead: 2
   maximum_inflight_mib: 1024

@@ -16,7 +16,7 @@ from .config import config_hash, load_yaml
 from .features import extract_feature_shards
 from .manifest import build_manifest, write_manifest
 from .metadata import amazon_record_to_product, iter_jsonl, open_jsonl_writer
-from .sampling import select_deterministic_sample, transform_and_split
+from .sampling import preserve_fixed_evaluation, select_deterministic_sample, transform_and_split
 from .text import DescriptionProcessor
 from .training import train_adapter_pilot
 
@@ -198,6 +198,11 @@ def command_sample_catalog(arguments: argparse.Namespace) -> int:
         train_fraction=float(split_config["train"]),
         validation_fraction=float(split_config["validation"]),
     )
+    if arguments.fixed_pilot:
+        transformed, fixed_statistics = preserve_fixed_evaluation(
+            transformed, iter_jsonl(arguments.fixed_pilot)
+        )
+        transformed_statistics.update(fixed_statistics)
     part_path = output_path.with_name(f"{output_path.stem}.part{output_path.suffix}")
     try:
         with open_jsonl_writer(part_path) as output:
@@ -222,7 +227,12 @@ def command_sample_catalog(arguments: argparse.Namespace) -> int:
     manifest = build_manifest(
         project_root=project_root.parent,
         command=sys.argv,
-        inputs={"metadata": str(input_path)},
+        inputs={
+            "metadata": str(input_path),
+            "fixed_pilot": (
+                str(Path(arguments.fixed_pilot).resolve()) if arguments.fixed_pilot else None
+            ),
+        },
         outputs={"pilot_sample": str(output_path), "summary": str(summary_path)},
         configuration={
             "description_path": str(Path(arguments.description_config).resolve()),
@@ -264,6 +274,28 @@ def command_cache_prefetch(arguments: argparse.Namespace) -> int:
         "failed": 0,
     }
     seen: set[str] = set()
+    next_progress = 1000
+
+    def record_future(future: concurrent.futures.Future[str]) -> None:
+        nonlocal next_progress
+        try:
+            counts[future.result()] += 1
+        except Exception:
+            counts["failed"] += 1
+        processed = counts["cache_hits"] + counts["downloaded"] + counts["failed"]
+        if processed >= next_progress:
+            print(
+                json.dumps(
+                    {
+                        "progress": processed,
+                        "cache_hits": counts["cache_hits"],
+                        "downloaded": counts["downloaded"],
+                        "failed": counts["failed"],
+                    }
+                ),
+                flush=True,
+            )
+            next_progress += 1000
 
     def urls():
         for record in iter_jsonl(arguments.input):
@@ -295,15 +327,9 @@ def command_cache_prefetch(arguments: argparse.Namespace) -> int:
                     pending, return_when=concurrent.futures.FIRST_COMPLETED
                 )
                 for future in done:
-                    try:
-                        counts[future.result()] += 1
-                    except Exception:
-                        counts["failed"] += 1
+                    record_future(future)
         for future in concurrent.futures.as_completed(pending):
-            try:
-                counts[future.result()] += 1
-            except Exception:
-                counts["failed"] += 1
+            record_future(future)
     counts["elapsed_seconds"] = round(time.perf_counter() - started, 4)
     counts["cache_status"] = cache.status()
     report_path = Path(arguments.report).resolve()
@@ -428,6 +454,10 @@ def build_parser() -> argparse.ArgumentParser:
     sample_catalog.add_argument("--output", required=True)
     sample_catalog.add_argument("--description-config", required=True)
     sample_catalog.add_argument("--pilot-config", required=True)
+    sample_catalog.add_argument(
+        "--fixed-pilot",
+        help="Preserve validation/test membership and exclude their duplicates when scaling",
+    )
     sample_catalog.set_defaults(function=command_sample_catalog)
 
     cache_status = subparsers.add_parser("cache-status", help="Inspect the bounded image cache")

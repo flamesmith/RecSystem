@@ -73,6 +73,8 @@ Phase limits are ceilings and success gates, not automatic workload commitments.
 
 The first pilot uses a deterministic hash sample rather than the first 5,000 rows. Exact duplicate descriptions and shared image URLs are grouped before assigning train, validation, or test membership.
 
+The 50K expansion preserves the exact 5K validation/test IDs and removes any additional training row connected to them by an exact normalized description or shared image URL. This fixed benchmark is required for the 5K-versus-50K deterioration guardrail.
+
 ## Current status
 
 The reusable foundation and 5K pilot are complete. The selected trained multi-chunk adapter improved sealed-test bidirectional Recall@10 from 58.50% to 70.90%, with its 95% paired-bootstrap gain interval entirely above zero. See `docs/pilot_5k_results.md` for the full comparison and the fixed-evaluation 50K protocol. No full-catalog image download has been started.

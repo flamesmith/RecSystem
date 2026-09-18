@@ -339,12 +339,66 @@ def train_adapter_pilot(
     finite_fraction = float(
         np.mean([np.isfinite(value).all() for key, value in arrays.items() if value.dtype.kind == "f"])
     )
+    taxonomy_weight = float(
+        training_config.get("multichunk_with_taxonomy", {}).get("taxonomy_weight", 0.20)
+    )
+    minimum_slice_queries = int(
+        guardrail_config["promotion_from_5k"]["minimum_supported_slice_queries"]
+    )
+    reference_model = None
+    reference_text_values = None
+    reference_validation: dict[str, Any] | None = None
+    reference_config = training_config.get("reference_5k")
+    if reference_config:
+        reference_text_values = text_view(
+            arrays, str(reference_config["strategy"]), taxonomy_weight
+        )
+        reference_checkpoint = torch.load(
+            Path(reference_config["checkpoint"]), map_location=device
+        )
+        reference_training_config = reference_checkpoint["training_config"]
+        reference_adapter_config = reference_training_config["adapter"]
+        reference_feature_index = reference_checkpoint["feature_index"]
+        reference_model = ContrastiveAdapters(
+            dimension=int(images.shape[1]),
+            bottleneck=int(reference_adapter_config["bottleneck_dimension"]),
+            dropout=float(reference_adapter_config["dropout"]),
+            logit_scale=float(reference_feature_index["pretrained_logit_scale"]),
+            logit_bias=float(reference_feature_index["pretrained_logit_bias"]),
+            maximum_logit_scale=float(reference_adapter_config["maximum_logit_scale"]),
+        ).to(device)
+        reference_model.load_state_dict(reference_checkpoint["state_dict"])
+        reference_model.eval()
+        reference_validation_images, reference_validation_texts = _adapt_all(
+            reference_model,
+            images[validation_indices],
+            reference_text_values[validation_indices],
+            device,
+        )
+        reference_validation = {
+            "strategy": str(reference_config["strategy"]),
+            "checkpoint": str(reference_config["checkpoint"]),
+            "retrieval": paired_retrieval_metrics(
+                reference_validation_images, reference_validation_texts
+            ),
+            "taxonomy": neighbor_taxonomy_metrics(
+                reference_validation_images,
+                reference_validation_texts,
+                arrays["leaf_category"][validation_indices],
+            ),
+            "slices": slice_recall_at_10(
+                reference_validation_images,
+                reference_validation_texts,
+                arrays["category_path"][validation_indices],
+                minimum_slice_queries,
+            ),
+        }
     strategies: list[dict[str, Any]] = []
     for strategy_number, strategy in enumerate(training_config["strategies"]):
         text_values = text_view(
             arrays,
             strategy,
-            float(training_config.get("multichunk_with_taxonomy", {}).get("taxonomy_weight", 0.20)),
+            taxonomy_weight,
         )
         dimension = int(images.shape[1])
         model = ContrastiveAdapters(
@@ -365,9 +419,6 @@ def train_adapter_pilot(
         baseline_metrics = paired_retrieval_metrics(validation_images, validation_texts)
         baseline_taxonomy = neighbor_taxonomy_metrics(
             validation_images, validation_texts, arrays["leaf_category"][validation_indices]
-        )
-        minimum_slice_queries = int(
-            guardrail_config["promotion_from_5k"]["minimum_supported_slice_queries"]
         )
         baseline_slices = slice_recall_at_10(
             validation_images,
@@ -486,8 +537,46 @@ def train_adapter_pilot(
         result["selected_validation"] = (
             result["trained_validation"] if use_adapter else result["baseline_validation"]
         )
+        result["selected_taxonomy"] = (
+            result["trained_taxonomy"] if use_adapter else result["baseline_taxonomy"]
+        )
+        if reference_validation is not None:
+            scaling_settings = guardrail_config["reconsider_at_50k"]
+            recall_delta = (
+                result["selected_validation"]["bidirectional_recall@10"]
+                - reference_validation["retrieval"]["bidirectional_recall@10"]
+            )
+            taxonomy_delta = (
+                result["selected_taxonomy"]["cross_modal_same_leaf_precision@10"]
+                - reference_validation["taxonomy"]["cross_modal_same_leaf_precision@10"]
+            )
+            result["scaling_guardrail"] = {
+                "passed": bool(
+                    recall_delta
+                    >= -float(
+                        scaling_settings[
+                            "maximum_recall_at_10_regression_vs_5k_percentage_points"
+                        ]
+                    )
+                    / 100
+                    and taxonomy_delta
+                    >= -float(
+                        scaling_settings[
+                            "maximum_taxonomy_precision_at_10_regression_percentage_points"
+                        ]
+                    )
+                    / 100
+                ),
+                "validation_recall_at_10_delta": recall_delta,
+                "validation_taxonomy_precision_at_10_delta": taxonomy_delta,
+            }
+        else:
+            result["scaling_guardrail"] = {"passed": True}
+    scaling_candidates = [
+        result for result in strategies if result["scaling_guardrail"]["passed"]
+    ]
     winner = max(
-        strategies,
+        scaling_candidates or strategies,
         key=lambda result: (
             result["selected_validation"]["bidirectional_recall@10"],
             result["selected_validation"]["bidirectional_recall@1"],
@@ -497,7 +586,7 @@ def train_adapter_pilot(
     winning_texts = text_view(
         arrays,
         winner["strategy"],
-        float(training_config.get("multichunk_with_taxonomy", {}).get("taxonomy_weight", 0.20)),
+        taxonomy_weight,
     )
     test_images = images[test_indices]
     test_texts = winning_texts[test_indices]
@@ -533,6 +622,33 @@ def train_adapter_pilot(
         confidence_level=float(evaluation_config.get("confidence_level", 0.95)),
         seed=seed + 10000,
     )
+    reference_test: dict[str, Any] | None = None
+    reference_bootstrap_deltas: dict[str, Any] | None = None
+    if reference_model is not None and reference_text_values is not None:
+        reference_test_images, reference_test_texts = _adapt_all(
+            reference_model,
+            images[test_indices],
+            reference_text_values[test_indices],
+            device,
+        )
+        reference_test = {
+            "retrieval": paired_retrieval_metrics(reference_test_images, reference_test_texts),
+            "taxonomy": neighbor_taxonomy_metrics(
+                reference_test_images,
+                reference_test_texts,
+                arrays["leaf_category"][test_indices],
+            ),
+        }
+        reference_bootstrap_deltas = paired_bootstrap_recall_deltas(
+            reference_test_images,
+            reference_test_texts,
+            test_images,
+            test_texts,
+            ks=(1, 10),
+            resamples=int(evaluation_config.get("bootstrap_resamples", 5000)),
+            confidence_level=float(evaluation_config.get("confidence_level", 0.95)),
+            seed=seed + 20000,
+        )
     results = {
         "feature_directory": str(Path(feature_directory).resolve()),
         "device": device,
@@ -551,14 +667,18 @@ def train_adapter_pilot(
                 result["guardrails"]["passed"] for result in strategies
             ),
             "winner_guardrails_passed": bool(winner["guardrails"]["passed"]),
+            "scaling_guardrail_passed": bool(winner["scaling_guardrail"]["passed"]),
             "validation": winner["selected_validation"],
         },
+        "reference_5k_validation": reference_validation,
         "held_out_test": {
             "pretrained_retrieval": baseline_test_metrics,
             "selected_retrieval": test_metrics,
             "pretrained_taxonomy": baseline_test_taxonomy,
             "selected_taxonomy": test_taxonomy,
             "paired_bootstrap_deltas": bootstrap_deltas,
+            "reference_5k": reference_test,
+            "paired_bootstrap_deltas_vs_5k": reference_bootstrap_deltas,
         },
         "elapsed_seconds": round(time.perf_counter() - started, 4),
     }

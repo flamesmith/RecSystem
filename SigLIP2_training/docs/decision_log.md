@@ -87,3 +87,15 @@ What this optimizes: stopping architectural drift early instead of discovering r
 The selected multi-chunk adapter improved sealed-test bidirectional Recall@10 from 58.50% to 70.90% and Recall@1 from 27.46% to 41.19%. The paired 95% bootstrap intervals for both gains remained entirely above zero. Same-leaf precision@10 also improved from 7.69% to 9.88%. See `docs/pilot_5k_results.md` for the complete comparison.
 
 What this optimizes: scale to 50K only after demonstrating measurable retrieval improvement, numerical stability, category-slice health, and a no-regression fallback.
+
+## 2026-09-18 — Fixed-evaluation 50K expansion
+
+The 50K hash sample reuses the exact 512 validation and 488 test product IDs from the 5K pilot. All additional eligible products are training-only. Duplicate grouping across the expanded sample excluded 266 records whose descriptions or image URLs would connect training to fixed evaluation, including five former 5K training products.
+
+What this optimizes: a true data-scaling comparison where metric changes reflect additional training data rather than an easier or harder evaluation draw.
+
+## 2026-09-18 — Eight concurrent downloads for 50K
+
+The 5K run used four concurrent downloads. After measuring the new-image portion of the 50K prefetch, concurrency was increased to eight while retaining the same atomic writes, image validation, 8 GiB cache ceiling, and 30 GiB free-disk floor.
+
+What this optimizes: wall-clock download time without changing image content, model inputs, or storage safety.

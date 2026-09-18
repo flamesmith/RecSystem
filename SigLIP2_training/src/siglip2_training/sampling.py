@@ -172,3 +172,61 @@ def transform_and_split(
         "top_leaf_categories": dict(leaf_counts.most_common(20)),
     }
     return output, statistics
+
+
+def preserve_fixed_evaluation(
+    records: list[dict[str, Any]], fixed_records: Iterable[dict[str, Any]]
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    fixed = {str(record["product_id"]): str(record["split"]) for record in fixed_records}
+    invalid_splits = {split for split in fixed.values() if split not in {"train", "validation", "test"}}
+    if invalid_splits:
+        raise ValueError(f"Unexpected fixed split values: {sorted(invalid_splits)}")
+    selected_ids = {str(record["product_id"]) for record in records}
+    missing_fixed_ids = sorted(set(fixed) - selected_ids)
+    if missing_fixed_ids:
+        raise ValueError(f"Scaled sample does not contain {len(missing_fixed_ids)} fixed pilot products")
+
+    evaluation_splits_by_group: dict[str, set[str]] = {}
+    for record in records:
+        fixed_split = fixed.get(str(record["product_id"]))
+        if fixed_split in {"validation", "test"}:
+            evaluation_splits_by_group.setdefault(str(record["duplicate_group_id"]), set()).add(fixed_split)
+    conflicts = {
+        group_id: splits
+        for group_id, splits in evaluation_splits_by_group.items()
+        if len(splits) > 1
+    }
+    if conflicts:
+        raise ValueError(
+            f"Scaled duplicate groups bridge fixed validation and test: {len(conflicts)} groups"
+        )
+
+    kept: list[dict[str, Any]] = []
+    excluded = 0
+    fixed_training_excluded = 0
+    for record in records:
+        product_id = str(record["product_id"])
+        fixed_split = fixed.get(product_id)
+        evaluation_split = next(
+            iter(evaluation_splits_by_group.get(str(record["duplicate_group_id"]), set())), None
+        )
+        if fixed_split in {"validation", "test"}:
+            record["split"] = fixed_split
+            kept.append(record)
+        elif evaluation_split is not None:
+            excluded += 1
+            fixed_training_excluded += int(fixed_split == "train")
+        else:
+            record["split"] = "train"
+            kept.append(record)
+    split_counts = Counter(str(record["split"]) for record in kept)
+    statistics = {
+        "written_records": len(kept),
+        "excluded_evaluation_duplicates": excluded,
+        "fixed_training_products_excluded": fixed_training_excluded,
+        "fixed_pilot_products": len(fixed),
+        "fixed_validation_products": sum(split == "validation" for split in fixed.values()),
+        "fixed_test_products": sum(split == "test" for split in fixed.values()),
+        "split_counts": dict(sorted(split_counts.items())),
+    }
+    return kept, statistics

@@ -123,7 +123,11 @@ class TrainingTests(unittest.TestCase):
                     "require_positive_pair_margin": True,
                     "require_no_supported_slice_regression_over_percentage_points": 5.0,
                     "minimum_supported_slice_queries": 2,
-                }
+                },
+                "reconsider_at_50k": {
+                    "maximum_recall_at_10_regression_vs_5k_percentage_points": 2.0,
+                    "maximum_taxonomy_precision_at_10_regression_percentage_points": 3.0,
+                },
             }
             results = train_adapter_pilot(
                 feature_directory=feature_directory,
@@ -133,6 +137,18 @@ class TrainingTests(unittest.TestCase):
             )
             self.assertEqual(results["selection"]["strategy"], "raw_first_64")
             self.assertTrue((root / "output" / "results.json").exists())
+            training_config["reference_5k"] = {
+                "strategy": "raw_first_64",
+                "checkpoint": str(root / "output" / "raw_first_64.pt"),
+            }
+            scaled_results = train_adapter_pilot(
+                feature_directory=feature_directory,
+                output_directory=root / "scaled-output",
+                training_config=training_config,
+                guardrail_config=guardrails,
+            )
+            self.assertIsNotNone(scaled_results["reference_5k_validation"])
+            self.assertTrue(scaled_results["selection"]["scaling_guardrail_passed"])
 
 
 if __name__ == "__main__":

@@ -1,0 +1,14 @@
+sample:
+  size: 50000
+  seed: siglip2-home-kitchen-pilot-v1
+  require_image: true
+  require_text: true
+
+splits:
+  train: 0.80
+  validation: 0.10
+  test: 0.10
+
+tokenizer:
+  model_id: google/siglip2-base-patch16-224
+  local_files_only: true

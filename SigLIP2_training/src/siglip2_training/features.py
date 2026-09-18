@@ -246,6 +246,16 @@ def extract_feature_shards(
         shard_name = f"features-{len(shard_names):05d}.npz"
         _write_npz_atomic(output_directory / shard_name, combined)
         shard_names.append(shard_name)
+        print(
+            json.dumps(
+                {
+                    "feature_shard": shard_name,
+                    "shard_rows": shard_rows,
+                    "written_records": written_records,
+                }
+            ),
+            flush=True,
+        )
         shard_arrays = {}
         shard_rows = 0
 
