@@ -31,7 +31,7 @@ Passing these rules permits the next experiment; it does not prove production qu
 
 ## Reconsideration rule at 50K
 
-Stop automatic scaling if the 50K run loses more than 2 percentage points of Recall@10 or 3 percentage points of same-leaf precision@10 relative to the selected 5K configuration. Review sampling, text aggregation, false negatives, adapter capacity, and the frozen-tower assumption before continuing.
+Stop automatic scaling if the 50K run loses more than 2 percentage points of Recall@10 or 3 percentage points of same-leaf precision@10 relative to the selected 5K configuration. The comparison must reuse the exact fixed 5K validation and test products; new training rows that duplicate either fixed split are excluded. Review sampling, text aggregation, false negatives, adapter capacity, and the frozen-tower assumption before continuing.
 
 ## Historical reference points
 

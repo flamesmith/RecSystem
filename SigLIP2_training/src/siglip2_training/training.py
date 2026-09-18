@@ -75,6 +75,46 @@ def paired_retrieval_metrics(images: np.ndarray, texts: np.ndarray, ks: Sequence
     return metrics
 
 
+def _bidirectional_hit_values(images: np.ndarray, texts: np.ndarray, k: int) -> np.ndarray:
+    similarities = normalize_rows(images) @ normalize_rows(texts).T
+    targets = np.arange(len(images))
+    effective = min(k, len(images))
+    image_hits = np.any(np.argsort(-similarities, axis=1)[:, :effective] == targets[:, None], axis=1)
+    text_hits = np.any(np.argsort(-similarities.T, axis=1)[:, :effective] == targets[:, None], axis=1)
+    return (image_hits.astype(np.float32) + text_hits.astype(np.float32)) / 2
+
+
+def paired_bootstrap_recall_deltas(
+    baseline_images: np.ndarray,
+    baseline_texts: np.ndarray,
+    selected_images: np.ndarray,
+    selected_texts: np.ndarray,
+    *,
+    ks: Sequence[int],
+    resamples: int,
+    confidence_level: float,
+    seed: int,
+) -> dict[str, dict[str, float]]:
+    if resamples < 1 or not 0 < confidence_level < 1:
+        raise ValueError("Invalid bootstrap settings")
+    rng = np.random.default_rng(seed)
+    sample_indices = rng.integers(0, len(baseline_images), size=(resamples, len(baseline_images)))
+    alpha = (1.0 - confidence_level) / 2
+    output: dict[str, dict[str, float]] = {}
+    for k in ks:
+        baseline_hits = _bidirectional_hit_values(baseline_images, baseline_texts, k)
+        selected_hits = _bidirectional_hit_values(selected_images, selected_texts, k)
+        deltas = selected_hits - baseline_hits
+        bootstrap_means = deltas[sample_indices].mean(axis=1)
+        output[f"bidirectional_recall@{k}"] = {
+            "delta": float(deltas.mean()),
+            "confidence_lower": float(np.quantile(bootstrap_means, alpha)),
+            "confidence_upper": float(np.quantile(bootstrap_means, 1.0 - alpha)),
+            "confidence_level": confidence_level,
+        }
+    return output
+
+
 def neighbor_taxonomy_metrics(
     images: np.ndarray, texts: np.ndarray, leaves: np.ndarray, ks: Sequence[int] = (1, 5, 10)
 ) -> dict[str, float]:
@@ -482,6 +522,17 @@ def train_adapter_pilot(
     test_taxonomy = neighbor_taxonomy_metrics(
         test_images, test_texts, arrays["leaf_category"][test_indices]
     )
+    evaluation_config = training_config.get("evaluation", {})
+    bootstrap_deltas = paired_bootstrap_recall_deltas(
+        images[test_indices],
+        winning_texts[test_indices],
+        test_images,
+        test_texts,
+        ks=(1, 10),
+        resamples=int(evaluation_config.get("bootstrap_resamples", 5000)),
+        confidence_level=float(evaluation_config.get("confidence_level", 0.95)),
+        seed=seed + 10000,
+    )
     results = {
         "feature_directory": str(Path(feature_directory).resolve()),
         "device": device,
@@ -507,6 +558,7 @@ def train_adapter_pilot(
             "selected_retrieval": test_metrics,
             "pretrained_taxonomy": baseline_test_taxonomy,
             "selected_taxonomy": test_taxonomy,
+            "paired_bootstrap_deltas": bootstrap_deltas,
         },
         "elapsed_seconds": round(time.perf_counter() - started, 4),
     }

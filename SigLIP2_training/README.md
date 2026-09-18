@@ -67,7 +67,7 @@ The cache stores validated image bytes under content-independent URL hashes, use
 1. **Text strategy pilot — 50K products:** raw, canonical, multi-chunk, and taxonomy-aware views.
 2. **Optimization pilot — up to 200K products:** true batch size, hard negatives, balanced sampling, and bounded unfreezing.
 3. **Confirmation:** finalists on fixed cached validation data and repeated seeds.
-4. **Full catalog:** one resumable streaming feature-extraction pass followed by head training on stored features.
+4. **Full catalog:** one resumable streaming feature-extraction pass followed by adapter training on stored features.
 
 Phase limits are ceilings and success gates, not automatic workload commitments.
 
@@ -75,7 +75,7 @@ The first pilot uses a deterministic hash sample rather than the first 5,000 row
 
 ## Current status
 
-The reusable foundation is implemented and smoke-tested against the real Home & Kitchen metadata and image URLs. A real MPS pass also produced validated 768-dimensional image and text feature shards. See `docs/foundation_validation.md` for the measured gate. The next workload is a fixed, stratified Phase 1 sample; no full-catalog image download has been started.
+The reusable foundation and 5K pilot are complete. The selected trained multi-chunk adapter improved sealed-test bidirectional Recall@10 from 58.50% to 70.90%, with its 95% paired-bootstrap gain interval entirely above zero. See `docs/pilot_5k_results.md` for the full comparison and the fixed-evaluation 50K protocol. No full-catalog image download has been started.
 
 ## Run locally without installation
 

@@ -9,6 +9,7 @@ import numpy as np
 
 from siglip2_training.training import (
     group_safe_batches,
+    paired_bootstrap_recall_deltas,
     paired_retrieval_metrics,
     text_view,
     train_adapter_pilot,
@@ -22,6 +23,22 @@ class TrainingTests(unittest.TestCase):
         metrics = paired_retrieval_metrics(values, values)
         self.assertEqual(metrics["bidirectional_recall@1"], 1.0)
         self.assertGreater(metrics["positive_pair_margin"], 0.0)
+
+    def test_bootstrap_reports_zero_for_identical_systems(self) -> None:
+        values = np.eye(4, dtype=np.float32)
+        result = paired_bootstrap_recall_deltas(
+            values,
+            values,
+            values,
+            values,
+            ks=(1,),
+            resamples=100,
+            confidence_level=0.95,
+            seed=1,
+        )["bidirectional_recall@1"]
+        self.assertEqual(result["delta"], 0.0)
+        self.assertEqual(result["confidence_lower"], 0.0)
+        self.assertEqual(result["confidence_upper"], 0.0)
 
     def test_taxonomy_is_only_added_when_present(self) -> None:
         arrays = {

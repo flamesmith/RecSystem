@@ -81,3 +81,9 @@ What this optimizes: measurable learning with large negative sets while retainin
 The 5K gate compares every candidate against its matched pretrained baseline. Recall regression limits, finite-feature checks, positive-pair margin, download success, supported-category slices, and taxonomy-neighbor metrics are recorded. Notebook metrics are retained as historical context, not direct gates, because their domains and candidate-set sizes differ.
 
 What this optimizes: stopping architectural drift early instead of discovering retrieval deterioration after a 50K or full-catalog run.
+
+## 2026-09-18 — 5K gate passed with multi-chunk adapter
+
+The selected multi-chunk adapter improved sealed-test bidirectional Recall@10 from 58.50% to 70.90% and Recall@1 from 27.46% to 41.19%. The paired 95% bootstrap intervals for both gains remained entirely above zero. Same-leaf precision@10 also improved from 7.69% to 9.88%. See `docs/pilot_5k_results.md` for the complete comparison.
+
+What this optimizes: scale to 50K only after demonstrating measurable retrieval improvement, numerical stability, category-slice health, and a no-regression fallback.
