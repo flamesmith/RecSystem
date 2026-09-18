@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/siglip2/processed-product-v1.schema.json",
+  "title": "SigLIP2 processed product v1",
+  "type": "object",
+  "required": [
+    "product_id",
+    "category_path",
+    "taxonomy_text",
+    "description_clean",
+    "description_canonical",
+    "description_chunks",
+    "pipeline_version",
+    "config_hash",
+    "source_hash",
+    "cleaning_stats"
+  ],
+  "properties": {
+    "product_id": {"type": "string", "minLength": 1},
+    "title": {"type": "string"},
+    "image_url": {"type": ["string", "null"]},
+    "category_path": {"type": "string"},
+    "taxonomy_text": {"type": "string"},
+    "description_clean": {"type": "string"},
+    "description_canonical": {"type": "string"},
+    "description_chunks": {"type": "array", "items": {"type": "string"}, "maxItems": 4},
+    "pipeline_version": {"const": "1.0.0"},
+    "config_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "cleaning_stats": {"type": "object"}
+  },
+  "additionalProperties": false
+}

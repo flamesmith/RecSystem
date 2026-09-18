@@ -1,0 +1,10 @@
+.git
+.venv
+artifacts
+cache
+features
+checkpoints
+data
+__pycache__
+*.pyc
+*.ipynb

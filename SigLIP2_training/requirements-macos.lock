@@ -1,0 +1,9 @@
+# Versions verified in the existing .venv-siglip2 environment on 2026-09-18.
+numpy==1.26.4
+pandas==2.2.3
+Pillow==11.3.0
+PyYAML==6.0.3
+requests==2.34.2
+safetensors==0.8.0
+torch==2.2.2
+transformers==4.57.6

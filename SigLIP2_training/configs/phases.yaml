@@ -1,0 +1,32 @@
+phase_1:
+  name: text_strategy_pilot
+  maximum_products: 50000
+  text_variants:
+    - raw_first_64
+    - canonical_64
+    - multichunk_64
+    - multichunk_with_taxonomy_view
+  trainable_scope: projection_heads
+
+phase_2:
+  name: optimization_pilot
+  maximum_products: 200000
+  compare:
+    - true_contrastive_batch_size
+    - projection_head_learning_rate
+    - taxonomy_balanced_sampling
+    - hard_negative_sampling
+    - final_block_unfreezing
+
+phase_3:
+  name: confirmation
+  finalists: 2
+  repeated_seeds: 2
+  fixed_validation_catalog: true
+
+phase_4:
+  name: full_catalog
+  image_download_passes: 1
+  extract_frozen_features: true
+  default_trainable_scope: projection_heads
+  optional_partial_unfreeze: true

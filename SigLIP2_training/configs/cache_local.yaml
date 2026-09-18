@@ -1,0 +1,34 @@
+cache:
+  root: cache/training_images
+  database: cache/training_images/cache.sqlite
+  maximum_size_gib: 8
+  eviction_target_gib: 6
+  minimum_free_disk_gib: 30
+
+validation_cache:
+  root: cache/validation_images
+  maximum_size_gib: 2
+  evict: false
+
+download:
+  connect_timeout_seconds: 10
+  read_timeout_seconds: 30
+  maximum_attempts: 3
+  backoff_seconds: 1.5
+  maximum_file_mib: 12
+  chunk_size_kib: 256
+  user_agent: SigLIP2-training-research/1.0
+
+image_validation:
+  allowed_formats:
+    - JPEG
+    - PNG
+    - WEBP
+  maximum_pixels: 40000000
+  minimum_width: 64
+  minimum_height: 64
+
+prefetch:
+  download_workers: 4
+  batches_ahead: 2
+  maximum_inflight_mib: 1024

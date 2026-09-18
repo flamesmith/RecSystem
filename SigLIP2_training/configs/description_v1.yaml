@@ -1,0 +1,95 @@
+pipeline:
+  name: home_kitchen_description
+  version: 1.0.0
+
+normalization:
+  unicode_form: NFKC
+  lowercase_fingerprints: true
+  collapse_whitespace: true
+  strip_html: true
+
+deduplication:
+  exact_sentences: true
+  near_duplicate_sentences: true
+  similarity_threshold: 0.92
+  minimum_tokens_for_near_duplicate: 6
+
+boilerplate:
+  drop_sentence_patterns:
+    - "\\bmanufacturer(?:'s)? warranty\\b"
+    - "\\bwarranty information\\b"
+    - "\\bshipping (?:and )?handling\\b"
+    - "\\bactual colou?r may vary\\b"
+    - "\\bcolors? may vary due to (?:your )?(?:screen|monitor)\\b"
+    - "\\bplease (?:see|refer to) (?:the )?(?:image|images|picture|pictures)\\b"
+    - "\\bcontact us (?:first )?if you\\b"
+    - "\\b(?:100% )?customer satisfaction\\b"
+    - "\\bbuy with confidence\\b"
+
+taxonomy:
+  excluded_labels:
+    - Home & Kitchen
+    - Amazon Home
+  maximum_informative_levels: 3
+  separator: "; "
+
+attributes:
+  include_keys:
+    - Brand
+    - Material
+    - Color
+    - Size
+    - Style
+    - Pattern
+    - Shape
+    - Capacity
+    - Product Dimensions
+    - Item Dimensions LxWxH
+    - Item Weight
+    - Number of Items
+    - Unit Count
+    - Special Feature
+    - Special Features
+  maximum_attributes: 8
+
+canonical:
+  maximum_words: 54
+  maximum_sentences: 4
+  first_sentence_bonus: 3.0
+  measurement_bonus: 2.0
+  high_signal_term_bonus: 1.0
+  high_signal_terms:
+    - material
+    - color
+    - style
+    - size
+    - dimension
+    - capacity
+    - shape
+    - finish
+    - fabric
+    - wood
+    - metal
+    - glass
+    - cotton
+    - ceramic
+    - stainless
+    - storage
+    - adjustable
+    - washable
+    - waterproof
+
+chunking:
+  model_id: google/siglip2-base-patch16-224
+  maximum_tokens: 64
+  overlap_tokens: 12
+  maximum_chunks: 4
+  prefix_with_leaf: true
+  reserved_special_tokens: 2
+
+image_url:
+  required_variant: MAIN
+  preferred_sizes:
+    - large
+    - hi_res
+    - thumb
