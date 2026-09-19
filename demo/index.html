@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>RecSystem demo</title>
+<style>
+  body { font-family: -apple-system, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+  h1 { font-size: 1.3rem; }
+  #controls { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  input { font-size: 1rem; padding: 0.4rem; flex: 1; min-width: 200px; }
+  button { font-size: 1rem; padding: 0.4rem 0.8rem; cursor: pointer; }
+  #samples { margin-bottom: 1.5rem; font-size: 0.85rem; color: #555; }
+  #samples button { font-size: 0.8rem; padding: 0.2rem 0.5rem; margin: 0.15rem; }
+  .carousel { margin-bottom: 1.5rem; }
+  .carousel h2 { font-size: 1rem; margin-bottom: 0.4rem; }
+  .row { display: flex; gap: 0.6rem; overflow-x: auto; padding-bottom: 0.4rem; }
+  .card { border: 1px solid #ddd; border-radius: 6px; padding: 0.5rem; min-width: 140px; font-size: 0.8rem; flex-shrink: 0; }
+  .card .rank { color: #888; }
+  .card .asin { font-family: monospace; font-weight: bold; }
+  .card .score { color: #555; }
+  #error { color: #b00; margin-bottom: 1rem; }
+  #query-label { font-weight: bold; margin-bottom: 1rem; }
+</style>
+</head>
+<body>
+<h1>RecSystem demo</h1>
+<p>Reads directly from the FastAPI serving layer (<code>api.py</code>) -- no
+model runs here, this is only calling the precomputed lookup.</p>
+
+<div id="controls">
+  <input id="asin" placeholder="item asin, e.g. 0560467893" />
+  <button onclick="lookup()">Get recommendations</button>
+</div>
+<div id="samples">Try one: <span id="sample-buttons">loading…</span></div>
+
+<div id="error"></div>
+<div id="query-label"></div>
+<div id="results"></div>
+
+<script>
+const API = "http://127.0.0.1:8000";
+const CAROUSEL_TITLES = {
+  complements: "Complements (TTN)",
+  substitutes: "Substitutes (SigLIP2)",
+  popular_all_time: "Popular in category — all time",
+  popular_recency: "Popular in category — recent",
+};
+
+async function loadSamples() {
+  try {
+    const res = await fetch(`${API}/items/sample?n=8`);
+    const data = await res.json();
+    const el = document.getElementById("sample-buttons");
+    el.innerHTML = "";
+    for (const asin of data.asins) {
+      const b = document.createElement("button");
+      b.textContent = asin;
+      b.onclick = () => { document.getElementById("asin").value = asin; lookup(); };
+      el.appendChild(b);
+    }
+  } catch (e) {
+    document.getElementById("sample-buttons").textContent =
+      "(couldn't reach the API -- is it running? see demo/README.md)";
+  }
+}
+
+function card(rec) {
+  return `<div class="card">
+    <div class="rank">#${rec.rank}</div>
+    <div class="asin">${rec.candidate_asin}</div>
+    <div class="score">score ${rec.score.toFixed(3)}</div>
+  </div>`;
+}
+
+async function lookup() {
+  const asin = document.getElementById("asin").value.trim();
+  const errorEl = document.getElementById("error");
+  const labelEl = document.getElementById("query-label");
+  const resultsEl = document.getElementById("results");
+  errorEl.textContent = "";
+  resultsEl.innerHTML = "";
+  labelEl.textContent = "";
+  if (!asin) { errorEl.textContent = "enter an asin first"; return; }
+
+  let res;
+  try {
+    res = await fetch(`${API}/items/${encodeURIComponent(asin)}/recommendations`);
+  } catch (e) {
+    errorEl.textContent = `couldn't reach the API at ${API} -- is it running?`;
+    return;
+  }
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    errorEl.textContent = `${res.status}: ${body.detail || res.statusText}`;
+    return;
+  }
+  const data = await res.json();
+  labelEl.textContent = `Recommendations for ${data.query_asin} (snapshot ${data.snapshot})`;
+
+  for (const [key, title] of Object.entries(CAROUSEL_TITLES)) {
+    const recs = data.carousels[key] || [];
+    const section = document.createElement("div");
+    section.className = "carousel";
+    section.innerHTML = `<h2>${title}</h2>` +
+      (recs.length
+        ? `<div class="row">${recs.map(card).join("")}</div>`
+        : `<div style="color:#888; font-size:0.85rem;">no recommendations</div>`);
+    resultsEl.appendChild(section);
+  }
+}
+
+loadSamples();
+</script>
+</body>
+</html>

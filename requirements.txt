@@ -6,3 +6,11 @@ implicit==0.7.2
 matplotlib==3.10.3
 seaborn==0.13.2
 ipykernel==7.2.0
+fastapi==0.141.1
+uvicorn==0.53.0
+
+# Known gap, not fixed here (out of scope for this change): this file is
+# missing several packages the pipeline actually imports -- pyarrow
+# (parquet), sentence-transformers / transformers (SBERT, SigLIP2), nltk
+# (feature_extraction_workflow), requests, Pillow, tqdm. `implicit` above is
+# only used by the now-removed standalone BPR recommender and can likely go.

@@ -5,16 +5,45 @@
 ```
 v1-recommendations
 │
-├── TTN/                Complete the Look (complementary products)
-├── SigLIP2/             Visually Similar Products (substitutes)
-└── Popularity/           baseline / fallback for Complete the Look
+├── TTN/                Complements ("Complete the Look")
+├── SigLIP2/             Substitutes ("Visually Similar Products")
+├── Popularity/           Popular in category (all-time + recency)
+├── prepare_serving.py    unifies all three into one table
+├── load_serving_db.py    loads that table into SQLite
+├── api.py                FastAPI serving layer
+└── demo/                 static demo page calling the API
 ```
 
 Each folder has a `README.md` with what it does and the exact commands to
-run it. Build order: `TTN/build_data.py` first (both `SigLIP2/` and
-`Popularity/` read what it produces), then the rest in any order. Once all
-three have been built, `results.ipynb` (this directory) loads them and
-reports Recall@10/@100.
+run it. Full pipeline, in order, for one snapshot:
+
+```
+# 1. Data + models (TTN first -- SigLIP2/Popularity both read its output)
+python TTN/build_data.py --window-days 90
+python TTN/encode_descriptions.py --snapshot w90_2017-12-09     # optional, recommended
+python TTN/build_model.py --snapshot w90_2017-12-09             # -> a candidate version
+python SigLIP2/build_siglip2.py --snapshot w90_2017-12-09
+python Popularity/build_popularity.py --snapshot w90_2017-12-09
+
+# 2. Recommendation generation (needs a specific TTN --version from step 1's output)
+python TTN/generate_recommendations.py --snapshot w90_2017-12-09 --version <date>_v_00x
+python SigLIP2/generate_recommendations.py --snapshot w90_2017-12-09
+
+# 3. Serving
+python prepare_serving.py --snapshot w90_2017-12-09
+python load_serving_db.py --snapshot w90_2017-12-09
+SNAPSHOT=w90_2017-12-09 uvicorn api:app --reload
+
+# 4. results.ipynb (this directory) evaluates Recall@10/@100 for TTN/SigLIP2/POP;
+#    demo/index.html is a browsable page over the live API
+```
+
+Different `--window-days` values produce distinct, coexisting snapshots
+(`data/tower/w{window_days}_{date_threshold}/`) rather than overwriting
+each other. TTN versions candidate checkpoints under each snapshot
+(`models/ttn/<date>_v_00x/`) rather than overwriting the last training run —
+promotion to "champion" (which version `generate_recommendations.py` and
+the API actually use) is a deliberate manual step, not automatic.
 
 The shared data pipeline TTN and SigLIP2 both read from —
 `feature_extraction_workflow/`, `embedding_analysis/`,
