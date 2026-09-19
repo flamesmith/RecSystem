@@ -35,9 +35,17 @@ Prerequisite: TTN/build_data.py must have already run for the given
 (each item's own category, the same node encoding used everywhere else in
 this project).
 
-Output is keyed by asin (not item_idx), matching every other stage's
-recommendation output -- item_idx is a snapshot-internal row position, not
-stable across snapshots with different item coverage.
+Output IS this carousel's final recommendation-generation artifact --
+Popularity has no separate "model" from its recommendation list, so unlike
+TTN and SigLIP2 there's no distinct generate_recommendations.py for it.
+Written directly in the locked recommendation-generation schema (see
+analysis notes / PLAN.md): one parquet, category_node_id | variant | rank |
+candidate_asin | score, top-20 per (category, variant) -- the same K used
+for TTN's and SigLIP2's per-query recommendation files, so filtering/
+serving prep can treat all three uniformly. Keyed by asin (not item_idx),
+matching every other stage's recommendation output -- item_idx is a
+snapshot-internal row position, not stable across snapshots with different
+item coverage.
 
 Usage: python Popularity/build_popularity.py --snapshot w90_2017-12-09
 """
@@ -48,13 +56,17 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+TOP_K = 20      # matches TTN's and SigLIP2's recommendation-generation depth
+
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
                      help="snapshot_id from TTN/build_data.py, e.g. w90_2017-12-09")
-OUT_DIR = DATA_DIR / "tower" / parser.parse_args().snapshot
-OUT_PATH = OUT_DIR / "popularity_top100.json"
+SNAPSHOT_DIR = DATA_DIR / "tower" / parser.parse_args().snapshot
+OUT_DIR = SNAPSHOT_DIR / "recommendations"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+OUT_PATH = OUT_DIR / "popularity.parquet"
 
 RECENCY_WINDOW_DAYS = 60          # Popularity's own recency window -- see
                                    # the module docstring for why this is
@@ -65,8 +77,8 @@ REFERENCE_DATE = pd.Timestamp(DATE_THRESHOLD)     # swap for pd.Timestamp.now() 
 cutoff_time = REFERENCE_DATE.timestamp()
 recency_start_time = (REFERENCE_DATE - pd.Timedelta(days=RECENCY_WINDOW_DAYS)).timestamp()
 
-asins = np.load(OUT_DIR / "item_asins.npy", allow_pickle=False).astype(str)
-node_of_item = np.load(OUT_DIR / "node_of_item.npy")
+asins = np.load(SNAPSHOT_DIR / "item_asins.npy", allow_pickle=False).astype(str)
+node_of_item = np.load(SNAPSHOT_DIR / "node_of_item.npy")
 idx_of = {a: i for i, a in enumerate(asins)}
 print(f"tower items: {len(asins):,}")
 
@@ -82,37 +94,41 @@ print(f"reviews before {DATE_THRESHOLD}: {len(all_time):,} of {len(df_reviews):,
 print(f"  of those, in the {RECENCY_WINDOW_DAYS}-day window before it: {len(recency):,}")
 
 
-def top_by_node(reviews):
-    """Raw purchase-proxy count per tower item, ranked within its own category."""
+def top_by_node(reviews, variant):
+    """Raw purchase-proxy count per tower item, ranked within its own category.
+
+    Returns rows in the locked recommendation-generation schema:
+    category_node_id | variant | rank | candidate_asin | score.
+    """
     counts = reviews["asin"].value_counts()
     item_idx = counts.index.map(idx_of)
     in_tower = item_idx.notna()
     table = pd.DataFrame({
-        "asin": counts.index[in_tower].astype(str),
+        "candidate_asin": counts.index[in_tower].astype(str),
         "item_idx": item_idx[in_tower].astype(int),
-        "n": counts.to_numpy()[in_tower],
+        "score": counts.to_numpy()[in_tower].astype("float32"),
     })
-    table["node"] = node_of_item[table["item_idx"].to_numpy()]
-    table = table[table["node"] > 0]      # 0 is the reserved unseen/padding node
-    top10 = {int(k): g.nlargest(10, "n")["asin"].tolist()
-             for k, g in table.groupby("node")}
-    top100 = {int(k): g.nlargest(100, "n")["asin"].tolist()
-              for k, g in table.groupby("node")}
-    return table, top10, top100
+    table["category_node_id"] = node_of_item[table["item_idx"].to_numpy()]
+    table = table[table["category_node_id"] > 0]   # 0 is the reserved unseen/padding node
+
+    top = (table.sort_values("score", ascending=False)
+                .groupby("category_node_id", group_keys=False)
+                .head(TOP_K)
+                .sort_values(["category_node_id", "score"], ascending=[True, False]))
+    top["rank"] = top.groupby("category_node_id").cumcount() + 1
+    top["variant"] = variant
+    return top[["category_node_id", "variant", "rank", "candidate_asin", "score"]]
 
 
-all_time_table, all_time_top10, all_time_top100 = top_by_node(all_time)
-recency_table, recency_top10, recency_top100 = top_by_node(recency)
-print(f"all_time: {len(all_time_table):,} items with >=1 review, "
-      f"{len(all_time_top100):,} categories covered")
-print(f"recency ({RECENCY_WINDOW_DAYS}d): {len(recency_table):,} items with >=1 review, "
-      f"{len(recency_top100):,} categories covered")
+all_time_rows = top_by_node(all_time, "all_time")
+recency_rows = top_by_node(recency, "recency")
+print(f"all_time: {all_time_rows['candidate_asin'].nunique():,} items with >=1 review, "
+      f"{all_time_rows['category_node_id'].nunique():,} categories covered")
+print(f"recency ({RECENCY_WINDOW_DAYS}d): {recency_rows['candidate_asin'].nunique():,} items with >=1 review, "
+      f"{recency_rows['category_node_id'].nunique():,} categories covered")
 
-json.dump({
-    "all_time": {"top10_by_node": all_time_top10, "top100_by_node": all_time_top100},
-    "recency": {"window_days": RECENCY_WINDOW_DAYS,
-                "top10_by_node": recency_top10, "top100_by_node": recency_top100},
-}, open(OUT_PATH, "w"))
+out = pd.concat([all_time_rows, recency_rows], ignore_index=True)
+out.to_parquet(OUT_PATH)
 
 print(f"written -> {OUT_PATH.relative_to(ROOT)} "
-      f"({OUT_PATH.stat().st_size / 1e3:,.0f} KB)")
+      f"({len(out):,} rows, {OUT_PATH.stat().st_size / 1e3:,.0f} KB)")
