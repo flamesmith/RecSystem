@@ -1,8 +1,12 @@
-# Popularity — baseline / fallback for "Complete the Look"
+# Popularity — Trending in Category
 
-Not a trained model — a candidate item's membership in its category's
-top-10 / top-100 most frequent training targets, all-time (no time
-window). No query read at all: same list for every query in a category.
+Not a trained model, and not a fallback for TTN's complement recommendations
+— it's an independent carousel: "most popular desks," when viewing a desk,
+not "most popular things bought alongside a desk." Raw purchase-proxy count
+(one review = one purchase), grouped by the item's **own** category (`cat_4`
+— the most specific level this project's taxonomy has). No query read
+beyond "what category is this item in": every item in a category gets the
+same list.
 
 ## Run
 
@@ -11,18 +15,15 @@ window). No query read at all: same list for every query in a category.
 python Popularity/build_popularity.py
 ```
 
-Reads `data/tower/pairs_train.parquet`, writes
-`data/tower/popularity_top100.json` (per-category top-10/top-100 item lists).
+Reads `data/tower/item_asins.npy`, `node_of_item.npy`, and
+`Home_and_Kitchen_filtered.csv`; writes `data/tower/popularity_top100.json`
+with two variants, both anchored at `TTN/constants.json`'s `date_threshold`:
 
-## Its role
+- `all_time` — every review before the cutoff, no decay.
+- `recency` — only the `RECENCY_WINDOW_DAYS` (default 60, set in the script)
+  immediately before it.
 
-TTN's advantage over popularity isn't uniform — below roughly 25 training
-observations of the target item, TTN performs at or below random chance
-(see `results.ipynb`), so this is the safer default for those items rather
-than trusting TTN's output on something it hasn't really learned.
-
-## A gap, not yet resolved
-
-This is **all-time** popularity, not the 60-day window mentioned for a
-separate "popular in category" carousel — no time-windowed variant exists
-in this repo yet.
+`RECENCY_WINDOW_DAYS` here is unrelated to `complementary_cats_pairs`'
+`window_days` (the co-purchase *pairing* window used to build TTN's
+training pairs) — same word, two different concepts. See the script's
+docstring.
