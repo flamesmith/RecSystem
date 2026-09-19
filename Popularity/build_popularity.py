@@ -30,12 +30,18 @@ not a transaction log), so -- consistent with how every co-purchase pair in
 this project is built -- a review is used as the purchase proxy: one row in
 Home_and_Kitchen_filtered.csv per (reviewer, item), counted once each.
 
-Prerequisite: TTN/build_data.py must have already run, to produce
-data/tower/item_asins.npy and node_of_item.npy (each item's own category,
-the same node encoding used everywhere else in this project).
+Prerequisite: TTN/build_data.py must have already run for the given
+--snapshot, to produce that snapshot's item_asins.npy and node_of_item.npy
+(each item's own category, the same node encoding used everywhere else in
+this project).
 
-Usage: python Popularity/build_popularity.py
+Output is keyed by asin (not item_idx), matching every other stage's
+recommendation output -- item_idx is a snapshot-internal row position, not
+stable across snapshots with different item coverage.
+
+Usage: python Popularity/build_popularity.py --snapshot w90_2017-12-09
 """
+import argparse
 import json
 from pathlib import Path
 
@@ -44,7 +50,10 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
-OUT_DIR = DATA_DIR / "tower"
+parser = argparse.ArgumentParser()
+parser.add_argument("--snapshot", required=True,
+                     help="snapshot_id from TTN/build_data.py, e.g. w90_2017-12-09")
+OUT_DIR = DATA_DIR / "tower" / parser.parse_args().snapshot
 OUT_PATH = OUT_DIR / "popularity_top100.json"
 
 RECENCY_WINDOW_DAYS = 60          # Popularity's own recency window -- see
@@ -79,14 +88,15 @@ def top_by_node(reviews):
     item_idx = counts.index.map(idx_of)
     in_tower = item_idx.notna()
     table = pd.DataFrame({
+        "asin": counts.index[in_tower].astype(str),
         "item_idx": item_idx[in_tower].astype(int),
         "n": counts.to_numpy()[in_tower],
     })
     table["node"] = node_of_item[table["item_idx"].to_numpy()]
     table = table[table["node"] > 0]      # 0 is the reserved unseen/padding node
-    top10 = {int(k): g.nlargest(10, "n")["item_idx"].tolist()
+    top10 = {int(k): g.nlargest(10, "n")["asin"].tolist()
              for k, g in table.groupby("node")}
-    top100 = {int(k): g.nlargest(100, "n")["item_idx"].tolist()
+    top100 = {int(k): g.nlargest(100, "n")["asin"].tolist()
               for k, g in table.groupby("node")}
     return table, top10, top100
 

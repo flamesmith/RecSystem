@@ -11,13 +11,14 @@ same list.
 ## Run
 
 ```
-# after TTN/build_data.py has run at least once
-python Popularity/build_popularity.py
+# after TTN/build_data.py --window-days 90 has run at least once
+python Popularity/build_popularity.py --snapshot w90_2017-12-09
 ```
 
-Reads `data/tower/item_asins.npy`, `node_of_item.npy`, and
-`Home_and_Kitchen_filtered.csv`; writes `data/tower/popularity_top100.json`
-with two variants, both anchored at `TTN/constants.json`'s `date_threshold`:
+Reads that snapshot's `item_asins.npy`, `node_of_item.npy`, and
+`Home_and_Kitchen_filtered.csv`; writes
+`data/tower/<snapshot_id>/popularity_top100.json`, keyed by asin, with two
+variants, both anchored at `TTN/constants.json`'s `date_threshold`:
 
 - `all_time` — every review before the cutoff, no decay.
 - `recency` — only the `RECENCY_WINDOW_DAYS` (default 60, set in the script)

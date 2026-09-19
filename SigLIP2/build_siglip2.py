@@ -6,20 +6,28 @@ image is downloaded, encoded, and deleted immediately, so peak disk use is a
 few hundred images at a time, not the ~5GB the full catalogue's images would
 take.
 
-Resumable: data/tower/siglip_img_emb.npy and siglip_img_status.npy persist
-between runs. Status codes: 0 pending, 1 encoded, 2 no URL, 3 download
-failed, 4 decode/encode failed. Re-running only touches items still at 0, so
-interrupting and restarting is always safe.
+Two-level storage, because item coverage/order changes across snapshots
+(different --window-days can change which items even appear) but a given
+item's photo doesn't:
+  - data/tower/_siglip_cache/ -- ASIN-KEYED, shared across every snapshot.
+    Grows over time; an item encoded once is never re-fetched for a later
+    snapshot just because that snapshot orders items differently.
+  - data/tower/<snapshot_id>/siglip_img_{emb,status}.npy -- ROW-INDEX-KEYED,
+    aligned to that snapshot's item_asins.npy, projected from the cache.
+    This is what downstream consumers (TTN's image-augmented model,
+    results.ipynb, recommendation generation) actually read.
 
-Row-aligned to data/tower/item_asins.npy, so build downstream consumers
-(TTN's image-augmented model, results.ipynb) can index it the same way they
-index items.npz. About 28% of items have no image and get a zero vector,
-the same convention TTN uses for blank descriptions.
+Status codes: 0 pending, 1 encoded, 2 no URL, 3 download failed, 4
+decode/encode failed. Re-running only fetches cache items still at 0, so
+interrupting and restarting is always safe. About 28% of items have no
+image and get a zero vector, the same convention TTN uses for blank
+descriptions.
 
-Prerequisite: TTN/build_data.py must have already run, to produce
-data/tower/item_asins.npy (the item list and order this reads).
+Prerequisite: TTN/build_data.py must have already run for the given
+--snapshot, to produce that snapshot's item_asins.npy (the item list this
+run needs embeddings for).
 
-Usage: python SigLIP2/build_siglip2.py
+Usage: python SigLIP2/build_siglip2.py --snapshot w90_2017-12-09
   Runs a full pass by default (MAX_IMAGES = None below). Edit that constant
   to a small number for a quick smoke test before committing to the full
   run -- the pipeline resumes either way, so a small first pass costs
@@ -29,6 +37,7 @@ Usage: python SigLIP2/build_siglip2.py
 # ============================================================================
 # 1. Configuration
 # ============================================================================
+import argparse
 from pathlib import Path
 
 MODEL_ID = "google/siglip2-base-patch16-224"     # same checkpoint as the SigLIP2 branch
@@ -51,18 +60,31 @@ SEED = 42
 # --- paths ----------------------------------------------------------------
 def _find_root(start: Path) -> Path:
     for p in (start, *start.parents):
-        if (p / "data" / "tower" / "item_asins.npy").exists():
+        if (p / "data" / "tower").is_dir():
             return p
     raise FileNotFoundError("run this from inside the RecSystem repo")
 
-ROOT        = _find_root(Path.cwd())
-DATA_DIR    = ROOT / "data"
-TOWER_DIR   = DATA_DIR / "tower"
-ITEM_ASINS  = TOWER_DIR / "item_asins.npy"              # 137,362 tower items, in order
-IMAGE_CACHE = TOWER_DIR / "_siglip_image_cache"         # transient; emptied as we go
-EMB_PATH    = TOWER_DIR / "siglip_img_emb.npy"          # (n_items, 768) float32, aligned to ITEM_ASINS
-STATUS_PATH = TOWER_DIR / "siglip_img_status.npy"       # (n_items,) int8 status codes
-print("repo root:", ROOT)
+parser = argparse.ArgumentParser()
+parser.add_argument("--snapshot", required=True,
+                     help="snapshot_id from TTN/build_data.py, e.g. w90_2017-12-09")
+SNAPSHOT_ID = parser.parse_args().snapshot
+
+ROOT         = _find_root(Path.cwd())
+DATA_DIR     = ROOT / "data"
+TOWER_DIR    = DATA_DIR / "tower"
+SNAPSHOT_DIR = TOWER_DIR / SNAPSHOT_ID
+ITEM_ASINS   = SNAPSHOT_DIR / "item_asins.npy"           # this snapshot's items, in order
+
+CACHE_DIR    = TOWER_DIR / "_siglip_cache"               # shared, asin-keyed, grows over time
+CACHE_DIR.mkdir(parents=True, exist_ok=True)
+CACHE_ASINS  = CACHE_DIR / "cache_asins.npy"
+CACHE_EMB    = CACHE_DIR / "cache_emb.npy"
+CACHE_STATUS = CACHE_DIR / "cache_status.npy"
+IMAGE_CACHE  = TOWER_DIR / "_siglip_image_cache"         # transient; emptied as we go
+
+EMB_PATH     = SNAPSHOT_DIR / "siglip_img_emb.npy"       # per-snapshot output, projected from the cache
+STATUS_PATH  = SNAPSHOT_DIR / "siglip_img_status.npy"
+print("repo root:", ROOT, "| snapshot:", SNAPSHOT_ID)
 
 # ============================================================================
 # 2. Imports and device
@@ -119,21 +141,42 @@ n_params = sum(p.numel() for p in model.parameters())
 print(f"{model.__class__.__name__}: {n_params/1e6:.0f}M params on {DEVICE} | image dim {EMB_DIM}")
 
 # ============================================================================
-# 5. Embedding store -- resumable
+# 5. Embedding store -- resumable, asin-keyed, shared across every snapshot
 # ============================================================================
-if EMB_PATH.exists() and STATUS_PATH.exists():
-    emb = np.load(EMB_PATH)
-    status = np.load(STATUS_PATH)
-    assert emb.shape == (n_items, EMB_DIM), emb.shape
-    assert status.shape == (n_items,), status.shape
-    print(f"resuming — already encoded: {int((status == 1).sum()):,}")
+if CACHE_ASINS.exists():
+    cache_asins = np.load(CACHE_ASINS, allow_pickle=False).astype(str)
+    cache_emb = np.load(CACHE_EMB)
+    cache_status = np.load(CACHE_STATUS)
+    assert cache_emb.shape == (len(cache_asins), EMB_DIM), cache_emb.shape
+    assert cache_status.shape == (len(cache_asins),), cache_status.shape
+    print(f"cache: {len(cache_asins):,} asins tracked, "
+          f"{int((cache_status == 1).sum()):,} already encoded")
 else:
-    emb = np.zeros((n_items, EMB_DIM), dtype="float32")
-    status = np.zeros(n_items, dtype="int8")
-    print("fresh store")
+    cache_asins = np.array([], dtype=str)
+    cache_emb = np.zeros((0, EMB_DIM), dtype="float32")
+    cache_status = np.zeros(0, dtype="int8")
+    print("fresh cache")
 
-status[(status == 0) & ~have_url] = 2      # items with no URL: nothing to do
-print("status:", {int(k): int(v) for k, v in zip(*np.unique(status, return_counts=True))})
+cache_idx_of = {a: i for i, a in enumerate(cache_asins)}
+
+# Extend the cache with any of THIS snapshot's asins it hasn't seen before --
+# an item already cached (from any other snapshot) is never re-added.
+new_asins = [a for a in asins if a not in cache_idx_of]
+if new_asins:
+    new_status = np.array([0 if have_url[idx_of[a]] else 2 for a in new_asins], dtype="int8")
+    base = len(cache_asins)
+    cache_asins = np.concatenate([cache_asins, np.array(new_asins, dtype=str)])
+    cache_emb = np.concatenate([cache_emb, np.zeros((len(new_asins), EMB_DIM), dtype="float32")])
+    cache_status = np.concatenate([cache_status, new_status])
+    cache_idx_of.update({a: base + k for k, a in enumerate(new_asins)})
+print(f"cache after extending for this snapshot: {len(cache_asins):,} asins "
+      f"({len(new_asins):,} newly added)")
+print("cache status:", {int(k): int(v) for k, v in zip(*np.unique(cache_status, return_counts=True))})
+
+# URL for each of this run's pending cache indices -- only known for THIS
+# snapshot's asins, which is fine: we only ever fetch cache indices reachable
+# from this run's own asin set below.
+cache_url_of = {cache_idx_of[a]: url_of.get(a, "") for a in asins}
 
 # ============================================================================
 # 6. Fetch / encode / delete helpers
@@ -151,50 +194,51 @@ def sized(url: str) -> str:
     return f"{stem}{IMAGE_SIZE_TAG}{dot}{ext}" if dot and "/" not in ext else url
 
 
-def fetch(i: int):
-    """Download item i's image to the cache dir. Returns (i, path) or (i, None)."""
-    path = IMAGE_CACHE / f"{asins[i]}.img"
+def fetch(ci: int):
+    """Download cache index ci's image to the cache dir. Returns (ci, path) or (ci, None)."""
+    path = IMAGE_CACHE / f"{cache_asins[ci]}.img"
     try:
-        r = _session.get(sized(urls[i]), timeout=REQUEST_TIMEOUT)
+        r = _session.get(sized(cache_url_of[ci]), timeout=REQUEST_TIMEOUT)
         r.raise_for_status()
         path.write_bytes(r.content)
-        return i, path
+        return ci, path
     except Exception:
-        return i, None
+        return ci, None
 
 
 @torch.inference_mode()
 def encode(items):
-    """items: list of (i, path). Writes normalised vectors into `emb`, sets status."""
+    """items: list of (cache_idx, path). Writes normalised vectors into cache_emb, sets cache_status."""
     imgs, keep = [], []
-    for i, p in items:
+    for ci, p in items:
         try:
             with Image.open(p) as im:
                 imgs.append(im.convert("RGB"))
-            keep.append(i)
+            keep.append(ci)
         except Exception:
-            status[i] = 4
+            cache_status[ci] = 4
     if not imgs:
         return
     pixel_values = image_processor(images=imgs, return_tensors="pt")["pixel_values"].to(DEVICE)
     out = model.get_image_features(pixel_values=pixel_values)
     feats = getattr(out, "pooler_output", out)          # this transformers version wraps it
     feats = F.normalize(feats, dim=-1).float().cpu().numpy()
-    for j, i in enumerate(keep):
-        emb[i] = feats[j]
-        status[i] = 1
+    for j, ci in enumerate(keep):
+        cache_emb[ci] = feats[j]
+        cache_status[ci] = 1
 
 
-def flush():
-    np.save(EMB_PATH, emb)
-    np.save(STATUS_PATH, status)
+def flush_cache():
+    np.save(CACHE_ASINS, cache_asins)
+    np.save(CACHE_EMB, cache_emb)
+    np.save(CACHE_STATUS, cache_status)
 
 # ============================================================================
 # 7. Run the pipeline
 # ============================================================================
-pending = np.where((status == 0) & have_url)[0]
+pending = np.array([cache_idx_of[a] for a in asins if cache_status[cache_idx_of[a]] == 0])
 todo = pending if MAX_IMAGES is None else pending[:int(MAX_IMAGES)]
-print(f"pending with URL: {len(pending):,}   |   this run: {len(todo):,}")
+print(f"pending with URL (this snapshot): {len(pending):,}   |   this run: {len(todo):,}")
 
 t0 = time.time()
 since_save = 0
@@ -202,10 +246,10 @@ with ThreadPoolExecutor(max_workers=FETCH_WORKERS) as pool:
     for c in tqdm(range(0, len(todo), FETCH_CHUNK), desc="chunks"):
         chunk = todo[c:c + FETCH_CHUNK]
         fetched = list(pool.map(fetch, chunk))
-        ok = [(i, p) for i, p in fetched if p is not None]
-        for i, p in fetched:
+        ok = [(ci, p) for ci, p in fetched if p is not None]
+        for ci, p in fetched:
             if p is None:
-                status[i] = 3
+                cache_status[ci] = 3
         for b in range(0, len(ok), ENCODE_BATCH_SIZE):
             encode(ok[b:b + ENCODE_BATCH_SIZE])
         if not KEEP_IMAGES:
@@ -213,23 +257,37 @@ with ThreadPoolExecutor(max_workers=FETCH_WORKERS) as pool:
                 p.unlink(missing_ok=True)
         since_save += len(chunk)
         if since_save >= SAVE_EVERY:
-            flush()
+            flush_cache()
             since_save = 0
 
-flush()
+flush_cache()
 if not KEEP_IMAGES:
     shutil.rmtree(IMAGE_CACHE, ignore_errors=True)
 
 dt = time.time() - t0
 codes = {0: "pending", 1: "encoded", 2: "no url", 3: "fetch fail", 4: "decode fail"}
-counts = {codes[int(k)]: int(v) for k, v in zip(*np.unique(status, return_counts=True))}
+counts = {codes[int(k)]: int(v) for k, v in zip(*np.unique(cache_status, return_counts=True))}
 rate = len(todo) / max(dt, 1e-9)
 print(f"\nthis run: {len(todo):,} items in {dt:.1f}s  ({rate:.1f} img/s)")
-print("store status:", counts)
-rem = int((status == 0).sum())
+print("cache status:", counts)
+rem = len(pending) - len(todo)
 if rem and len(todo) and dt > 0:
-    print(f"est. for the remaining {rem:,}: ~{rem / rate / 60:.0f} min "
+    print(f"est. for the remaining {rem:,} in this snapshot: ~{rem / rate / 60:.0f} min "
           f"(a small run overstates this — model load and MPS warm-up are one-time)")
+
+# ============================================================================
+# 7b. Project the cache onto this snapshot's own item order
+# ============================================================================
+# What everything downstream (TTN's image-augmented model, results.ipynb,
+# recommendation generation) actually reads -- row-index-keyed, aligned to
+# THIS snapshot's item_asins.npy, same convention as items.npz/node_of_item.npy.
+snap_idx = np.array([cache_idx_of[a] for a in asins])
+emb = cache_emb[snap_idx]
+status = cache_status[snap_idx]
+np.save(EMB_PATH, emb)
+np.save(STATUS_PATH, status)
+print(f"\nprojected -> {EMB_PATH.relative_to(ROOT)}, {STATUS_PATH.relative_to(ROOT)} "
+      f"({len(asins):,} items)")
 
 # ============================================================================
 # 8. Sanity check

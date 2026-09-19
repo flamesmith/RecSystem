@@ -1,22 +1,36 @@
-"""Train the TTN ("Complete the Look") two-tower model and save its checkpoint.
+"""Train the TTN ("Complete the Look") two-tower model and save a versioned
+checkpoint.
 
 Extracted verbatim from ttn_complementary.ipynb's section 10 -- the model
 definition, BPR loss (temperature, logQ correction, in-node hard negatives),
-training loop, evaluation, and checkpoint export.
+training loop, evaluation, and checkpoint export -- plus versioning: each
+run gets its own <date>_v_00x directory rather than overwriting the last
+run's checkpoint, so a bad retrain never destroys the only copy of a good
+one, and a candidate version can be reviewed (metrics, config) before it's
+ever promoted to champion. Promotion itself (writing champion.json) is a
+separate, deliberate step -- this script never does it automatically.
 
-Prerequisite: TTN/build_data.py must have already run, to produce the
-data/tower/ arrays this reads. Run TTN/encode_descriptions.py in between the
-two for a model trained with description signal (optional -- this script
-detects its absence and trains without that block otherwise).
+Prerequisite: TTN/build_data.py must have already run for the given
+--snapshot, to produce the data/tower/<snapshot_id>/ arrays this reads. Run
+TTN/encode_descriptions.py in between the two for a model trained with
+description signal (optional -- this script detects its absence and trains
+without that block otherwise).
 
-Usage: python TTN/build_model.py
-Output: data/tower/ttn_complementary.pt
+Usage: python TTN/build_model.py --snapshot w90_2017-12-09
+Output: data/tower/<snapshot_id>/models/ttn/<date>_v_00x/
+          model.pt              -- state_dict, config, vocab_sizes,
+                                    numeric_standardisation, metrics
+          version_manifest.json -- the same run's identity/config/metrics,
+                                    readable without loading torch
 """
 
 # ============================================================================
 # Setup
 # ============================================================================
+import argparse
+import subprocess
 import sys
+from datetime import date
 from pathlib import Path
 
 import numpy as np
@@ -31,13 +45,18 @@ DATA_DIR = ROOT / "data"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--snapshot", required=True,
+                     help="snapshot_id from build_data.py, e.g. w90_2017-12-09")
+SNAPSHOT_ID = parser.parse_args().snapshot
+
 # Show every column/variable when displaying a dataframe
 pd.set_option("display.max_columns", None)
 pd.set_option("display.width", None)
 pd.set_option("display.max_colwidth", 50)
 # Turn off scientific notation (e.g. 2.447268e+06 -> 2447268.00)
 pd.set_option("display.float_format", lambda x: f"{x:,.2f}")
-OUT_DIR = DATA_DIR / "tower"
+OUT_DIR = DATA_DIR / "tower" / SNAPSHOT_ID
 CAT_ORDER = ["cat_2", "cat_3", "cat_4", "brand", "color", "material", "product_type", "features"]
 
 import json
@@ -49,7 +68,7 @@ pairs_train = pd.read_parquet(OUT_DIR / "pairs_train.parquet")
 pairs_test = pd.read_parquet(OUT_DIR / "pairs_test.parquet")
 if (OUT_DIR / "desc_emb.npy").exists():
     arrays["desc_emb"] = np.load(OUT_DIR / "desc_emb.npy")
-print(f"loaded data/tower/ -- {len(arrays['title_emb']):,} items, "
+print(f"loaded {OUT_DIR.relative_to(ROOT)}/ -- {len(arrays['title_emb']):,} items, "
       f"{len(pairs_train):,} train pairs, {len(pairs_test):,} test pairs, "
       f"description block: {'on' if 'desc_emb' in arrays else 'OFF'}")
 
@@ -429,31 +448,61 @@ print()
 for _name, _value in baselines(pairs_test).items():
     print(f"baseline  {_name:<42} {_value:.4f}")
 
+# --- Version identity: <date>_v_00x, next in sequence for today -----------
+MODELS_DIR = OUT_DIR / "models" / "ttn"
+MODELS_DIR.mkdir(parents=True, exist_ok=True)
+today = date.today().isoformat()
+existing = sorted(int(p.name.rsplit("_v_", 1)[1]) for p in MODELS_DIR.glob(f"{today}_v_*")
+                   if p.is_dir() and p.name.rsplit("_v_", 1)[1].isdigit())
+VERSION_ID = f"{today}_v_{(existing[-1] + 1 if existing else 1):03d}"
+VERSION_DIR = MODELS_DIR / VERSION_ID
+VERSION_DIR.mkdir()
+
+try:
+    git_commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT,
+                                 capture_output=True, text=True, check=True).stdout.strip()
+except Exception:
+    git_commit = None
+
 # --- Save the weights, and everything needed to rebuild the model ---------
 # The fitted artifacts (vocabs.json, the medians) already live on disk; without
 # this the weights were the one half of the setup that vanished on restart, so
 # no two sessions could compare models. The config travels with the state dict
 # because ComplementaryTwoTower's shapes are derived from the vocabularies --
 # reloading against a different §6 fit would silently mismatch.
-CHECKPOINT = OUT_DIR / "ttn_complementary.pt"
+CONFIG = {"cat_dim": CAT_DIM, "node_dim": NODE_DIM, "hidden": HIDDEN,
+          "out_dim": OUT_DIM, "batch": BATCH, "epochs": EPOCHS, "lr": LR,
+          "seed": SEED, "cat_order": CAT_ORDER,
+          "logq_correction": LOGQ_CORRECTION,
+          "n_hard": N_HARD,
+          "use_description": USE_DESCRIPTION,
+          "tau": TAU, "patience": PATIENCE,
+          "best_epoch": best["epoch"]}
+CHECKPOINT = VERSION_DIR / "model.pt"
 torch.save({
     "state_dict": model.state_dict(),
-    "config": {"cat_dim": CAT_DIM, "node_dim": NODE_DIM, "hidden": HIDDEN,
-               "out_dim": OUT_DIM, "batch": BATCH, "epochs": EPOCHS, "lr": LR,
-               "seed": SEED, "cat_order": CAT_ORDER,
-               "logq_correction": LOGQ_CORRECTION,
-               "n_hard": N_HARD,
-               "use_description": USE_DESCRIPTION,
-               "tau": TAU, "patience": PATIENCE,
-               "best_epoch": best["epoch"]},
+    "config": CONFIG,
     "vocab_sizes": {k: len(v) for k, v in vocabs.items()},
     "numeric_standardisation": {"mean": mu.cpu(), "std": sd.cpu()},
     "metrics": metrics,
     "n_items": int(len(cat_t)),
     "n_train_pairs": int(len(pairs_train)),
+    "snapshot_id": SNAPSHOT_ID,
+    "version_id": VERSION_ID,
+    "git_commit": git_commit,
 }, CHECKPOINT)
 print(f"\nsaved -> {CHECKPOINT.relative_to(ROOT)} "
       f"({CHECKPOINT.stat().st_size / 1e6:,.1f} MB)")
+
+# Human-readable sidecar -- version identity, config, and metrics, without
+# needing to load torch to inspect what a candidate version actually is.
+json.dump({
+    "version_id": VERSION_ID,
+    "snapshot_id": SNAPSHOT_ID,
+    "git_commit": git_commit,
+    "config": CONFIG,
+    "metrics": {split: {k: v for k, v in m.items()} for split, m in metrics.items()},
+}, open(VERSION_DIR / "version_manifest.json", "w"), indent=1)
 
 # Reload into a fresh model and confirm it scores identically, so a restart
 # genuinely resumes rather than appearing to.
@@ -464,3 +513,5 @@ before = evaluate(model, pairs_test, n_eval=5000)["Recall@10"]
 after = evaluate(reloaded, pairs_test, n_eval=5000)["Recall@10"]
 assert abs(before - after) < 1e-9, f"reload changed the model: {before} vs {after}"
 print(f"reloaded checkpoint reproduces R@10 exactly: {after:.4f}")
+print(f"\nversion {VERSION_ID} is a CANDIDATE, not yet the champion -- "
+      f"promotion is a separate step (see Popularity/../champion promotion notebook)")

@@ -1,32 +1,50 @@
 """Build the model-ready data for TTN, from the raw feature/pairs tables.
 
-Extracted verbatim from ttn_complementary.ipynb's sections 1-9 (data
-loading through array export). Produces everything build_model.py needs:
-data/tower/items.npz, vocabs.json, pairs_{train,test}.parquet,
-node_of_item.npy, item_asins.npy.
+Extracted from ttn_complementary.ipynb's sections 1-9 (data loading through
+array export), then parameterized by --window-days so different co-purchase
+pairing windows produce distinct, coexisting data snapshots instead of
+overwriting each other. Produces everything build_model.py needs, under
+data/tower/<snapshot_id>/: items.npz, vocabs.json, pairs_{train,test}.parquet,
+node_of_item.npy, item_asins.npy, snapshot_manifest.json.
+
+snapshot_id = "w{window_days}_{date_threshold}" -- e.g. w90_2017-12-09.
+Every artifact in that directory came from this exact (window_days,
+date_threshold) pair. window_days is NOT the same thing as
+Popularity/build_popularity.py's RECENCY_WINDOW_DAYS -- this one gates which
+co-purchase PAIRS count as "bought together" for TTN's training data; that
+one gates which reviews count as "recent" for the popularity carousel. See
+that script's docstring for why the two are named apart deliberately.
 
 Prerequisites (built by feature_extraction_workflow/, embedding_analysis/,
-and complementary_cats_pairs/ -- see their own READMEs):
+and complementary_cats_pairs/categories.* -- see their own READMEs; none of
+these are window_days-specific, so they're shared across every snapshot):
   data/Home_and_Kitchen_filtered.csv
   data/df_features.pkl
   data/df_features_with_embeddings.pkl
-  data/co_purchase_pairs_{train,test}.pkl
   data/complementary_categories.pkl
   data/meta_Home_and_Kitchen_filtered.csv
   data/category_taxonomy.json, data/master_metadata.json
   TTN/constants.json (date_threshold)
 
+Co-purchase pairs are NOT a separate prerequisite file anymore -- this script
+calls complementary_cats_pairs.pairs.co_purchase_pairs() directly with the
+given window_days, rather than reading a pre-built pickle a separate
+notebook run has to match window_days with by hand.
+
 Usage:
-  python TTN/build_data.py
-  python TTN/encode_descriptions.py    # optional but recommended -- see its
-                                        # own docstring; adds description
-                                        # signal to the model trained next
-  python TTN/build_model.py
+  python TTN/build_data.py [--window-days N]     # default 90
+  python TTN/encode_descriptions.py --snapshot w90_2017-12-09   # optional
+                                        # but recommended -- see its own
+                                        # docstring; adds description signal
+                                        # to the model trained next
+  python TTN/build_model.py --snapshot w90_2017-12-09
 """
 
 # ============================================================================
 # Setup
 # ============================================================================
+import argparse
+import subprocess
 import sys
 from pathlib import Path
 
@@ -42,6 +60,14 @@ DATA_DIR = ROOT / "data"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--window-days", type=int, default=90,
+                     help="max gap, in days, between two purchases of a "
+                          "co-purchase pair (default 90, matching the "
+                          "value complementary_cats_pairs/pairs.ipynb used "
+                          "before this became a CLI parameter)")
+WINDOW_DAYS = parser.parse_args().window_days
+
 # Show every column/variable when displaying a dataframe
 pd.set_option("display.max_columns", None)
 pd.set_option("display.width", None)
@@ -55,6 +81,8 @@ pd.set_option("display.float_format", lambda x: f"{x:,.2f}")
 import json
 from pathlib import Path
 
+from complementary_cats_pairs import co_purchase_pairs
+
 # --- 1. Interactions: one row per review ----------------------------------
 df_reviews = pd.read_csv(
     DATA_DIR / "Home_and_Kitchen_filtered.csv",
@@ -65,16 +93,28 @@ df_reviews = pd.read_csv(
 # --- 2. Item features: one row per asin, the extracted attributes ---------
 df_features = pd.read_pickle(DATA_DIR / "df_features.pkl")
 
-# --- 3. Co-purchase pairs, one table per side of the cutoff ---------------
-co_pairs = {
-    "train": pd.read_pickle(DATA_DIR / "co_purchase_pairs_train.pkl"),
-    "test": pd.read_pickle(DATA_DIR / "co_purchase_pairs_test.pkl"),
-}
-
-# The split point, read from the same file pairs.ipynb reads. Only needed to
-# scope the fitted statistics in §5 and §7 to the training period.
+# The split point, read from the same file pairs.ipynb reads. Scopes the
+# fitted statistics in §5 and §7 to the training period, and is also the
+# upper bound co-purchase pairing uses below.
 DATE_THRESHOLD = json.loads((Path(__file__).parent / "constants.json").read_text())["date_threshold"]
 cutoff_time = pd.Timestamp(DATE_THRESHOLD).timestamp()
+SNAPSHOT_ID = f"w{WINDOW_DAYS}_{DATE_THRESHOLD}"
+print(f"snapshot: {SNAPSHOT_ID}  (window_days={WINDOW_DAYS}, date_threshold={DATE_THRESHOLD})")
+
+# --- 3. Co-purchase pairs, one table per side of the cutoff ---------------
+# Same logic as complementary_cats_pairs/pairs.ipynb §3, called directly
+# here instead of reading a pre-built pickle, so window_days is a single
+# parameter threaded through this one script rather than two things that
+# have to be kept in sync by hand across a notebook and this script.
+after_cutoff = df_reviews[df_reviews["unixReviewTime"] >= cutoff_time]
+co_pairs = {
+    "train": co_purchase_pairs(df_reviews, cutoff_time=cutoff_time, window_days=WINDOW_DAYS),
+    # after_cutoff is filtered first and passed cutoff_time=None -- passing
+    # the cutoff here would re-apply it as an upper bound and hand back the
+    # training pairs (see pairs.py's co_purchase_pairs docstring).
+    "test": co_purchase_pairs(after_cutoff, cutoff_time=None, window_days=WINDOW_DAYS),
+}
+print(f"co-purchase pairs: train {len(co_pairs['train']):,} | test {len(co_pairs['test']):,}")
 
 # --- 4. The complementary category mapping --------------------------------
 comp_cat = pd.read_pickle(DATA_DIR / "complementary_categories.pkl")
@@ -484,7 +524,7 @@ print(f"target_node paths still present in train: {still_used:,} of "
 # ============================================================================
 from pathlib import Path
 
-OUT_DIR = DATA_DIR / "tower"
+OUT_DIR = DATA_DIR / "tower" / SNAPSHOT_ID
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 ENCODE_TITLES = False          # True -> run SBERT instead of reusing the pickle
 USE_DESCRIPTION = True         # encode `description_cleaned` alongside the title
@@ -705,6 +745,24 @@ print(f"  their categorical slots on the reserved id 0: {zero_slots:,} of "
       f"{len(test_only) * len(CAT_ORDER):,}")
 print(f"items with no node in the training vocabulary : {(node_of_item == 0).sum():,}")
 print(f"test pairs whose target node is unseen       : {unseen_nodes:,}")
+try:
+    git_commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT,
+                                 capture_output=True, text=True, check=True).stdout.strip()
+except Exception:
+    git_commit = None
+manifest = {
+    "snapshot_id": SNAPSHOT_ID,
+    "window_days": WINDOW_DAYS,
+    "date_threshold": DATE_THRESHOLD,
+    "git_commit": git_commit,
+    "n_items": int(len(items)),
+    "n_pairs_train": int(len(pairs_train)),
+    "n_pairs_test": int(len(pairs_test)),
+    "co_purchase_pairs_train": int(len(co_pairs["train"])),
+    "co_purchase_pairs_test": int(len(co_pairs["test"])),
+}
+json.dump(manifest, open(OUT_DIR / "snapshot_manifest.json", "w"), indent=1)
+
 print(f"\nwritten to {OUT_DIR.relative_to(ROOT)}/")
 for f in sorted(OUT_DIR.iterdir()):
     print(f"  {f.name:<24} {f.stat().st_size / 1e6:>8,.1f} MB")
