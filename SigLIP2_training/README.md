@@ -64,7 +64,7 @@ The cache stores validated image bytes under content-independent URL hashes, use
 
 ## Four phases
 
-1. **Text strategy pilot — 50K products:** raw, canonical, multi-chunk, and taxonomy-aware views.
+1. **Text strategy pilot — 5K to 50K products:** raw, multi-chunk, and taxonomy-aware views with a fixed evaluation set.
 2. **Optimization pilot — up to 200K products:** true batch size, hard negatives, balanced sampling, and bounded unfreezing.
 3. **Confirmation:** finalists on fixed cached validation data and repeated seeds.
 4. **Full catalog:** one resumable streaming feature-extraction pass followed by adapter training on stored features.
@@ -77,7 +77,7 @@ The 50K expansion preserves the exact 5K validation/test IDs and removes any add
 
 ## Current status
 
-The reusable foundation and 5K pilot are complete. The selected trained multi-chunk adapter improved sealed-test bidirectional Recall@10 from 58.50% to 70.90%, with its 95% paired-bootstrap gain interval entirely above zero. See `docs/pilot_5k_results.md` for the full comparison and the fixed-evaluation 50K protocol. No full-catalog image download has been started.
+The reusable foundation and controlled 5K-to-50K scaling pilot are complete. The selected 50K multi-chunk adapter with a 20% taxonomy blend improved fixed-test bidirectional Recall@10 from 70.90% for the selected 5K checkpoint to 81.56%; the paired 95% interval for the difference was +7.58 to +13.93 percentage points. See `docs/pilot_50k_results.md` for the complete comparison. The next phase is the optimization pilot; no full-catalog image download has been started.
 
 ## Run locally without installation
 

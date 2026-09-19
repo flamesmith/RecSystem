@@ -6,8 +6,9 @@ runtime:
   device_preference:
     - mps
     - cpu
-  image_batch_size: 8
-  text_batch_size: 32
+  image_batch_size: 32
+  record_batch_size: 128
+  text_batch_size: 128
   shard_size: 1000
   output_dtype: float16
   maximum_text_tokens: 64
@@ -17,6 +18,6 @@ runtime:
 
 views:
   raw_first_64: true
-  canonical_64: true
+  canonical_64: false
   multichunk_64: true
   taxonomy_64: true

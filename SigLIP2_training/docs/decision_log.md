@@ -99,3 +99,15 @@ What this optimizes: a true data-scaling comparison where metric changes reflect
 The 5K run used four concurrent downloads. After measuring the new-image portion of the 50K prefetch, concurrency was increased to eight while retaining the same atomic writes, image validation, 8 GiB cache ceiling, and 30 GiB free-disk floor.
 
 What this optimizes: wall-clock download time without changing image content, model inputs, or storage safety.
+
+## 2026-09-18 — Memory-safe pooled 50K feature extraction
+
+The final 50K extractor uses 32-image MPS micro-batches inside 128-product record batches, 128-text batches, full-precision model computation, and float16 stored vectors. Repeated taxonomy strings are embedded once per run. The unused canonical-only view is omitted. A 64-image configuration exceeded the MPS memory ceiling, while half-precision model computation was slower on this Intel-era Mac.
+
+What this optimizes: safe local memory use and fewer redundant text-model calls without changing the selected comparison strategies.
+
+## 2026-09-18 — 50K scaling gate passed with taxonomy-blended multi-chunk
+
+The selected 50K multi-chunk adapter with a 20% taxonomy blend improved fixed-test bidirectional Recall@10 from 70.90% for the selected 5K checkpoint to 81.56%. The paired 95% interval for the difference was +7.58 to +13.93 percentage points. Recall@1 improved from 41.19% to 47.95%, and same-leaf precision@10 improved from 9.88% to 11.11%. The pre-agreed deterioration thresholds were not triggered. See `docs/pilot_50k_results.md` for the complete audit.
+
+What this optimizes: advance to negative-sampling and taxonomy-weight experiments only after additional training data demonstrated a statistically supported gain on fixed held-out products.

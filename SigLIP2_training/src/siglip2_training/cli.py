@@ -363,12 +363,20 @@ def command_extract_features(arguments: argparse.Namespace) -> int:
         config=feature_config,
         limit=arguments.limit,
         resume=arguments.resume,
+        reuse_feature_directory=(
+            Path(arguments.reuse_features).resolve() if arguments.reuse_features else None
+        ),
     )
     statistics = dict(result.__dict__)
     manifest = build_manifest(
         project_root=project_root.parent,
         command=sys.argv,
-        inputs={"processed_metadata": str(Path(arguments.input).resolve())},
+        inputs={
+            "processed_metadata": str(Path(arguments.input).resolve()),
+            "reuse_features": (
+                str(Path(arguments.reuse_features).resolve()) if arguments.reuse_features else None
+            ),
+        },
         outputs={"feature_directory": str(output_directory)},
         configuration={
             "features_path": str(Path(arguments.config).resolve()),
@@ -485,6 +493,9 @@ def build_parser() -> argparse.ArgumentParser:
     extract_features.add_argument("--cache-config", required=True)
     extract_features.add_argument("--limit", type=int)
     extract_features.add_argument("--resume", action="store_true")
+    extract_features.add_argument(
+        "--reuse-features", help="Reuse matching product embeddings from a completed feature directory"
+    )
     extract_features.set_defaults(function=command_extract_features)
 
     train_adapters = subparsers.add_parser(

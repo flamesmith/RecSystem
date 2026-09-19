@@ -17,6 +17,7 @@ from .cache import ImageCache
 class FeatureExtractionResult:
     source_records: int
     written_records: int
+    reused_records: int
     failed_records: int
     shards: tuple[str, ...]
     embedding_dimension: int
@@ -107,6 +108,46 @@ def _completed_shards(output_directory: Path) -> tuple[list[str], set[str]]:
     return names, completed
 
 
+def _load_reuse_features(directory: Path) -> tuple[dict[str, np.ndarray], dict[str, int]]:
+    index = json.loads((directory / "index.json").read_text(encoding="utf-8"))
+    parts: dict[str, list[np.ndarray]] = {}
+    for shard_name in index["shards"]:
+        with np.load(directory / shard_name, allow_pickle=False) as shard:
+            for key in shard.files:
+                parts.setdefault(key, []).append(shard[key])
+    arrays = {key: np.concatenate(values, axis=0) for key, values in parts.items()}
+    positions = {str(product_id): row for row, product_id in enumerate(arrays["product_id"])}
+    if len(positions) != len(arrays["product_id"]):
+        raise ValueError("Reuse feature directory contains duplicate product IDs")
+    return arrays, positions
+
+
+def _reuse_feature_keys(enabled_views: dict[str, bool]) -> set[str]:
+    keys = {"image"}
+    if enabled_views.get("raw_first_64", True):
+        keys.add("text_raw")
+    if enabled_views.get("canonical_64", True):
+        keys.add("text_canonical")
+    if enabled_views.get("taxonomy_64", True):
+        keys.add("text_taxonomy")
+    if enabled_views.get("multichunk_64", True):
+        keys.update({"text_chunks", "text_chunk_mask"})
+    return keys
+
+
+def _metadata_arrays(records: Sequence[dict[str, Any]]) -> dict[str, np.ndarray]:
+    return {
+        "product_id": np.asarray([str(record["product_id"]) for record in records]),
+        "split": np.asarray([str(record.get("split", "")) for record in records]),
+        "duplicate_group_id": np.asarray(
+            [str(record.get("duplicate_group_id", "")) for record in records]
+        ),
+        "category_path": np.asarray([str(record.get("category_path", "")) for record in records]),
+        "leaf_category": np.asarray([str(record.get("leaf_category", "")) for record in records]),
+        "taxonomy_mask": np.asarray([bool(record.get("taxonomy_text")) for record in records]),
+    }
+
+
 def _extract_batch(
     *,
     records: Sequence[dict[str, Any]],
@@ -119,18 +160,17 @@ def _extract_batch(
     maximum_tokens: int,
     maximum_chunks: int,
     enabled_views: dict[str, bool],
+    image_batch_size: int,
+    taxonomy_feature_cache: dict[str, np.ndarray],
 ) -> dict[str, np.ndarray]:
-    arrays: dict[str, np.ndarray] = {
-        "product_id": np.asarray([str(record["product_id"]) for record in records]),
-        "split": np.asarray([str(record.get("split", "")) for record in records]),
-        "duplicate_group_id": np.asarray(
-            [str(record.get("duplicate_group_id", "")) for record in records]
-        ),
-        "category_path": np.asarray([str(record.get("category_path", "")) for record in records]),
-        "leaf_category": np.asarray([str(record.get("leaf_category", "")) for record in records]),
-        "taxonomy_mask": np.asarray([bool(record.get("taxonomy_text")) for record in records]),
-        "image": _encode_images(model, image_processor, images, device),
-    }
+    arrays = _metadata_arrays(records)
+    arrays["image"] = np.concatenate(
+        [
+            _encode_images(model, image_processor, image_batch, device)
+            for image_batch in _batched(images, image_batch_size)
+        ],
+        axis=0,
+    )
     if enabled_views.get("raw_first_64", True):
         arrays["text_raw"] = _encode_texts(
             model,
@@ -150,13 +190,22 @@ def _extract_batch(
             maximum_tokens,
         )
     if enabled_views.get("taxonomy_64", True):
-        arrays["text_taxonomy"] = _encode_texts(
-            model,
-            tokenizer,
-            [_safe_text(record, "taxonomy_text") for record in records],
-            device,
-            text_batch_size,
-            maximum_tokens,
+        taxonomy_texts = [_safe_text(record, "taxonomy_text") for record in records]
+        unseen_taxonomy = list(
+            dict.fromkeys(text for text in taxonomy_texts if text not in taxonomy_feature_cache)
+        )
+        if unseen_taxonomy:
+            unseen_features = _encode_texts(
+                model,
+                tokenizer,
+                unseen_taxonomy,
+                device,
+                text_batch_size,
+                maximum_tokens,
+            )
+            taxonomy_feature_cache.update(zip(unseen_taxonomy, unseen_features, strict=True))
+        arrays["text_taxonomy"] = np.stack(
+            [taxonomy_feature_cache[text] for text in taxonomy_texts]
         )
     if enabled_views.get("multichunk_64", True):
         chunks_by_record = [record.get("description_chunks") or [] for record in records]
@@ -190,6 +239,7 @@ def extract_feature_shards(
     config: dict[str, Any],
     limit: int | None = None,
     resume: bool = False,
+    reuse_feature_directory: Path | None = None,
 ) -> FeatureExtractionResult:
     started = time.perf_counter()
     output_directory.mkdir(parents=True, exist_ok=True)
@@ -221,6 +271,7 @@ def extract_feature_shards(
         use_fast=bool(runtime.get("use_fast_image_processor", False)),
     )
     image_batch_size = int(runtime.get("image_batch_size", 4))
+    record_batch_size = int(runtime.get("record_batch_size", image_batch_size))
     text_batch_size = int(runtime.get("text_batch_size", 16))
     shard_size = int(runtime.get("shard_size", 1000))
     maximum_tokens = int(runtime.get("maximum_text_tokens", 64))
@@ -228,11 +279,21 @@ def extract_feature_shards(
     if str(runtime.get("output_dtype", "float16")) != "float16":
         raise ValueError("Only float16 feature output is currently supported")
     enabled_views = {key: bool(value) for key, value in config.get("views", {}).items()}
-    if image_batch_size < 1 or shard_size < 1:
-        raise ValueError("image_batch_size and shard_size must be positive")
+    required_reuse_keys = _reuse_feature_keys(enabled_views)
+    if image_batch_size < 1 or record_batch_size < 1 or shard_size < 1:
+        raise ValueError("image_batch_size, record_batch_size, and shard_size must be positive")
+
+    reuse_arrays: dict[str, np.ndarray] = {}
+    reuse_positions: dict[str, int] = {}
+    if reuse_feature_directory is not None:
+        reuse_arrays, reuse_positions = _load_reuse_features(Path(reuse_feature_directory))
+        missing_reuse_keys = required_reuse_keys - set(reuse_arrays)
+        if missing_reuse_keys:
+            raise ValueError(f"Reuse feature directory is missing: {sorted(missing_reuse_keys)}")
 
     source_records = 0
     written_records = len(completed_product_ids)
+    reused_records = 0
     failed_records = 0
     shard_names: list[str] = list(existing_shards)
     shard_arrays: dict[str, list[np.ndarray]] = {}
@@ -261,11 +322,22 @@ def extract_feature_shards(
 
     pending_records: list[dict[str, Any]] = []
     pending_images: list[Image.Image] = []
+    taxonomy_feature_cache: dict[str, np.ndarray] = {}
     failure_part = output_directory / "failures.jsonl.part"
     failure_log = failure_part.open("w", encoding="utf-8")
 
+    def append_arrays(arrays: dict[str, np.ndarray]) -> None:
+        nonlocal written_records, shard_rows, shard_arrays
+        for key, value in arrays.items():
+            shard_arrays.setdefault(key, []).append(value)
+        batch_rows = len(arrays["product_id"])
+        written_records += batch_rows
+        shard_rows += batch_rows
+        if shard_rows >= shard_size:
+            flush_shard()
+
     def process_pending() -> None:
-        nonlocal written_records, shard_rows, pending_records, pending_images, shard_arrays
+        nonlocal pending_records, pending_images
         if not pending_records:
             return
         arrays = _extract_batch(
@@ -279,23 +351,29 @@ def extract_feature_shards(
             maximum_tokens=maximum_tokens,
             maximum_chunks=maximum_chunks,
             enabled_views=enabled_views,
+            image_batch_size=image_batch_size,
+            taxonomy_feature_cache=taxonomy_feature_cache,
         )
-        for key, value in arrays.items():
-            shard_arrays.setdefault(key, []).append(value)
-        batch_rows = len(pending_records)
-        written_records += batch_rows
-        shard_rows += batch_rows
+        append_arrays(arrays)
         pending_records = []
         pending_images = []
-        if shard_rows >= shard_size:
-            flush_shard()
 
     try:
         for record in records:
             if limit is not None and source_records >= limit:
                 break
             source_records += 1
-            if str(record.get("product_id")) in completed_product_ids:
+            product_id = str(record.get("product_id"))
+            if product_id in completed_product_ids:
+                continue
+            reuse_row = reuse_positions.get(product_id)
+            if reuse_row is not None:
+                process_pending()
+                arrays = _metadata_arrays([record])
+                for key in required_reuse_keys:
+                    arrays[key] = reuse_arrays[key][reuse_row : reuse_row + 1]
+                append_arrays(arrays)
+                reused_records += 1
                 continue
             try:
                 cached_image = cache.get_or_download(str(record["image_url"]))
@@ -318,7 +396,7 @@ def extract_feature_shards(
                 continue
             pending_records.append(record)
             pending_images.append(image)
-            if len(pending_records) >= image_batch_size:
+            if len(pending_records) >= record_batch_size:
                 process_pending()
         process_pending()
         flush_shard()
@@ -335,6 +413,7 @@ def extract_feature_shards(
     result = FeatureExtractionResult(
         source_records=source_records,
         written_records=written_records,
+        reused_records=reused_records,
         failed_records=failed_records,
         shards=tuple(shard_names),
         embedding_dimension=dimension,
