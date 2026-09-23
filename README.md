@@ -5,6 +5,10 @@
 ```
 v1-recommendations
 │
+├── data_creation/          derives new facts from raw sources (features,
+│    feature_extraction_workflow/   embeddings, category-pair mapping) --
+│    embedding_analysis/            not window_days-specific, shared across
+│    complementary_cats_pairs/      every snapshot
 ├── data_processing/       SHARED data prep + TTN-specific array building
 │    build_snapshot.py      item list, item categories, cleaned pairs
 │    build_ttn_arrays.py    TTN-only: items.npz, vocabs.json, slim pairs
@@ -51,9 +55,15 @@ each other. TTN versions candidate checkpoints under each snapshot
 promotion to "champion" (which version `generate_recommendations.py` and
 the API actually use) is a deliberate manual step, not automatic.
 
-The shared data pipeline TTN and SigLIP2 both read from —
-`feature_extraction_workflow/`, `embedding_analysis/`,
-`complementary_cats_pairs/` — is unchanged at the repo root.
+The upstream data-creation pipeline that `data_processing/build_snapshot.py`
+and `SigLIP2/build_siglip2.py` both depend on —
+`data_creation/feature_extraction_workflow/`,
+`data_creation/embedding_analysis/`,
+`data_creation/complementary_cats_pairs/` — lives under `data_creation/`,
+distinct from `data_processing/`: `data_creation/` derives new facts from
+raw sources (extracted item features, embeddings, the category-pair
+mapping), while `data_processing/` reshapes those already-created
+artifacts into model-ready form and adds no new facts of its own.
 
 ## Setup
 

@@ -102,7 +102,7 @@ from tqdm.auto import tqdm
 from transformers import AutoImageProcessor, AutoModel
 
 sys.path.insert(0, str(ROOT))
-from complementary_cats_pairs import first_image_url
+from data_creation.complementary_cats_pairs import first_image_url
 
 DEVICE = torch.device(
     "cuda" if torch.cuda.is_available()

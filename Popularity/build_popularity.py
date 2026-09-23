@@ -15,7 +15,7 @@ this never counts a review from the held-out test period):
   recency  -- only reviews in the RECENCY_WINDOW_DAYS immediately before
               date_threshold (default 60).
 
-RECENCY_WINDOW_DAYS is UNRELATED to complementary_cats_pairs/pairs.py's
+RECENCY_WINDOW_DAYS is UNRELATED to data_creation/complementary_cats_pairs/pairs.py's
 `window_days` (the co-purchase PAIRING window -- how far apart two
 purchases can be and still count as "bought together" for TTN's training
 pairs). Same word, two different concepts: one gates which purchases count
@@ -70,7 +70,7 @@ OUT_PATH = OUT_DIR / "popularity.parquet"
 
 RECENCY_WINDOW_DAYS = 60          # Popularity's own recency window -- see
                                    # the module docstring for why this is
-                                   # NOT complementary_cats_pairs' window_days
+                                   # NOT data_creation/complementary_cats_pairs' window_days
 
 DATE_THRESHOLD = json.loads((ROOT / "TTN" / "constants.json").read_text())["date_threshold"]
 REFERENCE_DATE = pd.Timestamp(DATE_THRESHOLD)     # swap for pd.Timestamp.now() in a live deployment

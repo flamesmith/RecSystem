@@ -37,9 +37,11 @@ integer-coded embedding-table vocabularies), pairs_{train,test}.parquet
 data_processing/build_ttn_arrays.py from this script's tower_pairs_*.parquet
 output.
 
-Prerequisites (built by feature_extraction_workflow/, embedding_analysis/,
-and complementary_cats_pairs/categories.* -- see their own READMEs; none of
-these are window_days-specific, so they're shared across every snapshot):
+Prerequisites (built by data_creation/feature_extraction_workflow/,
+data_creation/embedding_analysis/, and
+data_creation/complementary_cats_pairs/categories.* -- see their own
+READMEs; none of these are window_days-specific, so they're shared across
+every snapshot):
   data/Home_and_Kitchen_filtered.csv
   data/df_features.pkl
   data/complementary_categories.pkl
@@ -69,13 +71,13 @@ DATA_DIR = ROOT / "data"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from complementary_cats_pairs import DST_COLS, SRC_COLS, co_purchase_pairs, fold_cat_4, parse_category_levels
+from data_creation.complementary_cats_pairs import DST_COLS, SRC_COLS, co_purchase_pairs, fold_cat_4, parse_category_levels
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--window-days", type=int, default=90,
                      help="max gap, in days, between two purchases of a "
                           "co-purchase pair (default 90, matching the "
-                          "value complementary_cats_pairs/pairs.ipynb used "
+                          "value data_creation/complementary_cats_pairs/pairs.ipynb used "
                           "before this became a CLI parameter)")
 WINDOW_DAYS = parser.parse_args().window_days
 

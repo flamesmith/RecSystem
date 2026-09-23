@@ -24,7 +24,7 @@ variants, both anchored at `TTN/constants.json`'s `date_threshold`:
 - `recency` — only the `RECENCY_WINDOW_DAYS` (default 60, set in the script)
   immediately before it.
 
-`RECENCY_WINDOW_DAYS` here is unrelated to `complementary_cats_pairs`'
+`RECENCY_WINDOW_DAYS` here is unrelated to `data_creation/complementary_cats_pairs`'
 `window_days` (the co-purchase *pairing* window used to build TTN's
 training pairs) — same word, two different concepts. See the script's
 docstring.

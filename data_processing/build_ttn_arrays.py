@@ -165,7 +165,7 @@ def item_title_embeddings(items):
         model = SentenceTransformer("all-MiniLM-L6-v2")
         return np.asarray(model.encode(items["title"].astype(str).fillna("").tolist(),
                                        batch_size=256, show_progress_bar=True))
-    # Reuse the vectors embedding_analysis/ already produced (384-d, unit-norm).
+    # Reuse the vectors data_creation/embedding_analysis/ already produced (384-d, unit-norm).
     wanted = set(items["asin"])
     frame = pd.read_pickle(DATA_DIR / "df_features_with_embeddings.pkl")[
         ["asin", "title_embedding"]]
