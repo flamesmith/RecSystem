@@ -30,7 +30,7 @@ not a transaction log), so -- consistent with how every co-purchase pair in
 this project is built -- a review is used as the purchase proxy: one row in
 Home_and_Kitchen_filtered.csv per (reviewer, item), counted once each.
 
-Prerequisite: TTN/build_data.py must have already run for the given
+Prerequisite: data_processing/build_snapshot.py must have already run for the given
 --snapshot, to produce that snapshot's item_asins.npy and node_of_item.npy
 (each item's own category, the same node encoding used everywhere else in
 this project).
@@ -62,7 +62,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
-                     help="snapshot_id from TTN/build_data.py, e.g. w90_2017-12-09")
+                     help="snapshot_id from data_processing/build_snapshot.py, e.g. w90_2017-12-09")
 SNAPSHOT_DIR = DATA_DIR / "tower" / parser.parse_args().snapshot
 OUT_DIR = SNAPSHOT_DIR / "recommendations"
 OUT_DIR.mkdir(parents=True, exist_ok=True)

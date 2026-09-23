@@ -11,7 +11,7 @@ same list.
 ## Run
 
 ```
-# after TTN/build_data.py --window-days 90 has run at least once
+# after data_processing/build_snapshot.py --window-days 90 has run at least once
 python Popularity/build_popularity.py --snapshot w90_2017-12-09
 ```
 

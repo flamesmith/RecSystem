@@ -19,7 +19,7 @@ turn out to matter more than one merged "best complements" list.
 
 Licensed target categories are read off pairs_train rather than re-joining
 complementary_categories.pkl: every (query, target_node) pair in
-pairs_train was already licensed by that mapping when build_data.py built
+pairs_train was already licensed by that mapping when data_processing/build_ttn_arrays.py built
 it, so grouping "query's own node -> the target_node values seen for it in
 training" reproduces the same licensing relationship for free.
 
@@ -52,7 +52,7 @@ if str(ROOT) not in sys.path:
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
-                     help="snapshot_id from TTN/build_data.py, e.g. w90_2017-12-09")
+                     help="snapshot_id from data_processing/build_ttn_arrays.py, e.g. w90_2017-12-09")
 parser.add_argument("--version", required=True,
                      help="version_id from TTN/build_model.py, e.g. 2026-09-19_v_001 "
                           "(deliberately no 'latest'/'champion' default -- be explicit "

@@ -30,7 +30,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
-                     help="snapshot_id from TTN/build_data.py, e.g. w90_2017-12-09")
+                     help="snapshot_id from data_processing/build_snapshot.py, e.g. w90_2017-12-09")
 SNAPSHOT_DIR = ROOT / "data" / "tower" / parser.parse_args().snapshot
 SRC_PATH = SNAPSHOT_DIR / "serving" / "recommendations.parquet"
 DB_PATH = SNAPSHOT_DIR / "serving" / "recommendations.db"

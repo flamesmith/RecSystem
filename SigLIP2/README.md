@@ -9,7 +9,7 @@ complement `../TTN/` retrieves).
 ## Run
 
 ```
-# after TTN/build_data.py --window-days 90 has run at least once
+# after data_processing/build_snapshot.py --window-days 90 has run at least once
 python SigLIP2/build_siglip2.py --snapshot w90_2017-12-09
 ```
 
@@ -27,7 +27,7 @@ and `siglip_img_status.npy` (flags items with no usable image — about 28%
 of the catalogue, left as a zero vector) — that per-snapshot pair is what
 everything downstream actually reads.
 
-Depends on `TTN/build_data.py` having already run for the given snapshot:
+Depends on `data_processing/build_snapshot.py` having already run for the given snapshot:
 it reads that snapshot's `item_asins.npy` for the item order and list.
 
 See `results.ipynb` (repo root) for its evaluated Recall@10/@100.

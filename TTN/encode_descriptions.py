@@ -1,18 +1,19 @@
 """Encode `description_cleaned` for the tower's items, in a lean process.
 
-Run AFTER build_data.py has written data/tower/<snapshot_id>/item_asins.npy,
-and BEFORE build_model.py trains the model -- build_model.py detects whether
-desc_emb.npy exists in that same snapshot and trains without the description
-block if it doesn't, so running this in between is what gives the model
-description signal at all:
+Run AFTER data_processing/build_ttn_arrays.py has written
+data/tower/<snapshot_id>/items.npz, and BEFORE build_model.py trains the
+model -- build_model.py detects whether desc_emb.npy exists in that same
+snapshot and trains without the description block if it doesn't, so running
+this in between is what gives the model description signal at all:
 
-    python TTN/build_data.py --window-days 90     # produces item_asins.npy
+    python data_processing/build_snapshot.py --window-days 90
+    python data_processing/build_ttn_arrays.py --snapshot w90_2017-12-09
     python TTN/encode_descriptions.py --snapshot w90_2017-12-09
     python TTN/build_model.py --snapshot w90_2017-12-09   # now finds desc_emb.npy
 
-Doing this inside build_data.py holds df_features (2.9 GB) and the embeddings
-pickle (4.3 GB) in memory alongside SBERT; on 16 GB the batches stall for
-minutes at a time. This process loads two columns and nothing else.
+Doing this inside build_ttn_arrays.py holds df_features (2.9 GB) and the
+embeddings pickle (4.3 GB) in memory alongside SBERT; on 16 GB the batches
+stall for minutes at a time. This process loads two columns and nothing else.
 
 Writes data/tower/<snapshot_id>/desc_emb.npy, aligned row-for-row with that
 snapshot's items.npz. Re-encodes per snapshot even though the description
@@ -29,7 +30,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
-                     help="snapshot_id from build_data.py, e.g. w90_2017-12-09")
+                     help="snapshot_id from data_processing/build_ttn_arrays.py, e.g. w90_2017-12-09")
 OUT = ROOT / "data" / "tower" / parser.parse_args().snapshot
 MAX_CHARS = 1200          # MiniLM caps at 256 word-pieces; the tokeniser still
                           # reads everything past it, and a few 50 kB blurbs

@@ -10,7 +10,7 @@ one, and a candidate version can be reviewed (metrics, config) before it's
 ever promoted to champion. Promotion itself (writing champion.json) is a
 separate, deliberate step -- this script never does it automatically.
 
-Prerequisite: TTN/build_data.py must have already run for the given
+Prerequisite: data_processing/build_ttn_arrays.py must have already run for the given
 --snapshot, to produce the data/tower/<snapshot_id>/ arrays this reads. Run
 TTN/encode_descriptions.py in between the two for a model trained with
 description signal (optional -- this script detects its absence and trains
@@ -47,7 +47,7 @@ if str(ROOT) not in sys.path:
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
-                     help="snapshot_id from build_data.py, e.g. w90_2017-12-09")
+                     help="snapshot_id from data_processing/build_ttn_arrays.py, e.g. w90_2017-12-09")
 SNAPSHOT_ID = parser.parse_args().snapshot
 
 # Show every column/variable when displaying a dataframe

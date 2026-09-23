@@ -23,7 +23,7 @@ interrupting and restarting is always safe. About 28% of items have no
 image and get a zero vector, the same convention TTN uses for blank
 descriptions.
 
-Prerequisite: TTN/build_data.py must have already run for the given
+Prerequisite: data_processing/build_snapshot.py must have already run for the given
 --snapshot, to produce that snapshot's item_asins.npy (the item list this
 run needs embeddings for).
 
@@ -66,7 +66,7 @@ def _find_root(start: Path) -> Path:
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
-                     help="snapshot_id from TTN/build_data.py, e.g. w90_2017-12-09")
+                     help="snapshot_id from data_processing/build_snapshot.py, e.g. w90_2017-12-09")
 SNAPSHOT_ID = parser.parse_args().snapshot
 
 ROOT         = _find_root(Path.cwd())
