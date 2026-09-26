@@ -108,6 +108,96 @@ flowchart LR
     N2 -.own-category node.-> M1
 ```
 
+## Variable-level lineage
+
+The file-level diagram above shows which *files* feed which. This one instead
+follows each *variable* TTN actually trains on — one lane per variable (or
+group of identically-treated variables), left to right through the stage that
+touches it, ending at the exact array/vocab it lands in. `description`/
+`desc_emb` is left out here (see the tables below if you need it); so is
+everything past this point — how the model itself consumes these arrays.
+
+```mermaid
+flowchart TB
+    classDef raw fill:#fde68a,stroke:#b45309,color:#3f2d05
+    classDef stage1 fill:#bbf7d0,stroke:#15803d,color:#0b3a1e
+    classDef stage2 fill:#bfdbfe,stroke:#1d4ed8,color:#0f2a63
+    classDef stage3 fill:#fbcfe8,stroke:#be185d,color:#5c0d31
+    classDef discard fill:#fecaca,stroke:#b91c1c,color:#450a0a
+    classDef pass fill:#f4f4f5,stroke:#a1a1aa,color:#3f3f46
+
+    subgraph V1["cat_2 / cat_3"]
+        direction LR
+        V1R["category (breadcrumb list)<br/>meta CSV"]:::raw
+        V1S1["cat_2, cat_3<br/>ensure_cat_columns() splits the breadcrumb"]:::stage1
+        V1S2["query_/target_cat_2, cat_3<br/>attached to pairs; vocab fit on train;<br/>missing → 'Missing'"]:::stage2
+        V1S3["cat_ids[:,0], cat_ids[:,1]<br/>vocabs['cat_2'], vocabs['cat_3']"]:::stage3
+        V1R --> V1S1 --> V1S2 --> V1S3
+    end
+
+    subgraph V2["cat_4"]
+        direction LR
+        V2R["category (breadcrumb list)<br/>meta CSV"]:::raw
+        V2S1["cat_4 (raw level)<br/>ensure_cat_columns()"]:::stage1
+        V2S2["cat_4_clean<br/>folded via category_taxonomy.json:<br/>outside whitelist → '&lt;cat_3&gt;_Other'"]:::stage2
+        V2S3["cat_ids[:,2]<br/>vocabs['cat_4']"]:::stage3
+        V2R --> V2S1 --> V2S2 --> V2S3
+    end
+
+    subgraph V3["brand"]
+        direction LR
+        V3R["brand<br/>meta CSV"]:::raw
+        V3S1["brand_clean (v1)<br/>clean_brand(): spelling-merge<br/>+ rare-fold"]:::discard
+        V3X["✕ discarded —<br/>never read downstream"]:::discard
+        V3S2["brand_clean (v2, overwrites v1)<br/>recomputed straight from raw brand;<br/>rare-fold refit train-only, no spelling-merge"]:::stage2
+        V3S3["cat_ids[:,3]<br/>vocabs['brand']"]:::stage3
+        V3R --> V3S1 -.-> V3X
+        V3R --> V3S2 --> V3S3
+    end
+
+    subgraph V4["color / material / product_type / features"]
+        direction LR
+        V4R["title/description/feature text<br/>meta CSV"]:::raw
+        V4S1["Color, Material, Product_Type, Features<br/>extracted via master_metadata.json schema,<br/>then canonicalize_values() folds spelling variants"]:::stage1
+        V4S2["query_/target_color/material/<br/>product_type/features<br/>attached to pairs; vocab fit;<br/>missing → 'Missing'"]:::stage2
+        V4S3["cat_ids[:,4..7]<br/>vocabs['color'|'material'|'product_type'|'features']"]:::stage3
+        V4R --> V4S1 --> V4S2 --> V4S3
+    end
+
+    subgraph V5["price"]
+        direction LR
+        V5R["price (string)<br/>meta CSV"]:::raw
+        V5P["carried through unchanged<br/>(no Stage 1 transform)"]:::pass
+        V5S2["numeric price;<br/>missing imputed hierarchically<br/>(cat_4→cat_3→cat_2→global, train-fit);<br/>price_imputed flag added"]:::stage2
+        V5S3["numeric[:,0..2]<br/>log1p(price), price decile, price_imputed"]:::stage3
+        V5R --> V5P --> V5S2 --> V5S3
+    end
+
+    subgraph V6["title"]
+        direction LR
+        V6R["title<br/>meta CSV"]:::raw
+        V6S1["title_cleaned → title_embedding<br/>clean_text() then SBERT (384-d)<br/>→ df_features_with_embeddings.pkl"]:::stage1
+        V6P["title_cleaned carried onto pairs<br/>(text itself not reused)"]:::pass
+        V6S3["items.npz['title_emb']<br/>reused by asin, not recomputed"]:::stage3
+        V6R --> V6S1 --> V6P --> V6S3
+    end
+
+    subgraph V7["target_node"]
+        direction LR
+        V7R["query_/target_cat_2/3/4<br/>(already vocab-applied, Stage 2)"]:::stage2
+        V7S2["target_node string<br/>= cat_2 + ' &gt; ' + cat_3 + ' &gt; ' + cat_4<br/>vocab fit on train"]:::stage2
+        V7S3a["node_of_item.npy<br/>Stage 2's own encoding —<br/>item's OWN category"]:::stage2
+        V7S3b["vocabs['target_node'] + target_node_id<br/>Stage 3's own, separate encoding —<br/>pair's TARGET category"]:::stage3
+        V7R --> V7S2
+        V7S2 --> V7S3a
+        V7S2 --> V7S3b
+    end
+```
+
+**Two things this graph surfaces that the file-level one doesn't:**
+- **`brand` is computed twice, and the second computation wins** — Stage 1's `clean_brand()` spelling-merge is thrown away; `build_snapshot.py` looks for a `"brand_norm"` column, doesn't find one, and silently recomputes `brand_clean` from the raw `brand` string instead.
+- **`target_node` is encoded twice, independently** — once in Stage 2 (`node_of_item.npy`) and once in Stage 3 (`vocabs["target_node"]`). Both sort the same underlying set of strings the same way, so the ids match today, but they aren't the same computation — a change to one without the other would silently desync them.
+
 ## Stage 1 — `data_creation/build_data.py`
 
 Item-level, **window_days-independent** — run once, reused by every snapshot.
