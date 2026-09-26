@@ -9,9 +9,11 @@ The two raw files sit at the far left. The static config/constants files sit
 in a row at the **top** — they're referenced throughout, not consumed once
 and discarded, so they're pulled out of the main left-to-right chain instead
 of cluttering it. The main chain reads left to right, stage by stage; every
-table/array node is labeled with what it actually contains. Solid arrows are
-a direct file read; dotted arrows mean only a column/value from that source
-is used, not the whole file.
+table/array node is labeled with what it actually contains.
+
+**Line style — see the legend at the top of the diagram:**
+- **Thick solid (`━━▶`)** — the primary input a stage reads to build its output (a full file, or the direct predecessor artifact).
+- **Thin dotted (`┈┈▶`)** — a supplementary value pulled in alongside the primary input (one column, a threshold, a whitelist set) — not the whole file.
 
 ```mermaid
 flowchart LR
@@ -21,6 +23,13 @@ flowchart LR
     classDef stage2 fill:#bfdbfe,stroke:#1d4ed8,color:#0f2a63
     classDef stage3 fill:#fbcfe8,stroke:#be185d,color:#5c0d31
     classDef stage4 fill:#e9d5ff,stroke:#7e22ce,color:#3b0764
+    classDef dot fill:#fff,stroke:#999,color:#fff
+
+    subgraph LEGEND[" LEGEND "]
+        direction LR
+        LA(( )):::dot ==>|primary input, full read| LB(( )):::dot
+        LC(( )):::dot -.->|supplementary — partial value only| LD(( )):::dot
+    end
 
     subgraph CFG[" STATIC CONFIG — tracked in git, hand-authored, referenced throughout "]
         direction LR
@@ -39,9 +48,9 @@ flowchart LR
         F2["df_features_with_embeddings.pkl<br/>+ 384-d SBERT title vector per item"]:::stage1
         F3["pair_stats.pkl<br/>every scored also_buy category pair,<br/>unfiltered (support + lift)"]:::stage1
         F4["complementary_categories.pkl<br/>pairs clearing min_edges + min_lift"]:::stage1
-        F1 -->|SBERT title encode| F2
-        F1 -->|also_buy edges| F3
-        F3 -->|threshold| F4
+        F1 ==>|SBERT title encode| F2
+        F1 ==>|also_buy edges| F3
+        F3 ==>|threshold| F4
     end
 
     subgraph S2["STAGE 2 — data_processing/build_snapshot.py --window-days N"]
@@ -50,8 +59,6 @@ flowchart LR
         N2["node_of_item.npy<br/>each item's OWN category, encoded"]:::stage2
         N3["tower_pairs_train.parquet<br/>cleaned, licensed, windowed<br/>co-purchase pairs — train split"]:::stage2
         N4["tower_pairs_test.parquet<br/>same, held-out test split"]:::stage2
-        N3 -.same build.-> N1
-        N3 -.same build.-> N2
     end
 
     subgraph S3["STAGE 3 — data_processing/build_ttn_arrays.py + TTN/encode_descriptions.py"]
@@ -67,36 +74,36 @@ flowchart LR
         direction TB
         M1["model.pt<br/>trained ComplementaryTwoTower —<br/>state_dict, config, metrics"]:::stage4
         M2["version_manifest.json<br/>same run's identity/config/metrics,<br/>readable without loading torch"]:::stage4
-        M1 --> M2
+        M1 ==>|save checkpoint| M2
     end
 
-    %% ---- static config feeds the stages that need it ----
+    %% ---- static config feeds the stages that need it (all supplementary) ----
     C1 -.schema.-> F1
     C2 -.noise phrases.-> F1
     C3 -.taxonomy whitelist.-> F3
     C3 -.cat_4 folding.-> S2
     C4 -.train/test split.-> S2
 
-    %% ---- main left-to-right chain ----
-    R1 --> F1
+    %% ---- main left-to-right chain: thick = primary input, dotted = supplementary ----
+    R1 ==>|reads full catalogue| F1
     R1 -.category lookup.-> F3
-    R2 --> N3
-    R2 --> N4
+    R2 ==>|reads full review log| N3
+    R2 ==>|reads full review log| N4
     R1 -.price medians.-> S2
     F1 -.category path.-> S2
     F4 -.licenses direction.-> S2
 
-    N3 --> T3
-    N4 --> T4
-    N1 --> T1
+    N3 ==>|encode + slim| T3
+    N4 ==>|encode + slim| T4
+    N1 ==>|build items table| T1
     F2 -.title vectors.-> T1
     F1 -.description text.-> T5
     N1 -.item order.-> T5
 
-    T1 --> M1
-    T2 --> M1
-    T3 --> M1
-    T4 --> M1
+    T1 ==>|train input| M1
+    T2 ==>|train input| M1
+    T3 ==>|train input| M1
+    T4 ==>|train input| M1
     T5 -.optional.-> M1
     N2 -.own-category node.-> M1
 ```
