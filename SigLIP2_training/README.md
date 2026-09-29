@@ -159,6 +159,9 @@ Never commit:
 - Downloaded images
 - SQLite cache databases
 - Frozen feature matrices
-- Model weights or optimizer checkpoints
+
+Compact, explicitly promoted deployment adapters may be versioned as a deliberate exception. The
+selected 200K adapter package is committed under `checkpoints/pilot_200k/`; optimizer progress,
+experimental candidates, base-model files, and full-catalog vector indexes remain external artifacts.
 
 Commit code, configuration, tests, schemas, decision records, and small aggregate reports only.

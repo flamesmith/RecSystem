@@ -1,0 +1,76 @@
+{
+  "created_at_utc": "2026-09-22T17:28:27.762994+00:00",
+  "command": [
+    "/Users/vachemacbook/Desktop/RecSystem/RecSystem/SigLIP2_training/src/siglip2_training/__main__.py",
+    "train-adapters",
+    "--features",
+    "features/pilot_200k",
+    "--output",
+    "checkpoints/pilot_200k",
+    "--config",
+    "configs/adapter_200k.yaml",
+    "--guardrails",
+    "configs/guardrails.yaml"
+  ],
+  "git_commit": "2f02bbffd54d377f5cf23e9ba2200513754bbbcf",
+  "python": "3.11.6",
+  "platform": "macOS-15.4.1-x86_64-i386-64bit",
+  "packages": {
+    "torch": "2.2.2",
+    "transformers": "4.57.6",
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "Pillow": "11.3.0",
+    "PyYAML": "6.0.3",
+    "requests": "2.34.2"
+  },
+  "inputs": {
+    "feature_directory": "/Users/vachemacbook/Desktop/RecSystem/RecSystem/SigLIP2_training/features/pilot_200k"
+  },
+  "outputs": {
+    "checkpoint_directory": "/Users/vachemacbook/Desktop/RecSystem/RecSystem/SigLIP2_training/checkpoints/pilot_200k",
+    "results": "/Users/vachemacbook/Desktop/RecSystem/RecSystem/SigLIP2_training/checkpoints/pilot_200k/results.json"
+  },
+  "configuration": {
+    "training_path": "/Users/vachemacbook/Desktop/RecSystem/RecSystem/SigLIP2_training/configs/adapter_200k.yaml",
+    "training_hash": "8d0914e4ed70774e0fdb0de5e8c2458fc925457da29ee87203f014a917ad5d03",
+    "guardrails_path": "/Users/vachemacbook/Desktop/RecSystem/RecSystem/SigLIP2_training/configs/guardrails.yaml",
+    "guardrails_hash": "c7bcb1f4012851c82a443a4e8b9e2218430602131412294eb815d59ff0b397ef"
+  },
+  "statistics": {
+    "rows": {
+      "train": 197144,
+      "validation": 498,
+      "test": 488
+    },
+    "selection": {
+      "candidate": "taxonomy_w20_random_200k",
+      "strategy": "multichunk_with_taxonomy",
+      "taxonomy_weight": 0.2,
+      "batching": {
+        "mode": "random"
+      },
+      "variant": "trained_adapter",
+      "promoted_challenger": true,
+      "best_challenger": "taxonomy_w20_random_200k",
+      "strategies_passing_guardrails": 1,
+      "winner_guardrails_passed": true,
+      "scaling_guardrail_passed": true,
+      "validation": {
+        "image_to_text_recall@1": 0.5040160642570282,
+        "text_to_image_recall@1": 0.5020080321285141,
+        "bidirectional_recall@1": 0.5030120481927711,
+        "image_to_text_recall@5": 0.7289156626506024,
+        "text_to_image_recall@5": 0.7409638554216867,
+        "bidirectional_recall@5": 0.7349397590361446,
+        "image_to_text_recall@10": 0.8333333333333334,
+        "text_to_image_recall@10": 0.8072289156626506,
+        "bidirectional_recall@10": 0.820281124497992,
+        "mean_positive_cosine": 0.1391066610813141,
+        "mean_off_diagonal_cosine": 0.05727002498803059,
+        "positive_pair_margin": 0.0818366360932835
+      }
+    },
+    "elapsed_seconds": 528.5768
+  }
+}

@@ -6,6 +6,12 @@ features/*
 !features/.gitkeep
 checkpoints/*
 !checkpoints/.gitkeep
+!checkpoints/pilot_200k/
+checkpoints/pilot_200k/*
+!checkpoints/pilot_200k/README.md
+!checkpoints/pilot_200k/manifest.json
+!checkpoints/pilot_200k/results.json
+!checkpoints/pilot_200k/taxonomy_w20_random_200k.pt
 data/*
 !data/.gitkeep
 *.sqlite
