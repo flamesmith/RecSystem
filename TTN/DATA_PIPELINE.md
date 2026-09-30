@@ -70,7 +70,7 @@ flowchart TB
 
     DFFEATURES[["df_features.pkl<br/>= every variable above<br/>+ all raw passthrough columns"]]:::file
 
-    ORCH ==>|calls run_feature_extraction(),<br/>expand_features(), etc.| FILE1
+    ORCH ==>|calls run_feature_extraction,<br/>expand_features, etc.| FILE1
 
     RAW --> P_CAT
     CFG1 -.keys used as the row filter.-> P_CAT
@@ -137,8 +137,8 @@ flowchart TB
     DFPAIRSTATS[["pair_stats.pkl"]]:::file
     DFCOMPCATS[["complementary_categories.pkl"]]:::file
 
-    ORCH ==>|calls create_embeddings()| FILE2
-    ORCH ==>|calls load_taxonomy(),<br/>build_base_table(), score_pairs(), etc.| FILE3
+    ORCH ==>|calls create_embeddings| FILE2
+    ORCH ==>|calls load_taxonomy,<br/>build_base_table, score_pairs, etc.| FILE3
 
     DFFEATURES --> P_EMBED --> V_EMBED --> DFEMB
 
