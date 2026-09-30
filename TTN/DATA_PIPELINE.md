@@ -29,6 +29,9 @@ flowchart TB
     classDef vars fill:#bbf7d0,stroke:#15803d,color:#0b3a1e
     classDef discard fill:#fecaca,stroke:#b91c1c,color:#450a0a
     classDef file fill:#93c5fd,stroke:#1d4ed8,color:#0f2a63,stroke-width:2px
+    classDef orch fill:#fef3c7,stroke:#d97706,color:#78350f,stroke-width:2px
+
+    ORCH["data_creation/build_data.py<br/>ORCHESTRATOR — calls every function<br/>below, in order, saves the result"]:::orch
 
     RAW["meta_Home_and_Kitchen_filtered.csv (RAW)<br/>asin, category, title, description, feature,<br/>brand, price, also_buy, imageURL, imageURLHighRes,<br/>rank, main_cat, date, tech1, tech2"]:::raw
     CFG1["master_metadata.json<br/>per-cat_3 field schema"]:::config
@@ -67,6 +70,8 @@ flowchart TB
 
     DFFEATURES[["df_features.pkl<br/>= every variable above<br/>+ all raw passthrough columns"]]:::file
 
+    ORCH ==>|calls run_feature_extraction(),<br/>expand_features(), etc.| FILE1
+
     RAW --> P_CAT
     CFG1 -.keys used as the row filter.-> P_CAT
     P_CAT --> V_CAT --> DFFEATURES
@@ -100,6 +105,9 @@ flowchart TB
     classDef proc fill:#ffffff,stroke:#374151,color:#111827
     classDef vars fill:#bbf7d0,stroke:#15803d,color:#0b3a1e
     classDef file fill:#93c5fd,stroke:#1d4ed8,color:#0f2a63,stroke-width:2px
+    classDef orch fill:#fef3c7,stroke:#d97706,color:#78350f,stroke-width:2px
+
+    ORCH["data_creation/build_data.py<br/>ORCHESTRATOR"]:::orch
 
     DFFEATURES[["df_features.pkl<br/>(from Step 1a)"]]:::file
     RAW["meta_Home_and_Kitchen_filtered.csv (RAW)"]:::raw
@@ -128,6 +136,9 @@ flowchart TB
 
     DFPAIRSTATS[["pair_stats.pkl"]]:::file
     DFCOMPCATS[["complementary_categories.pkl"]]:::file
+
+    ORCH ==>|calls create_embeddings()| FILE2
+    ORCH ==>|calls load_taxonomy(),<br/>build_base_table(), score_pairs(), etc.| FILE3
 
     DFFEATURES --> P_EMBED --> V_EMBED --> DFEMB
 
