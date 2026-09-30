@@ -14,7 +14,12 @@ naming exactly what they're used for.
 
 Item-level, **window_days-independent** — run once, reused by every
 snapshot. Resumable: each step is skipped (existing file reused) unless
-`--force`.
+`--force`. `build_data.py` is the **orchestrator** — it doesn't contain
+transformation logic itself, it just calls functions from other files in
+order and saves whatever they return. The diagrams below show which file
+each function actually lives in.
+
+### Step 1a — item feature extraction
 
 ```mermaid
 flowchart TB
@@ -26,58 +31,41 @@ flowchart TB
     classDef file fill:#93c5fd,stroke:#1d4ed8,color:#0f2a63,stroke-width:2px
 
     RAW["meta_Home_and_Kitchen_filtered.csv (RAW)<br/>asin, category, title, description, feature,<br/>brand, price, also_buy, imageURL, imageURLHighRes,<br/>rank, main_cat, date, tech1, tech2"]:::raw
-
     CFG1["master_metadata.json<br/>per-cat_3 field schema"]:::config
     CFG2["global_filters.json<br/>marketing phrases to strip"]:::config
-    CFG3["category_taxonomy.json<br/>reviewed (cat_3, cat_4) whitelist"]:::config
 
-    P_CAT["ensure_cat_columns() + filter_by_cat_3()<br/>split the category breadcrumb;<br/>DROP rows whose cat_3 has no schema"]:::proc
-    V_CAT["cat_1, cat_2, cat_3, cat_4, cat_5, cat_6"]:::vars
+    subgraph FILE1[" feature_extraction_workflow/extract_features.py — every function below lives here "]
+        direction TB
+        P_CAT["ensure_cat_columns() + filter_by_cat_3()<br/>split the category breadcrumb;<br/>DROP rows whose cat_3 has no schema"]:::proc
+        V_CAT["cat_1, cat_2, cat_3, cat_4, cat_5, cat_6"]:::vars
 
-    P_CLEAN["clean_text() + remove_global_filters()<br/>lowercase, strip noise/stopwords,<br/>lemmatize, strip marketing phrases"]:::proc
-    V_CLEAN["title_cleaned, description_cleaned,<br/>feature_cleaned"]:::vars
+        P_CLEAN["clean_text() + remove_global_filters()<br/>lowercase, strip noise/stopwords,<br/>lemmatize, strip marketing phrases"]:::proc
+        V_CLEAN["title_cleaned, description_cleaned,<br/>feature_cleaned"]:::vars
 
-    P_EXTRACT["extract_features(), per cleaned column,<br/>using that row's cat_3 schema"]:::proc
-    V_EXTRACT["extracted_features_title,<br/>extracted_features_description,<br/>extracted_features_feature"]:::vars
+        P_EXTRACT["extract_features(), per cleaned column,<br/>using that row's cat_3 schema"]:::proc
+        V_EXTRACT["extracted_features_title,<br/>extracted_features_description,<br/>extracted_features_feature"]:::vars
 
-    P_MERGE["merge_extracted()<br/>priority: title &gt; description &gt; feature"]:::proc
-    V_MERGE["extracted_features"]:::vars
+        P_MERGE["merge_extracted()<br/>priority: title &gt; description &gt; feature"]:::proc
+        V_MERGE["extracted_features"]:::vars
 
-    P_EXPAND["expand_features()<br/>one column per field key found<br/>(25 distinct fields across all categories)"]:::proc
+        P_EXPAND["expand_features()<br/>one column per field key found<br/>(25 distinct fields across all categories)"]:::proc
 
-    V_NOCHANGE["No further transformation:<br/>Brand, Material, Theme, Size, Shape,<br/>Sub_Type, Scent, Shape_Style"]:::vars
-    P_CANON["canonicalize_values()<br/>folds spelling variants (grey→gray)"]:::proc
-    V_CANON["Color, Features, Product_Type"]:::vars
-    P_DIM["parse_dimensions() → normalize_dimensions()<br/>→ clean_numeric_ranges()<br/>convert recognized length units to inches,<br/>then range-filter"]:::proc
-    V_DIM["Dimensions (raw), dimension_1/2/3 (mixed units),<br/>dimension_unit, dimension_unit_src, dimension_unit_clean,<br/>dimension_1_in/2_in/3_in,<br/>dimension_1_in_cleaned/2_in_cleaned/3_in_cleaned"]:::vars
-    P_NUMUNIT["parse_numeric_and_unit() → numeric + unit split<br/>→ clean_numeric_ranges() on the numeric half"]:::proc
-    V_NUMUNIT["Piece_Count → piece_count_numeric/_unit/_numeric_cleaned<br/>Capacity_Volume → capacity_volume_numeric/_unit/_numeric_cleaned<br/>Thread_Count → thread_count_numeric/_unit/_numeric_cleaned<br/>Weight → weight_numeric/_unit/_numeric_cleaned"]:::vars
-    P_NUMONLY["parse_numeric_and_unit()[0] — unit discarded<br/>→ clean_numeric_ranges()"]:::proc
-    V_NUMONLY["bar_pressure_numeric/_cleaned, capacity_cups_numeric/_cleaned,<br/>density_weight_lb/_cleaned, pocket_depth_in/_cleaned,<br/>power_rating_w/_cleaned, stage_count_numeric/_cleaned,<br/>voltage_numeric/_cleaned"]:::vars
-    V_IGNORED["No further transformation, unused downstream:<br/>Filter_Rating, Part_Number"]:::vars
+        V_NOCHANGE["No further transformation:<br/>Brand, Material, Theme, Size, Shape,<br/>Sub_Type, Scent, Shape_Style"]:::vars
+        P_CANON["canonicalize_values()<br/>folds spelling variants (grey→gray)"]:::proc
+        V_CANON["Color, Features, Product_Type"]:::vars
+        P_DIM["parse_dimensions() → normalize_dimensions()<br/>→ clean_numeric_ranges()"]:::proc
+        V_DIM["Dimensions (raw), dimension_1/2/3 (mixed units),<br/>dimension_unit, dimension_unit_src, dimension_unit_clean,<br/>dimension_1_in/2_in/3_in,<br/>dimension_1_in_cleaned/2_in_cleaned/3_in_cleaned"]:::vars
+        P_NUMUNIT["parse_numeric_and_unit() → numeric + unit split<br/>→ clean_numeric_ranges() on the numeric half"]:::proc
+        V_NUMUNIT["Piece_Count → piece_count_numeric/_unit/_numeric_cleaned<br/>Capacity_Volume → capacity_volume_numeric/_unit/_numeric_cleaned<br/>Thread_Count → thread_count_numeric/_unit/_numeric_cleaned<br/>Weight → weight_numeric/_unit/_numeric_cleaned"]:::vars
+        P_NUMONLY["parse_numeric_and_unit()[0] — unit discarded<br/>→ clean_numeric_ranges()"]:::proc
+        V_NUMONLY["bar_pressure_numeric/_cleaned, capacity_cups_numeric/_cleaned,<br/>density_weight_lb/_cleaned, pocket_depth_in/_cleaned,<br/>power_rating_w/_cleaned, stage_count_numeric/_cleaned,<br/>voltage_numeric/_cleaned"]:::vars
+        V_IGNORED["No further transformation, unused downstream:<br/>Filter_Rating, Part_Number"]:::vars
 
-    P_BRAND["clean_brand()<br/>spelling-merge + rare-fold"]:::proc
-    V_BRAND["brand_clean (v1)"]:::discard
+        P_BRAND["clean_brand()<br/>spelling-merge + rare-fold"]:::proc
+        V_BRAND["brand_clean (v1)"]:::discard
+    end
 
     DFFEATURES[["df_features.pkl<br/>= every variable above<br/>+ all raw passthrough columns"]]:::file
-
-    P_EMBED["create_embeddings() — embedding_analysis.py<br/>SBERT all-MiniLM-L6-v2 on title_cleaned"]:::proc
-    V_EMBED["title_embedding (384-d)"]:::vars
-    DFEMB[["df_features_with_embeddings.pkl<br/>= df_features.pkl + title_embedding"]]:::file
-
-    P_TAXO["load_taxonomy()"]:::proc
-    V_TAXO["valid_pairs — whitelist set"]:::vars
-    P_BASE["build_base_table() — SOURCE side"]:::proc
-    V_BASE["asin, cat_2, cat_3, cat_4_clean (local fold),<br/>image_url, also_buy (parsed to real list), also_buy_n"]:::vars
-    P_LOOKUP["load_catalogue_lookup() — TARGET side<br/>RE-READS the raw CSV directly (not df_features.pkl) —<br/>covers the WHOLE catalogue, bypassing the cat_3 row filter"]:::proc
-    V_LOOKUP["asin, cat_2, cat_3, cat_4_clean (local fold), image_url<br/>— one row per asin, whole catalogue"]:::vars
-    P_BUILDPAIRS["build_pairs()<br/>explode also_buy into edges; join target category;<br/>unresolved target → 'Not in catalogue'"]:::proc
-    V_EDGES["src_asin, src_cat_2/3/4, src_image_url,<br/>dst_asin, dst_cat_2/3/4, dst_image_url<br/>(~5M edge rows)"]:::vars
-    P_SCORE["score_pairs()<br/>aggregate by the 6 category columns"]:::proc
-    V_SCORE["edges, src_edges, dst_edges, support, lift<br/>— one row per distinct category pair"]:::vars
-    DFPAIRSTATS[["pair_stats.pkl"]]:::file
-    P_FILTER["filter_pairs()<br/>keep edges ≥ min_edges AND lift ≥ min_lift"]:::proc
-    DFCOMPCATS[["complementary_categories.pkl"]]:::file
 
     RAW --> P_CAT
     CFG1 -.keys used as the row filter.-> P_CAT
@@ -101,6 +89,45 @@ flowchart TB
     P_EXPAND --> V_IGNORED --> DFFEATURES
 
     RAW -->|brand| P_BRAND --> V_BRAND --> DFFEATURES
+```
+
+### Steps 1b–1d — embeddings, then category-pair scoring
+
+```mermaid
+flowchart TB
+    classDef raw fill:#fde68a,stroke:#b45309,color:#3f2d05
+    classDef config fill:#e0e7ff,stroke:#4338ca,color:#241d5c
+    classDef proc fill:#ffffff,stroke:#374151,color:#111827
+    classDef vars fill:#bbf7d0,stroke:#15803d,color:#0b3a1e
+    classDef file fill:#93c5fd,stroke:#1d4ed8,color:#0f2a63,stroke-width:2px
+
+    DFFEATURES[["df_features.pkl<br/>(from Step 1a)"]]:::file
+    RAW["meta_Home_and_Kitchen_filtered.csv (RAW)"]:::raw
+    CFG3["category_taxonomy.json<br/>reviewed (cat_3, cat_4) whitelist"]:::config
+
+    subgraph FILE2[" embedding_analysis/embedding_analysis.py "]
+        P_EMBED["create_embeddings()<br/>SBERT all-MiniLM-L6-v2 on title_cleaned"]:::proc
+        V_EMBED["title_embedding (384-d)"]:::vars
+    end
+    DFEMB[["df_features_with_embeddings.pkl<br/>= df_features.pkl + title_embedding<br/>(saved by build_data.py)"]]:::file
+
+    subgraph FILE3[" complementary_cats_pairs/categories.py "]
+        direction TB
+        P_TAXO["load_taxonomy()"]:::proc
+        V_TAXO["valid_pairs — whitelist set"]:::vars
+        P_BASE["build_base_table() — SOURCE side"]:::proc
+        V_BASE["asin, cat_2, cat_3, cat_4_clean (local fold),<br/>also_buy (parsed to real list), also_buy_n"]:::vars
+        P_LOOKUP["load_catalogue_lookup() — TARGET side<br/>RE-READS the raw CSV directly, covering the<br/>WHOLE catalogue (bypasses the cat_3 row filter)"]:::proc
+        V_LOOKUP["asin, cat_2, cat_3, cat_4_clean (local fold)<br/>— one row per asin, whole catalogue"]:::vars
+        P_BUILDPAIRS["build_pairs()<br/>explode also_buy into edges; join target category;<br/>unresolved target → 'Not in catalogue'"]:::proc
+        V_EDGES["src/dst asin, src/dst cat_2/3/4<br/>(~5M edge rows)"]:::vars
+        P_SCORE["score_pairs()<br/>aggregate by the 6 category columns"]:::proc
+        V_SCORE["edges, support, lift<br/>— one row per distinct category pair"]:::vars
+        P_FILTER["filter_pairs()<br/>keep edges ≥ min_edges AND lift ≥ min_lift"]:::proc
+    end
+
+    DFPAIRSTATS[["pair_stats.pkl"]]:::file
+    DFCOMPCATS[["complementary_categories.pkl"]]:::file
 
     DFFEATURES --> P_EMBED --> V_EMBED --> DFEMB
 
@@ -114,12 +141,12 @@ flowchart TB
     DFPAIRSTATS --> P_FILTER --> DFCOMPCATS
 ```
 
-| # | Reads | Modifications | Writes |
-|---|---|---|---|
-| 1a | `meta_Home_and_Kitchen_filtered.csv` | Category split + `cat_3` row filter, text cleaning, schema-driven attribute extraction, canonicalization, brand fold, dimension/numeric cleaning (full detail in the diagram above) | `df_features.pkl` |
-| 1b | `df_features.pkl` | SBERT (`all-MiniLM-L6-v2`) encodes `title_cleaned` → 384-d unit-norm vector per item | `df_features_with_embeddings.pkl` |
-| 1c | `df_features.pkl`'s `also_buy`/`cat_2`/`cat_3`, `category_taxonomy.json`, a second direct read of `meta_Home_and_Kitchen_filtered.csv` (for target-category lookup over the whole catalogue) | Explode `also_buy` into edges, resolve each target's category, score `support`/`lift` per distinct category pair | `pair_stats.pkl` — every scored pair, unfiltered (cached; expensive step) |
-| 1d | `pair_stats.pkl` | Keep pairs where `edges >= min_edges` **and** `lift >= min_lift` | `complementary_categories.pkl` |
+| # | File(s) responsible | Reads | Modifications | Writes |
+|---|---|---|---|---|
+| 1a | orchestrator: `build_data.py` · functions: `extract_features.py` | `meta_Home_and_Kitchen_filtered.csv` | Category split + `cat_3` row filter, text cleaning, schema-driven attribute extraction, canonicalization, brand fold, dimension/numeric cleaning | `df_features.pkl` |
+| 1b | orchestrator: `build_data.py` · functions: `embedding_analysis.py` | `df_features.pkl` | SBERT (`all-MiniLM-L6-v2`) encodes `title_cleaned` → 384-d unit-norm vector per item | `df_features_with_embeddings.pkl` |
+| 1c | orchestrator: `build_data.py` · functions: `categories.py` | `df_features.pkl`'s `also_buy`/`cat_2`/`cat_3`, `category_taxonomy.json`, a second direct read of `meta_Home_and_Kitchen_filtered.csv` | Explode `also_buy` into edges, resolve each target's category, score `support`/`lift` per distinct category pair | `pair_stats.pkl` |
+| 1d | orchestrator: `build_data.py` · functions: `categories.py` | `pair_stats.pkl` | Keep pairs where `edges >= min_edges` **and** `lift >= min_lift` | `complementary_categories.pkl` |
 
 **Two things worth remembering from this stage:**
 - `brand_clean (v1)` (spelling-merge + rare-fold, shown in red) is computed here but **discarded** — Stage 2 recomputes `brand_clean` from scratch from raw `brand` and that's the version that survives.
@@ -128,7 +155,10 @@ flowchart TB
 ## Stage 2 — `data_processing/build_snapshot.py --window-days N`
 
 Shared by TTN, SigLIP2, and Popularity. Re-reads the raw review log directly
-(separately from Stage 1) to build the co-purchase pairs.
+(separately from Stage 1) to build the co-purchase pairs. Unlike Stage 1,
+almost everything below is written directly in `build_snapshot.py` itself —
+it's both orchestrator and logic. The one exception is `co_purchase_pairs()`
+(the `P_COPAIR` step), imported from `complementary_cats_pairs/pairs.py`.
 
 ```mermaid
 flowchart TB
@@ -226,34 +256,32 @@ flowchart TB
 
     TOWERPAIRS[["tower_pairs_train.parquet<br/>tower_pairs_test.parquet<br/>(from Stage 2)"]]:::file
     DFEMB[["df_features_with_embeddings.pkl<br/>(from Stage 1)"]]:::file
-    NODEITEM[["node_of_item.npy<br/>(from Stage 2)"]]:::file
 
-    P_ITEMS["build_items()<br/>dedup both sides/splits into one<br/>items table, keyed by asin"]:::proc
-    V_ITEMS["items: one row per asin,<br/>every attached attribute"]:::vars
+    subgraph FILE4[" data_processing/build_ttn_arrays.py — orchestrator and functions, one file "]
+        direction TB
+        P_ITEMS["build_items()<br/>dedup both sides/splits into one<br/>items table, keyed by asin"]:::proc
+        V_ITEMS["items: one row per asin,<br/>every attached attribute"]:::vars
 
-    P_VOCAB["fit_vocabs(), TRAIN ONLY<br/>own integer-coded embedding vocabularies —<br/>distinct from Stage 2's dtype vocabularies;<br/>id 0 reserved for padding/unseen"]:::proc
-    V_VOCAB["vocabs.json: cat_2, cat_3, cat_4, brand, color,<br/>material, product_type, features, target_node"]:::vars
+        P_VOCAB["fit_vocabs(), TRAIN ONLY<br/>own integer-coded embedding vocabularies —<br/>distinct from Stage 2's dtype vocabularies"]:::proc
+        V_VOCAB["vocabs.json: cat_2, cat_3, cat_4, brand,<br/>color, material, product_type,<br/>features, target_node"]:::vars
 
-    P_CATIDS["encode_items() — categorical half"]:::proc
-    V_CATIDS["cat_ids[:,0:8] = cat_2, cat_3, cat_4,<br/>brand, color, material, product_type, features"]:::vars
+        P_ENCODE["encode_items()<br/>categorical + numeric halves, together"]:::proc
+        V_ENCODE["cat_ids[:,0:8] = cat_2, cat_3, cat_4, brand,<br/>color, material, product_type, features<br/>numeric[:,0:3] = log1p(price), price decile, price_imputed"]:::vars
 
-    P_NUMERIC["encode_items() — numeric half"]:::proc
-    V_NUMERIC["numeric[:,0:3] = log1p(price),<br/>price decile (normalized), price_imputed"]:::vars
+        P_TITLEEMB["item_title_embeddings()<br/>REUSE by asin, not recomputed"]:::proc
+        V_TITLEEMB["title_emb (384-d)"]:::vars
 
-    P_TITLEEMB["item_title_embeddings()<br/>REUSE by asin, not recomputed<br/>(ENCODE_TITLES=False)"]:::proc
-    V_TITLEEMB["title_emb (384-d)"]:::vars
+        P_SLIM["slim_pairs()<br/>asin → idx; target_node → target_node_id"]:::proc
+        V_SLIM["query_idx, target_idx,<br/>target_node_id, weight"]:::vars
+    end
 
-    P_SLIM["slim_pairs()<br/>map asin → idx; target_node → target_node_id"]:::proc
-    V_SLIM["query_idx, target_idx,<br/>target_node_id, weight (always 1.0 today)"]:::vars
-
-    ITEMSNPZ[["items.npz<br/>(cat_ids, numeric, title_emb)"]]:::file
+    ITEMSNPZ[["items.npz"]]:::file
     PAIRSOUT[["pairs_train.parquet<br/>pairs_test.parquet"]]:::file
 
     TOWERPAIRS --> P_ITEMS --> V_ITEMS
     V_ITEMS --> P_VOCAB --> V_VOCAB
-    V_ITEMS --> P_CATIDS
-    V_VOCAB --> P_CATIDS --> V_CATIDS --> ITEMSNPZ
-    V_ITEMS --> P_NUMERIC --> V_NUMERIC --> ITEMSNPZ
+    V_ITEMS --> P_ENCODE
+    V_VOCAB --> P_ENCODE --> V_ENCODE --> ITEMSNPZ
     V_ITEMS --> P_TITLEEMB
     DFEMB -.title_embedding, matched by asin.-> P_TITLEEMB
     P_TITLEEMB --> V_TITLEEMB --> ITEMSNPZ
@@ -261,8 +289,9 @@ flowchart TB
     V_ITEMS -.asin → idx mapping.-> P_SLIM
     V_VOCAB -.target_node vocab.-> P_SLIM
     P_SLIM --> V_SLIM --> PAIRSOUT
-    NODEITEM -.read directly by build_model.py,<br/>independent of this stage's own vocab.-> PAIRSOUT
 ```
+
+(`node_of_item.npy`, from Stage 2, isn't shown here — it's not read or produced anywhere in this stage; `TTN/build_model.py` reads it directly and independently in Stage 4.)
 
 | Step | Modification |
 |---|---|
