@@ -37,7 +37,18 @@ python data_processing/build_ttn_arrays.py --snapshot w90_2017-12-09
 python TTN/encode_descriptions.py --snapshot w90_2017-12-09   # optional, recommended
 python TTN/build_model.py --snapshot w90_2017-12-09
 ```
-→ trained checkpoint at `data/tower/w90_.../models/ttn/<date>_v_00x/model.pt`
+→ trained checkpoint at `data/tower/w90_.../models/ttn/<date>_v_00x/model.pt` — note
+the printed `version_id` (e.g. `2026-09-19_v_001`), you need it next.
+
+```bash
+python TTN/generate_recommendations.py --snapshot w90_2017-12-09 --version 2026-09-19_v_001
+```
+→ `data/tower/w90_.../recommendations/complements.parquet` — this is the step
+that actually produces usable recommendations; `build_model.py` alone only
+saves a checkpoint. `--version` is deliberately explicit, no "latest" or
+"champion" default — promoting a version to **champion** (the one a serving
+API would use) is a separate, manual decision, not a script in this repo.
+
 Details: [`TTN/DATA_PIPELINE.md`](TTN/DATA_PIPELINE.md)
 
 ## 3b. SigLIP2 — "Visually Similar Products" (substitute)
@@ -64,7 +75,8 @@ python data_creation/build_data.py
 python data_processing/build_snapshot.py --window-days 90
 python data_processing/build_ttn_arrays.py --snapshot w90_2017-12-09
 python TTN/encode_descriptions.py --snapshot w90_2017-12-09
-python TTN/build_model.py --snapshot w90_2017-12-09
+python TTN/build_model.py --snapshot w90_2017-12-09              # note the printed version_id
+python TTN/generate_recommendations.py --snapshot w90_2017-12-09 --version 2026-09-19_v_001
 python SigLIP2/build_siglip2.py --snapshot w90_2017-12-09
 python SigLIP2/generate_recommendations.py --snapshot w90_2017-12-09
 python Popularity/build_popularity.py --snapshot w90_2017-12-09
@@ -73,3 +85,10 @@ python Popularity/build_popularity.py --snapshot w90_2017-12-09
 Every step is resumable/safe to re-run — each one either skips work already
 on disk (`build_data.py`, unless `--force`) or picks up where it left off
 (`build_siglip2.py`'s cache).
+
+## Out of scope here
+
+This file stops once each model has written its `recommendations/*.parquet`.
+Serving that (promoting a TTN version to champion, the SQLite serving DB,
+the FastAPI layer, the `demo/` website) is a separate, further step not
+covered by this run order.
