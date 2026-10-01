@@ -1,8 +1,8 @@
 # Orchestration — Run Order
 
-Which files to run, in order, to go from the two raw files to all three
-trained/served recommenders. For *what* each step does, see the linked
-`DATA_PIPELINE.md` in each folder — this file is just the sequence.
+Which files to run, in order, to go from the two raw files to a running
+serving API for all three recommenders. For *what* each step does, see the
+linked `DATA_PIPELINE.md` in each folder — this file is just the sequence.
 
 ## 0. Prerequisites (already on disk, once)
 
@@ -68,6 +68,38 @@ python Popularity/build_popularity.py --snapshot w90_2017-12-09
 → `data/tower/w90_.../recommendations/popularity.parquet`
 Details: [`Popularity/DATA_PIPELINE.md`](Popularity/DATA_PIPELINE.md)
 
+## 4. Serving prep — precompute everything the API will ever need, once
+
+This is the step that means **the API never runs a model, ever** — not
+TTN, not SigLIP2, nothing. Every request it serves is a plain indexed
+SQLite lookup against work already done in steps 1–3c. Requires all three
+of 3a/3b/3c to have already run for this snapshot.
+
+```bash
+python prepare_serving.py --snapshot w90_2017-12-09
+```
+→ `data/tower/w90_.../serving/recommendations.parquet` — unifies TTN's
+`complements`, SigLIP2's `substitutes`, and Popularity's `popular` (both
+variants) into one table, one row per `(query_asin, carousel, rank)`,
+truncated to `DISPLAY_K` (10).
+
+```bash
+python load_serving_db.py --snapshot w90_2017-12-09
+```
+→ `data/tower/w90_.../serving/recommendations.db` — that table loaded into
+SQLite, indexed on `(query_asin, carousel, variant)`.
+
+## 5. Serve
+
+```bash
+SNAPSHOT=w90_2017-12-09 uvicorn api:app --reload
+```
+Reads only `recommendations.db` from step 4. The snapshot is fixed at
+process startup (`SNAPSHOT` env var) — there's no live snapshot-swap, so
+promoting a new snapshot or a new TTN version means re-running steps 4–5
+and restarting this process. `demo/index.html` is a static page that calls
+this API; open it directly, no build step.
+
 ## Minimal end-to-end example
 
 ```bash
@@ -80,15 +112,19 @@ python TTN/generate_recommendations.py --snapshot w90_2017-12-09 --version 2026-
 python SigLIP2/build_siglip2.py --snapshot w90_2017-12-09
 python SigLIP2/generate_recommendations.py --snapshot w90_2017-12-09
 python Popularity/build_popularity.py --snapshot w90_2017-12-09
+python prepare_serving.py --snapshot w90_2017-12-09
+python load_serving_db.py --snapshot w90_2017-12-09
+SNAPSHOT=w90_2017-12-09 uvicorn api:app --reload
 ```
 
 Every step is resumable/safe to re-run — each one either skips work already
-on disk (`build_data.py`, unless `--force`) or picks up where it left off
-(`build_siglip2.py`'s cache).
+on disk (`build_data.py`, unless `--force`), picks up where it left off
+(`build_siglip2.py`'s cache), or wholesale-replaces its output
+(`load_serving_db.py`).
 
 ## Out of scope here
 
-This file stops once each model has written its `recommendations/*.parquet`.
-Serving that (promoting a TTN version to champion, the SQLite serving DB,
-the FastAPI layer, the `demo/` website) is a separate, further step not
-covered by this run order.
+"Champion" promotion — deciding which TTN `--version` steps 4 onward should
+use — is a deliberate manual decision in this repo, not a script. There's
+no live multi-snapshot routing either: serving one snapshot means one
+running `api.py` process pointed at it.
