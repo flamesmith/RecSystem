@@ -31,3 +31,64 @@ Depends on `data_processing/build_snapshot.py` having already run for the given 
 it reads that snapshot's `item_asins.npy` for the item order and list.
 
 See `results.ipynb` (repo root) for its evaluated Recall@10/@100.
+
+## Trained adapter — imported from the `SigLIP2` branch
+
+Everything above uses the SigLIP2 backbone **frozen, as-is** — no training.
+A more advanced approach was developed on the `SigLIP2` branch (package
+`SigLIP2_training/`): lightweight **adapter** layers (image-side and
+text-side) trained on top of frozen SigLIP2 features, rather than full
+model fine-tuning. The trained checkpoint and a minimal loader for it are
+now imported into this folder:
+
+- `adapter_checkpoint/taxonomy_w20_random_200k.pt` — the trained weights,
+  copied byte-for-byte from that branch (SHA-256 verified). See
+  `adapter_checkpoint/README.md` for full provenance.
+- `adapter.py` — a small, self-contained loader (not the full training
+  package): `load_adapter()` reconstructs the architecture from the
+  checkpoint's own config and loads the weights; `adapt_image()` /
+  `adapt_text()` apply it to raw frozen SigLIP2 embeddings.
+- `description_pipeline.py` + `description_v1.yaml` — the exact
+  deterministic text preprocessing the adapter was trained on, ported
+  from that branch's `text.py`/`schema.py`/`config.py`: HTML stripping,
+  sentence dedup, boilerplate removal, taxonomy text, structured
+  attributes, and a scored "canonical description" (max 54 words).
+- `text_embeddings.py` — generates SigLIP2 **text** embeddings, which
+  nothing in this repo did before (`build_siglip2.py` only ever calls
+  `get_image_features()`; this is `get_text_features()`, the other half
+  of the same dual encoder, same checkpoint).
+
+Both the image and text paths are verified working end to end against
+real data already in this repo: `adapt_image()` against the `w60`
+snapshot's generated embeddings (median cosine to original 0.91, over
+2,000 real items), and the full chain `raw catalogue fields →
+description_pipeline → text_embeddings → adapt_text()` against a real
+catalogue item from `df_features.pkl` (cosine to original 0.81). Both
+confirm the adapter does real, bounded work — not a no-op, not
+destructive to the original signal.
+
+**What it is:**
+- **Trained on both images and descriptions**, via the preprocessing
+  above — not raw description text.
+- **Real, measured improvement**: on held-out cross-modal retrieval,
+  bidirectional Recall@10 went from 0.579 (frozen backbone alone) to 0.806
+  (after adapter training).
+- **Pilot scope**: trained on 200K products, not the full catalogue —
+  "no full-catalogue image download has been started" per the source
+  branch's own status notes.
+
+**What's still missing, to go from "callable" to "actually serving recommendations":**
+- **No precomputed catalogue index.** Nothing here has run every item's
+  embedding through `adapt_image()`/`adapt_text()` and stored the result
+  — that's the same batch-scoring step `SigLIP2/generate_recommendations.py`
+  already does for the *un*adapted image embeddings; it would need a
+  parallel version calling this adapter instead.
+- A `transformers` version difference from when this checkpoint's ecosystem
+  was built meant `get_text_features()` (and, in the existing
+  `build_siglip2.py`, `get_image_features()`) now returns a wrapped output
+  object rather than a plain tensor — handled in both, via the same
+  `getattr(out, "pooler_output", out)` fallback.
+- The source branch's own inference notebook
+  (`SigLIP2_training/notebooks/siglip2_200k_inference_and_api_flow.ipynb`)
+  is the fuller reference for the multichunk text view and a sketch of an
+  actual API layer, neither of which is imported here.
