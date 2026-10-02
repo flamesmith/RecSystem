@@ -2,15 +2,21 @@ numpy==2.4.2
 pandas==3.0.1
 scipy==1.15.3
 torch==2.10.0
+torchvision==0.25.0   # must stay paired with torch==2.10.0 exactly (PyPI pins torchvision releases 1:1 to a torch version) -- AutoImageProcessor (SigLIP2) requires it even on the PIL backend
 implicit==0.7.2
 matplotlib==3.10.3
 seaborn==0.13.2
 ipykernel==7.2.0
 fastapi==0.141.1
 uvicorn==0.53.0
+pyarrow==25.0.1
+transformers==5.17.0
+sentence-transformers==6.0.1
+nltk==3.10.3
+Pillow==12.1.1
+tqdm==4.67.3
+requests==2.34.2
 
-# Known gap, not fixed here (out of scope for this change): this file is
-# missing several packages the pipeline actually imports -- pyarrow
-# (parquet), sentence-transformers / transformers (SBERT, SigLIP2), nltk
-# (feature_extraction_workflow), requests, Pillow, tqdm. `implicit` above is
-# only used by the now-removed standalone BPR recommender and can likely go.
+# implicit (above) is only used by the now-removed standalone BPR
+# recommender and can likely go -- left in place since removing it is a
+# separate decision from closing this file's missing-package gap.
