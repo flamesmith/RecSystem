@@ -1,4 +1,6 @@
-"""Build SigLIP2 image embeddings for "Visually Similar Products".
+"""Encode SigLIP2 image embeddings for "Visually Similar Products" -- a
+frozen pretrained model's forward pass, not training (see SigLIP2/build_model.py
+for the script that actually trains something).
 
 Encodes each tower item's product image into a 768-d SigLIP2 vector
 (google/siglip2-base-patch16-224, F.normalize'd). Streaming pipeline: each
@@ -27,7 +29,7 @@ Prerequisite: data_processing/build_snapshot.py must have already run for the gi
 --snapshot, to produce that snapshot's item_asins.npy (the item list this
 run needs embeddings for).
 
-Usage: python SigLIP2/build_siglip2.py --snapshot w90_2017-12-09
+Usage: python SigLIP2/encode_siglip2_images.py --snapshot w90_2017-12-09
   Runs a full pass by default (MAX_IMAGES = None below). Edit that constant
   to a small number for a quick smoke test before committing to the full
   run -- the pipeline resumes either way, so a small first pass costs

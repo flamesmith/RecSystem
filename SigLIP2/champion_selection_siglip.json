@@ -1,0 +1,4 @@
+{
+  "_note": "Hand-edited pointer to the current SigLIP2 adapter champion. Not read by any script yet -- this is just the record. Uses a direct checkpoint_path rather than {snapshot_id, version_id} (unlike TTN/champion_selection.json) because candidates here aren't uniformly snapshot-scoped: checkpoints/pilot_200k/ has no snapshot_id at all (it's not tied to any --window-days snapshot), while generated/<snapshot_id>/models/<version_id>/ candidates are. A path works for both.",
+  "checkpoint_path": null
+}

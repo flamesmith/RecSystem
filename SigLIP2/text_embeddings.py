@@ -1,15 +1,15 @@
 """Generate SigLIP2 TEXT embeddings — the piece that didn't exist anywhere
-in this repo before. `SigLIP2/build_siglip2.py` only ever calls
+in this repo before. `SigLIP2/encode_siglip2_images.py` only ever calls
 `model.get_image_features()`; this is the equivalent for
 `model.get_text_features()`, ported from the `SigLIP2` branch's
 `SigLIP2_training/src/siglip2_training/features.py::_encode_texts`
 (commit 43327cad712038579d06ac53996f3c8133b953e9) — same tokenization
 (`padding="max_length"`, `truncation=True`, 64 tokens — matching
 `description_v1.yaml`'s `chunking.maximum_tokens`) and the same
-L2-normalization `build_siglip2.py` already applies to image embeddings.
+L2-normalization `encode_siglip2_images.py` already applies to image embeddings.
 
 Uses the SAME `google/siglip2-base-patch16-224` checkpoint
-`build_siglip2.py` already downloads — no new model, just the text half
+`encode_siglip2_images.py` already downloads — no new model, just the text half
 of the same dual encoder that script never calls.
 
 Usage:
@@ -49,7 +49,7 @@ def _batched(values: Sequence, size: int):
 def encode_texts(model, tokenizer, texts: Sequence[str], device: str = "cpu",
                   batch_size: int = 64, max_length: int = MAX_TOKENS) -> np.ndarray:
     """Raw SigLIP2 text embeddings, L2-normalized -- the text-side equivalent
-    of build_siglip2.py's image encoding. One row per input string."""
+    of encode_siglip2_images.py's image encoding. One row per input string."""
     parts = []
     for batch in _batched(list(texts), batch_size):
         inputs = tokenizer(

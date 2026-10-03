@@ -10,7 +10,7 @@ complement `../TTN/` retrieves).
 
 ```
 # after data_processing/build_snapshot.py --window-days 90 has run at least once
-python SigLIP2/build_siglip2.py --snapshot w90_2017-12-09
+python SigLIP2/encode_siglip2_images.py --snapshot w90_2017-12-09
 ```
 
 Resumable — safe to interrupt and re-run; only touches items not yet
@@ -41,9 +41,12 @@ text-side) trained on top of frozen SigLIP2 features, rather than full
 model fine-tuning. The trained checkpoint and a minimal loader for it are
 now imported into this folder:
 
-- `adapter_checkpoint/taxonomy_w20_random_200k.pt` — the trained weights,
-  copied byte-for-byte from that branch (SHA-256 verified). See
-  `adapter_checkpoint/README.md` for full provenance.
+- `checkpoints/pilot_200k/` — the full deployment package, copied
+  byte-for-byte from that branch (SHA-256 verified), same folder name and
+  same files: `taxonomy_w20_random_200k.pt` (the trained weights),
+  `results.json` (validation/test metrics and the promotion decision),
+  `manifest.json` (run environment and lineage), and `README.md` (that
+  branch's own provenance notes, unchanged).
 - `adapter.py` — a small, self-contained loader (not the full training
   package): `load_adapter()` reconstructs the architecture from the
   checkpoint's own config and loads the weights; `adapt_image()` /
@@ -54,7 +57,7 @@ now imported into this folder:
   sentence dedup, boilerplate removal, taxonomy text, structured
   attributes, and a scored "canonical description" (max 54 words).
 - `text_embeddings.py` — generates SigLIP2 **text** embeddings, which
-  nothing in this repo did before (`build_siglip2.py` only ever calls
+  nothing in this repo did before (`encode_siglip2_images.py` only ever calls
   `get_image_features()`; this is `get_text_features()`, the other half
   of the same dual encoder, same checkpoint).
 
@@ -85,7 +88,7 @@ destructive to the original signal.
   parallel version calling this adapter instead.
 - A `transformers` version difference from when this checkpoint's ecosystem
   was built meant `get_text_features()` (and, in the existing
-  `build_siglip2.py`, `get_image_features()`) now returns a wrapped output
+  `encode_siglip2_images.py`, `get_image_features()`) now returns a wrapped output
   object rather than a plain tensor — handled in both, via the same
   `getattr(out, "pooler_output", out)` fallback.
 - The source branch's own inference notebook

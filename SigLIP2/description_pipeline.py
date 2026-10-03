@@ -2,7 +2,7 @@
 branch's `SigLIP2_training/src/siglip2_training/{schema,config,text}.py`.
 
 This is the exact text transformation the trained adapter
-(`adapter_checkpoint/taxonomy_w20_random_200k.pt`) was trained against —
+(`checkpoints/pilot_200k/taxonomy_w20_random_200k.pt`) was trained against —
 faithfully ported (not reimplemented from scratch) so results here match
 what that checkpoint expects. Consolidated from 3 small files into 1,
 consistent with `adapter.py`'s "self-contained, not the whole training

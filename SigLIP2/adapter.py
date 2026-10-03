@@ -1,19 +1,19 @@
 """Load and call the trained SigLIP2 image/text adapter.
 
 This is a self-contained port of just the model architecture and loading
-logic needed to use `adapter_checkpoint/taxonomy_w20_random_200k.pt` --
+logic needed to use `checkpoints/pilot_200k/taxonomy_w20_random_200k.pt` --
 not the full training pipeline that produced it.
 
 Origin: the `SigLIP2` branch, `SigLIP2_training/src/siglip2_training/
 training.py` (`_torch_modules`), at commit 43327cad712038579d06ac53996f3c
 8133b953e9. That branch trains the adapter from scratch over a 200K-product
 pilot; this file only loads the already-trained result. See
-`adapter_checkpoint/README.md` for the checkpoint's own provenance, and
+`checkpoints/pilot_200k/README.md` for the checkpoint's own provenance, and
 `../SigLIP2/README.md`'s "Trained adapter" section for what this is and
 its known limitations (pilot-scale, no precomputed catalogue index here).
 
 What the adapter does: SigLIP2's frozen base embeddings (768-d, the same
-ones `build_siglip2.py` already produces for images) are *not* trained for
+ones `encode_siglip2_images.py` already produces for images) are *not* trained for
 this catalogue's text -- the adapter is two small residual MLP bottlenecks
 (one for images, one for text) learned on top of those frozen embeddings,
 pulling matching image/text pairs closer in the shared space. Both base
@@ -34,7 +34,7 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
-DEFAULT_CHECKPOINT = Path(__file__).resolve().parent / "adapter_checkpoint" / "taxonomy_w20_random_200k.pt"
+DEFAULT_CHECKPOINT = Path(__file__).resolve().parent / "checkpoints" / "pilot_200k" / "taxonomy_w20_random_200k.pt"
 
 
 class ResidualAdapter(nn.Module):
@@ -127,10 +127,10 @@ def adapt_image(model: ContrastiveAdapters, embeddings) -> np.ndarray:
 def adapt_text(model: ContrastiveAdapters, embeddings) -> np.ndarray:
     """Apply the trained text-side adapter to raw frozen SigLIP2 TEXT
     embeddings (shape (N, 768) or (768,)) -- note this is SigLIP2's own
-    text tower (`model.get_text_features(...)`), not SBERT. Nothing in
-    this repo currently produces SigLIP2 text embeddings; you'd need to
-    add that call yourself, using the same google/siglip2-base-patch16-224
-    checkpoint and its tokenizer."""
+    text tower (`model.get_text_features(...)`), not SBERT. See
+    `text_embeddings.py` for how to produce these from raw catalogue
+    fields; no catalogue-wide text-embedding file exists yet (only
+    build_model.py's small sampled subsets have used it so far)."""
     device = next(model.parameters()).device
     values = _to_tensor(embeddings, device)
     single = values.ndim == 1

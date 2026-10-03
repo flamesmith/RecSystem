@@ -13,7 +13,7 @@ zero-vector ties -- see this session's earlier description-similarity
 postmortem). An item with no usable image (about 28% of the catalogue)
 can't be ranked by this signal and is skipped as a query entirely.
 
-Prerequisite: SigLIP2/build_siglip2.py must have already run for the given
+Prerequisite: SigLIP2/encode_siglip2_images.py must have already run for the given
 --snapshot, to produce that snapshot's siglip_img_emb.npy / _status.npy.
 
 Usage: python SigLIP2/generate_recommendations.py --snapshot w90_2017-12-09

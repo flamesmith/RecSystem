@@ -1,0 +1,5 @@
+{
+  "_note": "Hand-edited pointer to the current TTN champion. Not read by any script yet -- this is just the record. A version_id alone isn't enough to identify a model: the <date>_v_00x numbering restarts per snapshot, so the same version string can mean two different models trained against different snapshots. Both fields are required together.",
+  "snapshot_id": null,
+  "version_id": null
+}
