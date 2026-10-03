@@ -1,0 +1,4 @@
+{
+  "_note": "Hand-edited pointer to the snapshot Popularity is currently serving from. Not read by any script yet -- this is just the record. No version_id field, unlike TTN's/SigLIP2's champion files: build_popularity.py is deterministic (no training, no randomness) -- running it twice against the same snapshot produces the exact same popularity.parquet, so there's nothing to version or pick a 'best' candidate between. The only thing that actually varies here is which snapshot's output this is.",
+  "snapshot_id": "w60_2017-12-09"
+}
