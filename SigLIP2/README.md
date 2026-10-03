@@ -17,14 +17,14 @@ Resumable — safe to interrupt and re-run; only touches items not yet
 encoded. Defaults to a full run (`MAX_IMAGES = None` in the script); edit
 that constant to a small number for a quick smoke test first.
 
-Two-level storage: `data/tower/_siglip_cache/` is an **asin-keyed** cache
-shared across every snapshot (an item's photo doesn't change just because a
-different `--window-days` snapshot orders items differently, so it's never
-re-fetched once cached). Each run then **projects** that cache onto the
-given snapshot's own item order, writing
-`data/tower/<snapshot_id>/siglip_img_emb.npy` (one 768-d vector per item)
-and `siglip_img_status.npy` (flags items with no usable image — about 28%
-of the catalogue, left as a zero vector) — that per-snapshot pair is what
+Two-level storage, both under this folder, not `data/`: `SigLIP2/image_cache/`
+is an **asin-keyed** cache shared across every snapshot (an item's photo
+doesn't change just because a different `--window-days` snapshot orders
+items differently, so it's never re-fetched once cached). Each run then
+**projects** that cache onto the given snapshot's own item order, writing
+`SigLIP2/generated/<snapshot_id>/siglip_img_emb.npy` (one 768-d vector per
+item) and `siglip_img_status.npy` (flags items with no usable image — about
+28% of the catalogue, left as a zero vector) — that per-snapshot pair is what
 everything downstream actually reads.
 
 Depends on `data_processing/build_snapshot.py` having already run for the given snapshot:

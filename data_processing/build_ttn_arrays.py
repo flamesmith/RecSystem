@@ -14,8 +14,9 @@ own integer-coded embedding-table vocabularies, encoding item attributes
 into arrays, and slimming the pair tables down to the (query_idx,
 target_idx, target_node_id) form BPR training reads.
 
-Produces, under data/tower/<snapshot_id>/ (alongside build_snapshot.py's
-shared item_asins.npy / node_of_item.npy, untouched by this script):
+Produces, under TTN/generated/<snapshot_id>/ (build_snapshot.py's shared
+item_asins.npy / node_of_item.npy stay under data/tower/<snapshot_id>/,
+untouched by this script):
   items.npz              -- title_emb, cat_ids, numeric[, desc_emb once
                              encode_descriptions.py has run]
   vocabs.json             -- integer-coded embedding-table vocabularies
@@ -60,7 +61,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
                      help="snapshot_id from build_snapshot.py, e.g. w90_2017-12-09")
 SNAPSHOT_ID = parser.parse_args().snapshot
-OUT_DIR = DATA_DIR / "tower" / SNAPSHOT_ID
+SNAP_DIR = DATA_DIR / "tower" / SNAPSHOT_ID              # shared artifacts (read only here)
+OUT_DIR = ROOT / "TTN" / "generated" / SNAPSHOT_ID        # TTN-specific outputs
+OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 pd.set_option("display.max_columns", None)
 pd.set_option("display.width", None)
@@ -74,9 +77,9 @@ COLMAP = {"cat_2": "cat_2", "cat_3": "cat_3", "cat_4": "cat_4",
           "brand_clean": "brand", "color": "color", "material": "material",
           "product_type": "product_type", "features": "features"}
 
-tower_pairs_train = pd.read_parquet(OUT_DIR / "tower_pairs_train.parquet")
-tower_pairs_test = pd.read_parquet(OUT_DIR / "tower_pairs_test.parquet")
-print(f"loaded {OUT_DIR.relative_to(ROOT)}/tower_pairs_{{train,test}}.parquet -- "
+tower_pairs_train = pd.read_parquet(SNAP_DIR / "tower_pairs_train.parquet")
+tower_pairs_test = pd.read_parquet(SNAP_DIR / "tower_pairs_test.parquet")
+print(f"loaded {SNAP_DIR.relative_to(ROOT)}/tower_pairs_{{train,test}}.parquet -- "
       f"train {len(tower_pairs_train):,} | test {len(tower_pairs_test):,}")
 
 # ============================================================================

@@ -9,10 +9,10 @@ take.
 Two-level storage, because item coverage/order changes across snapshots
 (different --window-days can change which items even appear) but a given
 item's photo doesn't:
-  - data/tower/_siglip_cache/ -- ASIN-KEYED, shared across every snapshot.
+  - SigLIP2/image_cache/ -- ASIN-KEYED, shared across every snapshot.
     Grows over time; an item encoded once is never re-fetched for a later
     snapshot just because that snapshot orders items differently.
-  - data/tower/<snapshot_id>/siglip_img_{emb,status}.npy -- ROW-INDEX-KEYED,
+  - SigLIP2/generated/<snapshot_id>/siglip_img_{emb,status}.npy -- ROW-INDEX-KEYED,
     aligned to that snapshot's item_asins.npy, projected from the cache.
     This is what downstream consumers (TTN's image-augmented model,
     results.ipynb, recommendation generation) actually read.
@@ -71,19 +71,22 @@ SNAPSHOT_ID = parser.parse_args().snapshot
 
 ROOT         = _find_root(Path.cwd())
 DATA_DIR     = ROOT / "data"
-TOWER_DIR    = DATA_DIR / "tower"
-SNAPSHOT_DIR = TOWER_DIR / SNAPSHOT_ID
+SNAPSHOT_DIR = DATA_DIR / "tower" / SNAPSHOT_ID          # shared artifacts (read only here)
 ITEM_ASINS   = SNAPSHOT_DIR / "item_asins.npy"           # this snapshot's items, in order
 
-CACHE_DIR    = TOWER_DIR / "_siglip_cache"               # shared, asin-keyed, grows over time
+SIGLIP_ROOT  = ROOT / "SigLIP2"
+OUT_DIR      = SIGLIP_ROOT / "generated" / SNAPSHOT_ID   # SigLIP2-specific, per-snapshot output
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+CACHE_DIR    = SIGLIP_ROOT / "image_cache"               # shared, asin-keyed, grows over time
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 CACHE_ASINS  = CACHE_DIR / "cache_asins.npy"
 CACHE_EMB    = CACHE_DIR / "cache_emb.npy"
 CACHE_STATUS = CACHE_DIR / "cache_status.npy"
-IMAGE_CACHE  = TOWER_DIR / "_siglip_image_cache"         # transient; emptied as we go
+IMAGE_CACHE  = SIGLIP_ROOT / "_image_download_cache"     # transient; emptied as we go
 
-EMB_PATH     = SNAPSHOT_DIR / "siglip_img_emb.npy"       # per-snapshot output, projected from the cache
-STATUS_PATH  = SNAPSHOT_DIR / "siglip_img_status.npy"
+EMB_PATH     = OUT_DIR / "siglip_img_emb.npy"            # per-snapshot output, projected from the cache
+STATUS_PATH  = OUT_DIR / "siglip_img_status.npy"
 print("repo root:", ROOT, "| snapshot:", SNAPSHOT_ID)
 
 # ============================================================================

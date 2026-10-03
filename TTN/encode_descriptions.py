@@ -1,7 +1,7 @@
 """Encode `description_cleaned` for the tower's items, in a lean process.
 
 Run AFTER data_processing/build_ttn_arrays.py has written
-data/tower/<snapshot_id>/items.npz, and BEFORE build_model.py trains the
+TTN/generated/<snapshot_id>/items.npz, and BEFORE build_model.py trains the
 model -- build_model.py detects whether desc_emb.npy exists in that same
 snapshot and trains without the description block if it doesn't, so running
 this in between is what gives the model description signal at all:
@@ -15,7 +15,7 @@ Doing this inside build_ttn_arrays.py holds df_features (2.9 GB) and the
 embeddings pickle (4.3 GB) in memory alongside SBERT; on 16 GB the batches
 stall for minutes at a time. This process loads two columns and nothing else.
 
-Writes data/tower/<snapshot_id>/desc_emb.npy, aligned row-for-row with that
+Writes TTN/generated/<snapshot_id>/desc_emb.npy, aligned row-for-row with that
 snapshot's items.npz. Re-encodes per snapshot even though the description
 text itself doesn't change with window_days -- only item coverage/order can
 differ between snapshots, and this hasn't been made snapshot-independent
@@ -31,13 +31,16 @@ ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
                      help="snapshot_id from data_processing/build_ttn_arrays.py, e.g. w90_2017-12-09")
-OUT = ROOT / "data" / "tower" / parser.parse_args().snapshot
+SNAPSHOT_ID = parser.parse_args().snapshot
+SNAP_DIR = ROOT / "data" / "tower" / SNAPSHOT_ID       # shared artifacts (read only here)
+OUT = ROOT / "TTN" / "generated" / SNAPSHOT_ID         # TTN-specific output
+OUT.mkdir(parents=True, exist_ok=True)
 MAX_CHARS = 1200          # MiniLM caps at 256 word-pieces; the tokeniser still
                           # reads everything past it, and a few 50 kB blurbs
                           # otherwise dominate the batch time
 BATCH = 64
 
-asins = np.load(OUT / "item_asins.npy", allow_pickle=False)
+asins = np.load(SNAP_DIR / "item_asins.npy", allow_pickle=False)
 print(f"items: {len(asins):,}")
 
 desc = pd.read_pickle(ROOT / "data" / "df_features.pkl")[["asin", "description_cleaned"]]

@@ -63,8 +63,9 @@ DATA_DIR = ROOT / "data"
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
                      help="snapshot_id from data_processing/build_snapshot.py, e.g. w90_2017-12-09")
-SNAPSHOT_DIR = DATA_DIR / "tower" / parser.parse_args().snapshot
-OUT_DIR = SNAPSHOT_DIR / "recommendations"
+SNAPSHOT_ID = parser.parse_args().snapshot
+SNAPSHOT_DIR = DATA_DIR / "tower" / SNAPSHOT_ID                      # shared artifacts
+OUT_DIR = ROOT / "Popularity" / "generated" / SNAPSHOT_ID / "recommendations"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_PATH = OUT_DIR / "popularity.parquet"
 

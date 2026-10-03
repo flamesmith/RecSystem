@@ -42,8 +42,15 @@ ROOT = Path(__file__).resolve().parent
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
                      help="snapshot_id from data_processing/build_snapshot.py, e.g. w90_2017-12-09")
-SNAPSHOT_DIR = ROOT / "data" / "tower" / parser.parse_args().snapshot
-REC_DIR = SNAPSHOT_DIR / "recommendations"
+SNAPSHOT_ID = parser.parse_args().snapshot
+SNAPSHOT_DIR = ROOT / "data" / "tower" / SNAPSHOT_ID
+# Each model keeps its own recommendations under its own folder now, not all
+# under the shared snapshot dir -- one recommendations dir per carousel.
+REC_DIRS = {
+    "complements": ROOT / "TTN" / "generated" / SNAPSHOT_ID / "recommendations",
+    "substitutes": ROOT / "SigLIP2" / "generated" / SNAPSHOT_ID / "recommendations",
+    "popular": ROOT / "Popularity" / "generated" / SNAPSHOT_ID / "recommendations",
+}
 OUT_DIR = SNAPSHOT_DIR / "serving"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_PATH = OUT_DIR / "recommendations.parquet"
@@ -66,7 +73,7 @@ parts = []
 
 for carousel, filename in (("complements", "complements.parquet"),
                             ("substitutes", "substitutes.parquet")):
-    path = REC_DIR / filename
+    path = REC_DIRS[carousel] / filename
     if not path.exists():
         print(f"skipping {carousel}: {path.relative_to(ROOT)} not found")
         continue
@@ -77,7 +84,7 @@ for carousel, filename in (("complements", "complements.parquet"),
     parts.append(df[["query_asin", "carousel", "variant", "rank", "candidate_asin", "score"]])
     print(f"{carousel}: {len(df):,} rows, {df['query_asin'].nunique():,} query items")
 
-pop_path = REC_DIR / "popularity.parquet"
+pop_path = REC_DIRS["popular"] / "popularity.parquet"
 if pop_path.exists():
     pop = pd.read_parquet(pop_path)
     # expand category_node_id -> every item whose OWN category is that node

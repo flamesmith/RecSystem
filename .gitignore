@@ -12,8 +12,25 @@ data/*.xls
 data/*.pkl
 data/*.parquet
 data/*.feather
-# Section 9's model-ready arrays (items.npz, pairs_*.parquet, vocabs.json)
+# Shared, cross-model snapshot artifacts (item_asins.npy, node_of_item.npy,
+# tower_pairs_*.parquet) plus the cross-model serving layer.
 data/tower/
+
+# Each model's own generated output (arrays, trained checkpoints,
+# recommendations) now lives alongside that model's code, not under data/ --
+# still entirely regenerable, still never committed, same convention as
+# data/tower/ above, just one level up per model.
+TTN/generated/
+SigLIP2/generated/
+SigLIP2/image_cache/
+SigLIP2/_image_download_cache/
+Popularity/generated/
+
+# Trained model checkpoints, anywhere in the repo -- except a deliberately
+# imported, promoted checkpoint this repo doesn't train itself (see
+# SigLIP2/adapter_checkpoint/README.md for provenance).
+*.pt
+!SigLIP2/adapter_checkpoint/*.pt
 
 data/*.npy
 data/*.npz

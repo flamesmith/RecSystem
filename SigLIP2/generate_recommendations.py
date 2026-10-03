@@ -31,16 +31,18 @@ ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
                      help="snapshot_id from data_processing/build_snapshot.py, e.g. w90_2017-12-09")
-SNAPSHOT_DIR = ROOT / "data" / "tower" / parser.parse_args().snapshot
-OUT_DIR = SNAPSHOT_DIR / "recommendations"
+SNAPSHOT_ID = parser.parse_args().snapshot
+SNAPSHOT_DIR = ROOT / "data" / "tower" / SNAPSHOT_ID              # shared artifacts
+SIGLIP_DIR = ROOT / "SigLIP2" / "generated" / SNAPSHOT_ID         # SigLIP2-specific artifacts
+OUT_DIR = SIGLIP_DIR / "recommendations"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_PATH = OUT_DIR / "substitutes.parquet"
 
 t0 = time.time()
 asins = np.load(SNAPSHOT_DIR / "item_asins.npy", allow_pickle=False).astype(str)
 node_of_item = np.load(SNAPSHOT_DIR / "node_of_item.npy")
-img_emb = np.load(SNAPSHOT_DIR / "siglip_img_emb.npy").astype("float32")
-img_status = np.load(SNAPSHOT_DIR / "siglip_img_status.npy")
+img_emb = np.load(SIGLIP_DIR / "siglip_img_emb.npy").astype("float32")
+img_status = np.load(SIGLIP_DIR / "siglip_img_status.npy")
 has_img = img_status == 1
 n_items = len(asins)
 print(f"items: {n_items:,} | with image: {has_img.sum():,} ({has_img.mean():.1%})")

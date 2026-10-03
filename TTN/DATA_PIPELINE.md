@@ -314,7 +314,8 @@ flowchart TB
 | 6 | Slim wide pairs down to `(query_idx, target_idx, target_node_id, weight)` |
 | 7 | Assert no *training* item/node lands on reserved id 0; report how many *test-only* items/nodes do (expected) |
 
-Outputs (same snapshot dir): `items.npz` (`title_emb`, `cat_ids`, `numeric`), `vocabs.json`, `pairs_{train,test}.parquet`.
+Outputs land in `TTN/generated/w{N}_{date_threshold}/` — **not** the shared
+`data/tower/` dir: `items.npz` (`title_emb`, `cat_ids`, `numeric`), `vocabs.json`, `pairs_{train,test}.parquet`.
 
 ## Stage 3b (optional, recommended) — `TTN/encode_descriptions.py --snapshot ...`
 
@@ -328,7 +329,7 @@ No further data transformation — reads only what Stages 2-3b produced
 (`items.npz`, `vocabs.json`, `node_of_item.npy`, `pairs_{train,test}.parquet`, `desc_emb.npy` if present), trains `ComplementaryTwoTower` with a BPR pairwise loss over co-purchase pairs, and saves a versioned checkpoint:
 
 ```
-data/tower/w{N}_{date_threshold}/models/ttn/<date>_v_00x/
+TTN/generated/w{N}_{date_threshold}/models/<date>_v_00x/
   model.pt                state_dict, config, vocab_sizes, price standardisation, metrics
   version_manifest.json   same identity/config/metrics, readable without loading torch
 ```

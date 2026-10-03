@@ -50,10 +50,16 @@ SNAPSHOT=w90_2017-12-09 uvicorn api:app --reload
 
 Different `--window-days` values produce distinct, coexisting snapshots
 (`data/tower/w{window_days}_{date_threshold}/`) rather than overwriting
-each other. TTN versions candidate checkpoints under each snapshot
-(`models/ttn/<date>_v_00x/`) rather than overwriting the last training run —
-promotion to "champion" (which version `generate_recommendations.py` and
-the API actually use) is a deliberate manual step, not automatic.
+each other. Only what's genuinely shared across all three models lives
+under `data/tower/<snapshot_id>/` — each model's own arrays, trained
+checkpoints, and recommendations live under that model's own folder instead
+(`TTN/generated/<snapshot_id>/`, `SigLIP2/generated/<snapshot_id>/`,
+`Popularity/generated/<snapshot_id>/`), not under `data/`. TTN versions
+candidate checkpoints under each snapshot
+(`TTN/generated/<snapshot_id>/models/<date>_v_00x/`) rather than overwriting
+the last training run — promotion to "champion" (which version
+`generate_recommendations.py` and the API actually use) is a deliberate
+manual step, not automatic.
 
 The upstream data-creation pipeline that `data_processing/build_snapshot.py`
 and `SigLIP2/build_siglip2.py` both depend on —

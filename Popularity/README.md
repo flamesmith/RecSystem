@@ -15,9 +15,10 @@ same list.
 python Popularity/build_popularity.py --snapshot w90_2017-12-09
 ```
 
-Reads that snapshot's `item_asins.npy`, `node_of_item.npy`, and
-`Home_and_Kitchen_filtered.csv`; writes
-`data/tower/<snapshot_id>/popularity_top100.json`, keyed by asin, with two
+Reads that snapshot's `item_asins.npy`, `node_of_item.npy` (from the shared
+`data/tower/<snapshot_id>/`), and `Home_and_Kitchen_filtered.csv`; writes
+`Popularity/generated/<snapshot_id>/recommendations/popularity.parquet`
+(one row per `category_node_id`/`variant`/`rank`, not per-asin JSON), with two
 variants, both anchored at `TTN/constants.json`'s `date_threshold`:
 
 - `all_time` — every review before the cutoff, no decay.

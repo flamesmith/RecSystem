@@ -60,24 +60,26 @@ parser.add_argument("--version", required=True,
 args = parser.parse_args()
 
 t0 = time.time()
-SNAPSHOT_DIR = ROOT / "data" / "tower" / args.snapshot
-VERSION_DIR = SNAPSHOT_DIR / "models" / "ttn" / args.version
-OUT_DIR = SNAPSHOT_DIR / "recommendations"
+SNAPSHOT_DIR = ROOT / "data" / "tower" / args.snapshot              # shared artifacts
+TTN_DIR = ROOT / "TTN" / "generated" / args.snapshot                # TTN-specific artifacts
+SIGLIP_DIR = ROOT / "SigLIP2" / "generated" / args.snapshot         # optional cross-read
+VERSION_DIR = TTN_DIR / "models" / args.version
+OUT_DIR = TTN_DIR / "recommendations"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_PATH = OUT_DIR / "complements.parquet"
 
 import json
-vocabs = json.load(open(SNAPSHOT_DIR / "vocabs.json"))
-arrays = dict(np.load(SNAPSHOT_DIR / "items.npz"))
+vocabs = json.load(open(TTN_DIR / "vocabs.json"))
+arrays = dict(np.load(TTN_DIR / "items.npz"))
 node_of_item = np.load(SNAPSHOT_DIR / "node_of_item.npy")
 asins = np.load(SNAPSHOT_DIR / "item_asins.npy", allow_pickle=False).astype(str)
-pairs_train = pd.read_parquet(SNAPSHOT_DIR / "pairs_train.parquet")
+pairs_train = pd.read_parquet(TTN_DIR / "pairs_train.parquet")
 n_items = len(asins)
-if (SNAPSHOT_DIR / "desc_emb.npy").exists():
-    arrays["desc_emb"] = np.load(SNAPSHOT_DIR / "desc_emb.npy")
-if (SNAPSHOT_DIR / "siglip_img_emb.npy").exists():
-    arrays["img_emb"] = np.load(SNAPSHOT_DIR / "siglip_img_emb.npy")
-print(f"loaded {SNAPSHOT_DIR.relative_to(ROOT)}/ -- {n_items:,} items, version {args.version}")
+if (TTN_DIR / "desc_emb.npy").exists():
+    arrays["desc_emb"] = np.load(TTN_DIR / "desc_emb.npy")
+if (SIGLIP_DIR / "siglip_img_emb.npy").exists():
+    arrays["img_emb"] = np.load(SIGLIP_DIR / "siglip_img_emb.npy")
+print(f"loaded {TTN_DIR.relative_to(ROOT)}/ -- {n_items:,} items, version {args.version}")
 
 # --- licensed target categories per source node, derived from pairs_train -
 query_node = node_of_item[pairs_train["query_idx"].to_numpy()]

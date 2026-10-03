@@ -11,13 +11,14 @@ ever promoted to champion. Promotion itself (writing champion.json) is a
 separate, deliberate step -- this script never does it automatically.
 
 Prerequisite: data_processing/build_ttn_arrays.py must have already run for the given
---snapshot, to produce the data/tower/<snapshot_id>/ arrays this reads. Run
-TTN/encode_descriptions.py in between the two for a model trained with
+--snapshot, to produce the TTN/generated/<snapshot_id>/ arrays this reads
+(node_of_item.npy still comes from the shared data/tower/<snapshot_id>/).
+Run TTN/encode_descriptions.py in between the two for a model trained with
 description signal (optional -- this script detects its absence and trains
 without that block otherwise).
 
 Usage: python TTN/build_model.py --snapshot w90_2017-12-09
-Output: data/tower/<snapshot_id>/models/ttn/<date>_v_00x/
+Output: TTN/generated/<snapshot_id>/models/<date>_v_00x/
           model.pt              -- state_dict, config, vocab_sizes,
                                     numeric_standardisation, metrics
           version_manifest.json -- the same run's identity/config/metrics,
@@ -56,13 +57,14 @@ pd.set_option("display.width", None)
 pd.set_option("display.max_colwidth", 50)
 # Turn off scientific notation (e.g. 2.447268e+06 -> 2447268.00)
 pd.set_option("display.float_format", lambda x: f"{x:,.2f}")
-OUT_DIR = DATA_DIR / "tower" / SNAPSHOT_ID
+SNAP_DIR = DATA_DIR / "tower" / SNAPSHOT_ID                 # shared artifacts
+OUT_DIR = ROOT / "TTN" / "generated" / SNAPSHOT_ID          # TTN-specific artifacts
 CAT_ORDER = ["cat_2", "cat_3", "cat_4", "brand", "color", "material", "product_type", "features"]
 
 import json
 vocabs = json.load(open(OUT_DIR / "vocabs.json"))
 arrays = dict(np.load(OUT_DIR / "items.npz"))
-node_of_item = np.load(OUT_DIR / "node_of_item.npy")
+node_of_item = np.load(SNAP_DIR / "node_of_item.npy")
 import pandas as pd
 pairs_train = pd.read_parquet(OUT_DIR / "pairs_train.parquet")
 pairs_test = pd.read_parquet(OUT_DIR / "pairs_test.parquet")
@@ -449,7 +451,8 @@ for _name, _value in baselines(pairs_test).items():
     print(f"baseline  {_name:<42} {_value:.4f}")
 
 # --- Version identity: <date>_v_00x, next in sequence for today -----------
-MODELS_DIR = OUT_DIR / "models" / "ttn"
+MODELS_DIR = OUT_DIR / "models"   # TTN/generated/<snapshot_id>/models/<version>/ -- no
+                                   # redundant "ttn" sub-level, we're already inside TTN/
 MODELS_DIR.mkdir(parents=True, exist_ok=True)
 today = date.today().isoformat()
 existing = sorted(int(p.name.rsplit("_v_", 1)[1]) for p in MODELS_DIR.glob(f"{today}_v_*")

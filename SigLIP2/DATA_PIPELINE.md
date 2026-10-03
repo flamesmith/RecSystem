@@ -38,7 +38,7 @@ flowchart TB
     P_ENCODE["encode()<br/>SigLIP2 image encoder<br/>(google/siglip2-base-patch16-224), L2-normalized"]:::proc
     V_ENCODE["768-d vector,<br/>status 1 = encoded"]:::vars
 
-    CACHE[["_siglip_cache/ — cache_asins.npy, cache_emb.npy, cache_status.npy<br/>ASIN-KEYED, shared across every snapshot, grows over time.<br/>Status: 0 pending · 1 encoded · 2 no URL · 3 fetch failed · 4 decode failed"]]:::cache
+    CACHE[["SigLIP2/image_cache/ — cache_asins.npy, cache_emb.npy, cache_status.npy<br/>ASIN-KEYED, shared across every snapshot, grows over time.<br/>Status: 0 pending · 1 encoded · 2 no URL · 3 fetch failed · 4 decode failed"]]:::cache
 
     P_PROJECT["project the cache onto<br/>THIS snapshot's own item order"]:::proc
 
@@ -101,5 +101,8 @@ have already run for the given snapshot — Stage A reads `item_asins.npy`,
 Stage B additionally reads `node_of_item.npy`. Stage A also reads
 `df_features.pkl` (from `data_creation/build_data.py`) for image URLs.
 
-Outputs land in `data/tower/<snapshot_id>/` (Stage A) and
-`data/tower/<snapshot_id>/recommendations/` (Stage B).
+Outputs land in `SigLIP2/generated/<snapshot_id>/` (Stage A: `siglip_img_emb.npy`/`_status.npy`)
+and `SigLIP2/generated/<snapshot_id>/recommendations/` (Stage B) — the
+shared, asin-keyed cache itself lives at `SigLIP2/image_cache/` (not
+per-snapshot). None of this is under `data/`; only `item_asins.npy`/
+`node_of_item.npy` (read, not written, by these stages) stay there.

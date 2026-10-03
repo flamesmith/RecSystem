@@ -53,12 +53,13 @@ flowchart TB
   living in two different scripts.
 - **The README is stale on the output filename.** `Popularity/README.md`
   says the output is `data/tower/<snapshot_id>/popularity_top100.json`; the
-  actual script writes `data/tower/<snapshot_id>/recommendations/popularity.parquet`
-  (confirmed by reading `build_popularity.py` itself — `OUT_PATH = OUT_DIR / "popularity.parquet"`).
+  actual script writes `popularity.parquet`, and not even under `data/` —
+  see Prerequisites below.
 
 ## Prerequisites
 
 Requires `data_processing/build_snapshot.py --window-days N` to have already
 run for the given snapshot — reads that snapshot's `item_asins.npy` and
-`node_of_item.npy` directly. Output lands in
-`data/tower/<snapshot_id>/recommendations/popularity.parquet`.
+`node_of_item.npy` directly from the shared `data/tower/<snapshot_id>/`.
+Output lands in `Popularity/generated/<snapshot_id>/recommendations/popularity.parquet`
+— under this model's own folder, not `data/`.
