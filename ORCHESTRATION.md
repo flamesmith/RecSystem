@@ -92,7 +92,7 @@ SQLite lookup against work already done in steps 1–3c. Requires all three
 of 3a/3b/3c to have already run for this snapshot.
 
 ```bash
-python prepare_serving.py --snapshot w90_2017-12-09
+python website/prepare_serving.py --snapshot w90_2017-12-09
 ```
 → `data/tower/w90_.../serving/recommendations.parquet` — unifies TTN's
 `complements`, SigLIP2's `substitutes`, and Popularity's `popular` (both
@@ -100,7 +100,7 @@ variants) into one table, one row per `(query_asin, carousel, rank)`,
 truncated to `DISPLAY_K` (10).
 
 ```bash
-python load_serving_db.py --snapshot w90_2017-12-09
+python website/load_serving_db.py --snapshot w90_2017-12-09
 ```
 → `data/tower/w90_.../serving/recommendations.db` — that table loaded into
 SQLite, indexed on `(query_asin, carousel, variant)`.
@@ -108,12 +108,12 @@ SQLite, indexed on `(query_asin, carousel, variant)`.
 ## 5. Serve
 
 ```bash
-SNAPSHOT=w90_2017-12-09 uvicorn api:app --reload
+SNAPSHOT=w90_2017-12-09 uvicorn website.api:app --reload
 ```
 Reads only `recommendations.db` from step 4. The snapshot is fixed at
 process startup (`SNAPSHOT` env var) — there's no live snapshot-swap, so
 promoting a new snapshot or a new TTN version means re-running steps 4–5
-and restarting this process. `demo/index.html` is a static page that calls
+and restarting this process. `website/index.html` is a static page that calls
 this API; open it directly, no build step.
 
 ## Minimal end-to-end example
@@ -128,19 +128,19 @@ python TTN/generate_recommendations.py --snapshot w90_2017-12-09 --version 2026-
 python SigLIP2/encode_siglip2_images.py --snapshot w90_2017-12-09
 python SigLIP2/generate_recommendations.py --snapshot w90_2017-12-09
 python Popularity/build_popularity.py
-python prepare_serving.py --snapshot w90_2017-12-09
-python load_serving_db.py --snapshot w90_2017-12-09
-SNAPSHOT=w90_2017-12-09 uvicorn api:app --reload
+python website/prepare_serving.py --snapshot w90_2017-12-09
+python website/load_serving_db.py --snapshot w90_2017-12-09
+SNAPSHOT=w90_2017-12-09 uvicorn website.api:app --reload
 ```
 
 Every step is resumable/safe to re-run — each one either skips work already
 on disk (`build_data.py`, unless `--force`), picks up where it left off
 (`encode_siglip2_images.py`'s cache), or wholesale-replaces its output
-(`load_serving_db.py`).
+(`website/load_serving_db.py`).
 
 ## Out of scope here
 
 "Champion" promotion — deciding which TTN `--version` steps 4 onward should
 use — is a deliberate manual decision in this repo, not a script. There's
 no live multi-snapshot routing either: serving one snapshot means one
-running `api.py` process pointed at it.
+running `website/api.py` process pointed at it.

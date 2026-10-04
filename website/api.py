@@ -17,12 +17,14 @@ Endpoints:
       -> one carousel only (carousel in complements, substitutes, popular).
       For "popular", pass ?variant=all_time or ?variant=recency
       (default: all_time).
+  GET /
+      -> the demo page (website/index.html), same origin as the API
   GET /health
       -> {"status": "ok", "snapshot": ...} -- confirms the DB is reachable.
 
 Usage:
-  python load_serving_db.py --snapshot w90_2017-12-09   # once, or after promotion
-  uvicorn api:app --reload
+  python website/load_serving_db.py --snapshot w90_2017-12-09   # once, or after promotion
+  uvicorn website.api:app --reload      # from the repo root; then open http://127.0.0.1:8000/
 """
 import os
 import sqlite3
@@ -30,9 +32,9 @@ from pathlib import Path
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]   # repo root; this file lives in website/
 SNAPSHOT_ID = os.environ.get("SNAPSHOT", "w90_2017-12-09")
 DB_PATH = ROOT / "data" / "tower" / SNAPSHOT_ID / "serving" / "recommendations.db"
 
@@ -40,11 +42,18 @@ VALID_CAROUSELS = {"complements", "substitutes", "popular"}
 VALID_VARIANTS = {"all_time", "recency"}
 
 app = FastAPI(title="RecSystem serving API")
-# Local demo only: demo/index.html is opened as a file:// page or a separate
-# dev server, so the browser treats it as a different origin from this API.
-app.add_middleware(
-    CORSMiddleware, allow_origins=["*"], allow_methods=["GET"], allow_headers=["*"],
-)
+# website/index.html is served by this same app at "/", so the page and the API
+# share an origin -- no CORS needed.
+
+# One SELECT shape for every recommendations query: the rec row plus the
+# item's display title/image from the `items` table load_serving_db.py builds.
+REC_SELECT = """SELECT r.rank, r.candidate_asin, r.score, i.title, i.image_url
+                FROM recommendations r LEFT JOIN items i ON i.asin = r.candidate_asin"""
+
+
+@app.get("/", include_in_schema=False)
+def index():
+    return FileResponse(Path(__file__).resolve().parent / "index.html")
 
 
 def get_conn():
@@ -52,7 +61,7 @@ def get_conn():
         raise HTTPException(
             status_code=503,
             detail=f"serving DB not found for snapshot {SNAPSHOT_ID!r} -- "
-                    f"run load_serving_db.py --snapshot {SNAPSHOT_ID} first",
+                    f"run website/load_serving_db.py --snapshot {SNAPSHOT_ID} first",
         )
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -98,23 +107,25 @@ def all_recommendations(asin: str):
     out = {}
     for carousel in ("complements", "substitutes"):
         rows = conn.execute(
-            """SELECT rank, candidate_asin, score FROM recommendations
-               WHERE query_asin = ? AND carousel = ? ORDER BY rank""",
+            REC_SELECT + """ WHERE r.query_asin = ? AND r.carousel = ? ORDER BY r.rank""",
             (asin, carousel),
         ).fetchall()
         out[carousel] = [dict(r) for r in rows]
 
     for variant in VALID_VARIANTS:
         rows = conn.execute(
-            """SELECT rank, candidate_asin, score FROM recommendations
-               WHERE query_asin = ? AND carousel = 'popular' AND variant = ?
-               ORDER BY rank""",
+            REC_SELECT + """ WHERE r.query_asin = ? AND r.carousel = 'popular'
+               AND r.variant = ? ORDER BY r.rank""",
             (asin, variant),
         ).fetchall()
         out[f"popular_{variant}"] = [dict(r) for r in rows]
 
+    q = conn.execute("SELECT title, image_url FROM items WHERE asin = ?", (asin,)).fetchone()
     conn.close()
-    return {"query_asin": asin, "snapshot": SNAPSHOT_ID, "carousels": out}
+    return {"query_asin": asin, "snapshot": SNAPSHOT_ID,
+            "query_title": q["title"] if q else None,
+            "query_image_url": q["image_url"] if q else None,
+            "carousels": out}
 
 
 @app.get("/items/{asin}/recommendations/{carousel}")
@@ -138,15 +149,13 @@ def one_carousel(asin: str, carousel: str, variant: Optional[str] = None):
                 detail=f"variant must be one of {sorted(VALID_VARIANTS)}, got {variant!r}",
             )
         rows = conn.execute(
-            """SELECT rank, candidate_asin, score FROM recommendations
-               WHERE query_asin = ? AND carousel = 'popular' AND variant = ?
-               ORDER BY rank""",
+            REC_SELECT + """ WHERE r.query_asin = ? AND r.carousel = 'popular'
+               AND r.variant = ? ORDER BY r.rank""",
             (asin, variant),
         ).fetchall()
     else:
         rows = conn.execute(
-            """SELECT rank, candidate_asin, score FROM recommendations
-               WHERE query_asin = ? AND carousel = ? ORDER BY rank""",
+            REC_SELECT + """ WHERE r.query_asin = ? AND r.carousel = ? ORDER BY r.rank""",
             (asin, carousel),
         ).fetchall()
 

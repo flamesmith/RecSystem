@@ -31,7 +31,7 @@ Prerequisite: TTN/generate_recommendations.py and SigLIP2/generate_recommendatio
 must have already run for the given --snapshot; Popularity/build_popularity.py
 must have run too, but it isn't --snapshot-specific (just run once).
 
-Usage: python prepare_serving.py --snapshot w90_2017-12-09
+Usage: python website/prepare_serving.py --snapshot w90_2017-12-09
 """
 import argparse
 from pathlib import Path
@@ -41,7 +41,7 @@ import pandas as pd
 
 DISPLAY_K = 10
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]   # repo root; this file lives in website/
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
                      help="snapshot_id from data_processing/build_snapshot.py, e.g. w90_2017-12-09")

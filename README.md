@@ -15,10 +15,12 @@ v1-recommendations
 ├── TTN/                   Complements ("Complete the Look")
 ├── SigLIP2/                Substitutes ("Visually Similar Products")
 ├── Popularity/              Popular in category (all-time + recency)
-├── prepare_serving.py       unifies all three into one table
-├── load_serving_db.py       loads that table into SQLite
-├── api.py                   FastAPI serving layer
-└── demo/                    static demo page calling the API
+├── website/                 local demo site
+│    prepare_serving.py     unifies all three into one table
+│    load_serving_db.py     loads that table into SQLite
+│    api.py                 FastAPI serving layer (also serves index.html)
+│    index.html             the page
+└── demo/                    recommendations_demo.ipynb (model comparison)
 ```
 
 Each folder has a `README.md` with what it does and the exact commands to
@@ -40,12 +42,12 @@ python TTN/generate_recommendations.py --snapshot w90_2017-12-09 --version <date
 python SigLIP2/generate_recommendations.py --snapshot w90_2017-12-09
 
 # 4. Serving
-python prepare_serving.py --snapshot w90_2017-12-09
-python load_serving_db.py --snapshot w90_2017-12-09
-SNAPSHOT=w90_2017-12-09 uvicorn api:app --reload
+python website/prepare_serving.py --snapshot w90_2017-12-09
+python website/load_serving_db.py --snapshot w90_2017-12-09
+SNAPSHOT=w90_2017-12-09 uvicorn website.api:app --reload
 
 # 5. results.ipynb (this directory) evaluates Recall@10/@100 for TTN/SigLIP2/POP;
-#    demo/index.html is a browsable page over the live API
+#    website/index.html is a browsable page over the live API
 ```
 
 Different `--window-days` values produce distinct, coexisting snapshots

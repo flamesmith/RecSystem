@@ -16,18 +16,22 @@ Schema:
   Indexed on (query_asin, carousel, variant) -- the API's one query pattern:
   "give me this item's recommendations for this carousel."
 
-Prerequisite: prepare_serving.py must have already run for the given
---snapshot.
+Also loads an `items (asin, title, image_url)` table for the demo page.
 
-Usage: python load_serving_db.py --snapshot w90_2017-12-09
+Prerequisite: prepare_serving.py must have already run for the given
+--snapshot, and data/asin_image_urls.json must exist
+(python data_creation/build_image_url_cache.py).
+
+Usage: python website/load_serving_db.py --snapshot w90_2017-12-09
 """
 import argparse
+import json
 import sqlite3
 from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]   # repo root; this file lives in website/
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
                      help="snapshot_id from data_processing/build_snapshot.py, e.g. w90_2017-12-09")
@@ -53,6 +57,23 @@ conn.execute("""
 """)
 df.to_sql("recommendations", conn, if_exists="append", index=False)
 conn.execute("CREATE INDEX idx_query_carousel ON recommendations (query_asin, carousel, variant)")
+
+# Display metadata (title, image) for every asin that can appear on screen,
+# as query or candidate, so the demo page can show pictures without the API
+# ever touching df_features.pkl. Image urls come from the small cache
+# data_creation/build_image_url_cache.py writes; items without one are
+# simply absent from it (about half the catalogue).
+shown = pd.unique(pd.concat([df["query_asin"], df["candidate_asin"]]))
+titles = (pd.read_pickle(ROOT / "data" / "df_features.pkl")[["asin", "title"]]
+          .drop_duplicates("asin").set_index("asin")["title"])
+image_by_asin = json.loads((ROOT / "data" / "asin_image_urls.json").read_text())
+items = pd.DataFrame({"asin": shown})
+items["title"] = items["asin"].map(titles)
+items["image_url"] = items["asin"].map(image_by_asin)
+conn.execute("CREATE TABLE items (asin TEXT PRIMARY KEY, title TEXT, image_url TEXT)")
+items.to_sql("items", conn, if_exists="append", index=False)
+print(f"items metadata: {len(items):,} asins, "
+      f"{items['image_url'].notna().sum():,} with an image")
 conn.commit()
 
 n_rows = conn.execute("SELECT COUNT(*) FROM recommendations").fetchone()[0]

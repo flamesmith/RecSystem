@@ -14,7 +14,11 @@
   .carousel { margin-bottom: 1.5rem; }
   .carousel h2 { font-size: 1rem; margin-bottom: 0.4rem; }
   .row { display: flex; gap: 0.6rem; overflow-x: auto; padding-bottom: 0.4rem; }
-  .card { border: 1px solid #ddd; border-radius: 6px; padding: 0.5rem; min-width: 140px; font-size: 0.8rem; flex-shrink: 0; }
+  .card { border: 1px solid #ddd; border-radius: 6px; padding: 0.5rem; width: 140px; font-size: 0.8rem; flex-shrink: 0; }
+  .card img, .card .noimg { width: 124px; height: 124px; object-fit: contain; background: #fff; display: block; margin: 0.2rem 0; }
+  .card .noimg { background: #eee; color: #999; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
+  .card .title { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin: 0.2rem 0; }
+  #query-card { display: flex; gap: 0.8rem; align-items: center; margin-bottom: 1rem; }
   .card .rank { color: #888; }
   .card .asin { font-family: monospace; font-weight: bold; }
   .card .score { color: #555; }
@@ -34,11 +38,11 @@ model runs here, this is only calling the precomputed lookup.</p>
 <div id="samples">Try one: <span id="sample-buttons">loading…</span></div>
 
 <div id="error"></div>
-<div id="query-label"></div>
+<div id="query-card"></div>
 <div id="results"></div>
 
 <script>
-const API = "http://127.0.0.1:8000";
+const API = "";   // same origin: this page is served by api.py at "/"
 const CAROUSEL_TITLES = {
   complements: "Complements (TTN)",
   substitutes: "Substitutes (SigLIP2)",
@@ -60,14 +64,26 @@ async function loadSamples() {
     }
   } catch (e) {
     document.getElementById("sample-buttons").textContent =
-      "(couldn't reach the API -- is it running? see demo/README.md)";
+      "(couldn't reach the API -- is it running? see website/README.md)";
   }
+}
+
+function esc(t) {
+  const d = document.createElement("div");
+  d.textContent = t == null ? "" : String(t);
+  return d.innerHTML.replace(/"/g, "&quot;");
+}
+
+function pic(url) {
+  return url ? `<img src="${esc(url)}" loading="lazy" alt="">` : `<div class="noimg">no image</div>`;
 }
 
 function card(rec) {
   return `<div class="card">
     <div class="rank">#${rec.rank}</div>
-    <div class="asin">${rec.candidate_asin}</div>
+    ${pic(rec.image_url)}
+    <div class="title">${esc(rec.title || "(no title)")}</div>
+    <div class="asin">${esc(rec.candidate_asin)}</div>
     <div class="score">score ${rec.score.toFixed(3)}</div>
   </div>`;
 }
@@ -75,18 +91,18 @@ function card(rec) {
 async function lookup() {
   const asin = document.getElementById("asin").value.trim();
   const errorEl = document.getElementById("error");
-  const labelEl = document.getElementById("query-label");
+  const labelEl = document.getElementById("query-card");
   const resultsEl = document.getElementById("results");
   errorEl.textContent = "";
   resultsEl.innerHTML = "";
-  labelEl.textContent = "";
+  labelEl.innerHTML = "";
   if (!asin) { errorEl.textContent = "enter an asin first"; return; }
 
   let res;
   try {
     res = await fetch(`${API}/items/${encodeURIComponent(asin)}/recommendations`);
   } catch (e) {
-    errorEl.textContent = `couldn't reach the API at ${API} -- is it running?`;
+    errorEl.textContent = "couldn't reach the API -- is it running?";
     return;
   }
   if (!res.ok) {
@@ -95,7 +111,10 @@ async function lookup() {
     return;
   }
   const data = await res.json();
-  labelEl.textContent = `Recommendations for ${data.query_asin} (snapshot ${data.snapshot})`;
+  labelEl.innerHTML = `<div style="width:124px">${pic(data.query_image_url)}</div>
+    <div><b>Query item</b><br>${esc(data.query_title || "(no title)")}<br>
+    <span style="font-family:monospace">${esc(data.query_asin)}</span>
+    <span style="color:#888"> · snapshot ${esc(data.snapshot)}</span></div>`;
 
   for (const [key, title] of Object.entries(CAROUSEL_TITLES)) {
     const recs = data.carousels[key] || [];

@@ -44,7 +44,7 @@ docstring.
 
 ## Consuming this output
 
-`prepare_serving.py` expands these category-level rows into per-item rows
+`website/prepare_serving.py` expands these category-level rows into per-item rows
 by joining `(cat_2, cat_3, cat_4)` against `df_features.pkl` for every item
 in whichever snapshot it's serving — not against `node_of_item.npy`, which
 Popularity itself no longer reads.
