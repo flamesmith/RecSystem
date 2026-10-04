@@ -3,6 +3,9 @@ recommendation-generation outputs into one table the serving DB loads.
 
 Three carousels, three different natural shapes going in:
   complements  -- TTN,      recommendations/complements.parquet  (per query item)
+  complements_proportional
+               -- TTN,      recommendations/complements_proportional.parquet
+                  (same model, different merge rule across licensed categories)
   substitutes  -- SigLIP2,  recommendations/substitutes.parquet  (per query item)
   popular      -- Popularity, recommendations/popularity.parquet (per CATEGORY,
                   two variants: all_time / recency)
@@ -17,7 +20,7 @@ regardless of which of the three produced it.
 
 Output schema (data/tower/<snapshot_id>/serving/recommendations.parquet):
   query_asin | carousel | variant | rank | candidate_asin | score
-  carousel in {"complements", "substitutes", "popular"}
+  carousel in {"complements", "complements_proportional", "substitutes", "popular"}
   variant  is None for complements/substitutes; "all_time" or "recency" for popular
 
 "Filtering" here is exactly: truncate every carousel down to DISPLAY_K
@@ -40,6 +43,12 @@ import numpy as np
 import pandas as pd
 
 DISPLAY_K = 10
+# The proportional carousel is NOT truncated to DISPLAY_K: its 20 slots are
+# allocated across licensed categories and ranked in category blocks, so
+# cutting to the top 10 would drop whole categories (measured on w90: ~9.6
+# categories per item across all 20 slots vs ~2.9 within the first 10) and
+# defeat the point of that variant.
+PROPORTIONAL_K = 20
 
 ROOT = Path(__file__).resolve().parents[1]   # repo root; this file lives in website/
 parser = argparse.ArgumentParser()
@@ -53,6 +62,7 @@ SNAPSHOT_DIR = ROOT / "data" / "tower" / SNAPSHOT_ID
 # path has no SNAPSHOT_ID in it, unlike the other two.
 REC_DIRS = {
     "complements": ROOT / "TTN" / "generated" / SNAPSHOT_ID / "recommendations",
+    "complements_proportional": ROOT / "TTN" / "generated" / SNAPSHOT_ID / "recommendations",
     "substitutes": ROOT / "SigLIP2" / "generated" / SNAPSHOT_ID / "recommendations",
     "popular": ROOT / "Popularity" / "generated" / "recommendations",
 }
@@ -72,24 +82,25 @@ item_by_cat = pd.DataFrame({"query_asin": asins}).merge(
     cat_by_asin, left_on="query_asin", right_index=True, how="inner")
 
 
-def truncate(df, key_col):
-    """Keep rank 1..DISPLAY_K per key_col, re-deriving rank in case the
-    source already truncated to fewer than DISPLAY_K for some keys."""
-    df = df[df["rank"] <= DISPLAY_K].copy()
+def truncate(df, key_col, k=DISPLAY_K):
+    """Keep rank 1..k per key_col, re-deriving rank in case the
+    source already truncated to fewer than k for some keys."""
+    df = df[df["rank"] <= k].copy()
     df["rank"] = df.groupby(key_col)["rank"].rank(method="first").astype(int)
     return df
 
 
 parts = []
 
-for carousel, filename in (("complements", "complements.parquet"),
-                            ("substitutes", "substitutes.parquet")):
+for carousel, filename, k in (("complements", "complements.parquet", DISPLAY_K),
+                               ("complements_proportional", "complements_proportional.parquet", PROPORTIONAL_K),
+                               ("substitutes", "substitutes.parquet", DISPLAY_K)):
     path = REC_DIRS[carousel] / filename
     if not path.exists():
         print(f"skipping {carousel}: {path.relative_to(ROOT)} not found")
         continue
     df = pd.read_parquet(path)
-    df = truncate(df, "query_asin")
+    df = truncate(df, "query_asin", k)
     df["carousel"] = carousel
     df["variant"] = None
     parts.append(df[["query_asin", "carousel", "variant", "rank", "candidate_asin", "score"]])
