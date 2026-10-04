@@ -16,7 +16,14 @@ can't be ranked by this signal and is skipped as a query entirely.
 Prerequisite: SigLIP2/encode_siglip2_images.py must have already run for the given
 --snapshot, to produce that snapshot's siglip_img_emb.npy / _status.npy.
 
-Usage: python SigLIP2/generate_recommendations.py --snapshot w90_2017-12-09
+--embeddings picks which image vectors are ranked by cosine similarity:
+  raw      (default) siglip_img_emb.npy             -> substitutes.parquet
+  adapted  adapted_img_emb.npy, i.e. the champion adapter in
+           champion_selection_siglip.json applied to the raw vectors by
+           generate_adapted_image_embeddings.py     -> substitutes_adapted.parquet
+Separate output files, so neither overwrites the other.
+
+Usage: python SigLIP2/generate_recommendations.py --snapshot w90_2017-12-09 [--embeddings adapted]
 """
 import argparse
 import time
@@ -31,17 +38,25 @@ ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument("--snapshot", required=True,
                      help="snapshot_id from data_processing/build_snapshot.py, e.g. w90_2017-12-09")
-SNAPSHOT_ID = parser.parse_args().snapshot
+parser.add_argument("--embeddings", choices=["raw", "adapted"], default="raw",
+                     help="raw SigLIP2 image embeddings, or the champion adapter's output "
+                          "(needs generate_adapted_image_embeddings.py to have run first)")
+_args = parser.parse_args()
+SNAPSHOT_ID = _args.snapshot
+EMBEDDINGS = _args.embeddings
 SNAPSHOT_DIR = ROOT / "data" / "tower" / SNAPSHOT_ID              # shared artifacts
 SIGLIP_DIR = ROOT / "SigLIP2" / "generated" / SNAPSHOT_ID         # SigLIP2-specific artifacts
 OUT_DIR = SIGLIP_DIR / "recommendations"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
-OUT_PATH = OUT_DIR / "substitutes.parquet"
+OUT_PATH = OUT_DIR / ("substitutes.parquet" if EMBEDDINGS == "raw" else "substitutes_adapted.parquet")
 
 t0 = time.time()
 asins = np.load(SNAPSHOT_DIR / "item_asins.npy", allow_pickle=False).astype(str)
 node_of_item = np.load(SNAPSHOT_DIR / "node_of_item.npy")
-img_emb = np.load(SIGLIP_DIR / "siglip_img_emb.npy").astype("float32")
+EMB_PATH = SIGLIP_DIR / ("siglip_img_emb.npy" if EMBEDDINGS == "raw" else "adapted_img_emb.npy")
+assert EMB_PATH.exists(), f"missing: {EMB_PATH.relative_to(ROOT)}"
+print(f"embeddings: {EMBEDDINGS} ({EMB_PATH.relative_to(ROOT)})")
+img_emb = np.load(EMB_PATH).astype("float32")
 img_status = np.load(SIGLIP_DIR / "siglip_img_status.npy")
 has_img = img_status == 1
 n_items = len(asins)

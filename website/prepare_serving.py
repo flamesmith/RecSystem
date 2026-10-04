@@ -6,7 +6,9 @@ Three carousels, three different natural shapes going in:
   complements_proportional
                -- TTN,      recommendations/complements_proportional.parquet
                   (same model, different merge rule across licensed categories)
-  substitutes  -- SigLIP2,  recommendations/substitutes.parquet  (per query item)
+  substitutes  -- SigLIP2,  recommendations/substitutes_adapted.parquet (per query item;
+                  ranked on the champion adapter's embeddings, see
+                  SigLIP2/champion_selection_siglip.json)
   popular      -- Popularity, recommendations/popularity.parquet (per CATEGORY,
                   two variants: all_time / recency)
 
@@ -94,7 +96,7 @@ parts = []
 
 for carousel, filename, k in (("complements", "complements.parquet", DISPLAY_K),
                                ("complements_proportional", "complements_proportional.parquet", PROPORTIONAL_K),
-                               ("substitutes", "substitutes.parquet", DISPLAY_K)):
+                               ("substitutes", "substitutes_adapted.parquet", DISPLAY_K)):
     path = REC_DIRS[carousel] / filename
     if not path.exists():
         print(f"skipping {carousel}: {path.relative_to(ROOT)} not found")
