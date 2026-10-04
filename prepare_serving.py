@@ -8,9 +8,12 @@ Three carousels, three different natural shapes going in:
                   two variants: all_time / recency)
 
 This is specifically where popularity's per-category rows get expanded into
-per-item rows -- joining category_node_id to every asin whose OWN category
-(node_of_item) equals it -- so the output below is uniform: one row per
-(query_asin, carousel, rank), regardless of which of the three produced it.
+per-item rows -- joining (cat_2, cat_3, cat_4) to every snapshot item whose
+OWN category matches it (from df_features.pkl, not node_of_item.npy --
+Popularity stopped using TTN's co-purchase-derived item/node vocabulary,
+see Popularity/build_popularity.py's own docstring for why) -- so the
+output below is uniform: one row per (query_asin, carousel, rank),
+regardless of which of the three produced it.
 
 Output schema (data/tower/<snapshot_id>/serving/recommendations.parquet):
   query_asin | carousel | variant | rank | candidate_asin | score
@@ -24,9 +27,9 @@ stored (20). No cold-start routing is applied (v1 scope, per this session's
 top-K as-is, including its known weakness on low-training-frequency
 targets.
 
-Prerequisite: TTN/generate_recommendations.py, SigLIP2/generate_recommendations.py,
-and Popularity/build_popularity.py must have all already run for the given
---snapshot.
+Prerequisite: TTN/generate_recommendations.py and SigLIP2/generate_recommendations.py
+must have already run for the given --snapshot; Popularity/build_popularity.py
+must have run too, but it isn't --snapshot-specific (just run once).
 
 Usage: python prepare_serving.py --snapshot w90_2017-12-09
 """
@@ -46,19 +49,27 @@ SNAPSHOT_ID = parser.parse_args().snapshot
 SNAPSHOT_DIR = ROOT / "data" / "tower" / SNAPSHOT_ID
 # Each model keeps its own recommendations under its own folder now, not all
 # under the shared snapshot dir -- one recommendations dir per carousel.
+# Popularity's isn't snapshot-scoped (see its own build script), so its
+# path has no SNAPSHOT_ID in it, unlike the other two.
 REC_DIRS = {
     "complements": ROOT / "TTN" / "generated" / SNAPSHOT_ID / "recommendations",
     "substitutes": ROOT / "SigLIP2" / "generated" / SNAPSHOT_ID / "recommendations",
-    "popular": ROOT / "Popularity" / "generated" / SNAPSHOT_ID / "recommendations",
+    "popular": ROOT / "Popularity" / "generated" / "recommendations",
 }
 OUT_DIR = SNAPSHOT_DIR / "serving"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_PATH = OUT_DIR / "recommendations.parquet"
 
 asins = np.load(SNAPSHOT_DIR / "item_asins.npy", allow_pickle=False).astype(str)
-node_of_item = np.load(SNAPSHOT_DIR / "node_of_item.npy")
-item_by_node = pd.DataFrame({"query_asin": asins, "category_node_id": node_of_item})
-item_by_node = item_by_node[item_by_node["category_node_id"] > 0]
+# Each snapshot item's own (cat_2, cat_3, cat_4) -- from df_features.pkl
+# directly, the same source Popularity itself now uses, not node_of_item.npy
+# (TTN's co-purchase-derived vocabulary; Popularity no longer reads it).
+df_features = pd.read_pickle(ROOT / "data" / "df_features.pkl")
+cat_by_asin = (df_features[["asin", "cat_2", "cat_3", "cat_4"]]
+               .drop_duplicates("asin").set_index("asin"))
+cat_by_asin["cat_4"] = cat_by_asin["cat_4"].fillna("Missing")
+item_by_cat = pd.DataFrame({"query_asin": asins}).merge(
+    cat_by_asin, left_on="query_asin", right_index=True, how="inner")
 
 
 def truncate(df, key_col):
@@ -87,8 +98,8 @@ for carousel, filename in (("complements", "complements.parquet"),
 pop_path = REC_DIRS["popular"] / "popularity.parquet"
 if pop_path.exists():
     pop = pd.read_parquet(pop_path)
-    # expand category_node_id -> every item whose OWN category is that node
-    expanded = pop.merge(item_by_node, on="category_node_id", how="inner")
+    # expand (cat_2, cat_3, cat_4) -> every snapshot item whose OWN category matches it
+    expanded = pop.merge(item_by_cat, on=["cat_2", "cat_3", "cat_4"], how="inner")
     # A popular item can BE the query (it's popular in its own category) --
     # exclude that row, same self-exclusion complements/substitutes already
     # apply at generation time, just done here since this is the first point

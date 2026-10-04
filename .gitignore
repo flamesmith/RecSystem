@@ -47,6 +47,10 @@ data/*.pkl.bak*
 # Raw source dataset (~16 GB) — the schema/config JSONs in data/ stay tracked
 data/meta_Home_and_Kitchen.json
 
+# Derived from df_features.pkl by data_creation/build_image_url_cache.py --
+# regenerable, not config, unlike the other tracked data/*.json files.
+data/asin_image_urls.json
+
 # Generated tables anywhere in the repo, not just data/. The rules above are
 # path-scoped, so a pickle or CSV written next to a notebook — e.g. a pair
 # table saved into complementary_cats_pairs/ or ttn/ — would otherwise be

@@ -92,6 +92,7 @@ from data_creation.complementary_cats_pairs import (
     save_pairs,
     score_pairs,
 )
+from data_creation.build_image_url_cache import build_image_url_cache
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--min-edges", type=int, default=5,
@@ -114,15 +115,16 @@ FEATURES_PATH = DATA_DIR / "df_features.pkl"
 EMBEDDINGS_PATH = DATA_DIR / "df_features_with_embeddings.pkl"
 PAIR_STATS_PATH = DATA_DIR / "pair_stats.pkl"
 COMPLEMENTARY_PATH = DATA_DIR / "complementary_categories.pkl"
+IMAGE_URL_CACHE_PATH = DATA_DIR / "asin_image_urls.json"
 
 # ============================================================================
 # 1. Item feature extraction -- meta_Home_and_Kitchen_filtered.csv -> df_features.pkl
 # ============================================================================
 if FEATURES_PATH.exists() and not ARGS.force:
     df_features = pd.read_pickle(FEATURES_PATH)
-    print(f"[1/3] reusing {FEATURES_PATH.name} ({len(df_features):,} rows) -- pass --force to rebuild")
+    print(f"[1/4] reusing {FEATURES_PATH.name} ({len(df_features):,} rows) -- pass --force to rebuild")
 else:
-    print("[1/3] extracting item features from meta_Home_and_Kitchen_filtered.csv "
+    print("[1/4] extracting item features from meta_Home_and_Kitchen_filtered.csv "
           "(text cleaning + per-category schema extraction; can take ~40 min)")
     df_items = pd.read_csv(
         DATA_DIR / "meta_Home_and_Kitchen_filtered.csv", low_memory=False,
@@ -145,9 +147,9 @@ else:
 # 2. Title embeddings -- df_features.pkl -> df_features_with_embeddings.pkl
 # ============================================================================
 if EMBEDDINGS_PATH.exists() and not ARGS.force:
-    print(f"[2/3] reusing {EMBEDDINGS_PATH.name} -- pass --force to rebuild")
+    print(f"[2/4] reusing {EMBEDDINGS_PATH.name} -- pass --force to rebuild")
 else:
-    print("[2/3] encoding item titles with SBERT (all-MiniLM-L6-v2)")
+    print("[2/4] encoding item titles with SBERT (all-MiniLM-L6-v2)")
     df_emb = create_embeddings(
         df_features, text_col="title_cleaned", model_name="all-MiniLM-L6-v2",
         batch_size=256, embedding_col="title_embedding",
@@ -160,9 +162,9 @@ else:
 # ============================================================================
 if PAIR_STATS_PATH.exists() and not ARGS.force:
     pair_stats = pd.read_pickle(PAIR_STATS_PATH)
-    print(f"[3/3] reusing {PAIR_STATS_PATH.name} ({len(pair_stats):,} scored pairs) -- pass --force to rebuild")
+    print(f"[3/4] reusing {PAIR_STATS_PATH.name} ({len(pair_stats):,} scored pairs) -- pass --force to rebuild")
 else:
-    print("[3/3] scoring also_buy category pairs (support + lift over the full catalogue)")
+    print("[3/4] scoring also_buy category pairs (support + lift over the full catalogue)")
     valid_pairs = load_taxonomy(DATA_DIR / "category_taxonomy.json")
     df_base = build_base_table(df_features, valid_pairs)
     cat_lookup = load_catalogue_lookup(DATA_DIR / "meta_Home_and_Kitchen_filtered.csv", valid_pairs)
@@ -177,8 +179,22 @@ print(f"      kept {len(complementary_categories):,} pairs at min_edges={ARGS.mi
       f"min_lift={ARGS.min_lift} -> {COMPLEMENTARY_PATH.name}")
 
 # ============================================================================
+# 4. Image url cache -- df_features.pkl's imageURL/imageURLHighRes -> a small
+#    asin -> url lookup, so a consumer that only wants pictures (e.g.
+#    demo/recommendations_demo.ipynb) never has to load the full 90-column
+#    feature table just to reach 2 of its columns.
+# ============================================================================
+if IMAGE_URL_CACHE_PATH.exists() and not ARGS.force:
+    print(f"[4/4] reusing {IMAGE_URL_CACHE_PATH.name} -- pass --force to rebuild")
+else:
+    print("[4/4] building the asin -> image url cache")
+    n_written = build_image_url_cache(df_features, IMAGE_URL_CACHE_PATH)
+    print(f"      {n_written:,} items with a real image ({n_written / len(df_features):.1%}) "
+          f"-> {IMAGE_URL_CACHE_PATH.name}")
+
+# ============================================================================
 # Summary
 # ============================================================================
 print("\nready for data_processing/build_snapshot.py:")
-for f in (FEATURES_PATH, EMBEDDINGS_PATH, PAIR_STATS_PATH, COMPLEMENTARY_PATH):
+for f in (FEATURES_PATH, EMBEDDINGS_PATH, PAIR_STATS_PATH, COMPLEMENTARY_PATH, IMAGE_URL_CACHE_PATH):
     print(f"  {f.name:<32} {f.stat().st_size / 1e6:>10,.1f} MB")

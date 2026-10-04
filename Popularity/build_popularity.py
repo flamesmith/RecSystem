@@ -3,14 +3,27 @@ version and a recency-windowed version.
 
 Not a trained model, and not a co-purchase-based fallback for "Complete the
 Look" (see README) -- raw purchase count per item, grouped by the item's
-OWN category (cat_4, the most specific level this project's taxonomy has --
-there is no cat_5). "Most popular desks" when viewing a desk -- not "most
-popular things bought alongside a desk," which is a different question this
-file does not answer.
+OWN category (cat_2/cat_3/cat_4 together). "Most popular desks" when
+viewing a desk -- not "most popular things bought alongside a desk," which
+is a different question this file does not answer.
 
-Two variants, both anchored at TTN/constants.json's date_threshold (the same
-train/test cutoff every other fitted statistic in this pipeline uses, so
-this never counts a review from the held-out test period):
+No --snapshot argument, unlike every other model's script -- deliberately
+changed from an earlier version that took one. That version restricted
+counts to items.in `data/tower/<snapshot_id>/item_asins.npy`, TTN's
+co-purchase-pair-derived item list -- a restriction that had nothing to do
+with Popularity's own logic (a raw count has no concept of "co-purchase"
+at all) and silently excluded any item that was reviewed hundreds of times
+but never happened to appear in a surviving TTN training pair. Categories
+here come straight from df_features.pkl's own cat_2/cat_3/cat_4 instead,
+covering every item with valid features (1,134,566 of them), not just the
+much smaller subset (134,749 for w60) that also cleared TTN's co-purchase
+and category-licensing filters. Since nothing left is snapshot-specific,
+this output is no longer snapshot-scoped either -- one universal result,
+not one per --window-days.
+
+Two variants, both anchored at TTN/constants.json's date_threshold (the
+same train/test cutoff every other fitted statistic in this pipeline
+uses, so this never counts a review from the held-out test period):
   all_time -- every review before date_threshold, no decay.
   recency  -- only reviews in the RECENCY_WINDOW_DAYS immediately before
               date_threshold (default 60).
@@ -30,42 +43,37 @@ not a transaction log), so -- consistent with how every co-purchase pair in
 this project is built -- a review is used as the purchase proxy: one row in
 Home_and_Kitchen_filtered.csv per (reviewer, item), counted once each.
 
-Prerequisite: data_processing/build_snapshot.py must have already run for the given
---snapshot, to produce that snapshot's item_asins.npy and node_of_item.npy
-(each item's own category, the same node encoding used everywhere else in
-this project).
+Items with no cat_4 (15.8% of df_features.pkl) are grouped at "Missing",
+same convention data_processing/build_snapshot.py uses, rather than
+dropped -- a missing leaf category doesn't mean the item has no category
+at all, cat_2/cat_3 are still real.
+
+Prerequisite: data_creation/build_data.py must have already produced
+data/df_features.pkl.
 
 Output IS this carousel's final recommendation-generation artifact --
 Popularity has no separate "model" from its recommendation list, so unlike
 TTN and SigLIP2 there's no distinct generate_recommendations.py for it.
-Written directly in the locked recommendation-generation schema (see
-analysis notes / PLAN.md): one parquet, category_node_id | variant | rank |
-candidate_asin | score, top-20 per (category, variant) -- the same K used
-for TTN's and SigLIP2's per-query recommendation files, so filtering/
-serving prep can treat all three uniformly. Keyed by asin (not item_idx),
-matching every other stage's recommendation output -- item_idx is a
-snapshot-internal row position, not stable across snapshots with different
-item coverage.
+One parquet: cat_2 | cat_3 | cat_4 | variant | rank | candidate_asin |
+score, top-20 per (category, variant) -- the same K used for TTN's and
+SigLIP2's per-query recommendation files. Keyed by the category path
+directly (cat_2/cat_3/cat_4), not an opaque integer id -- there's no
+shared vocabulary to encode against now that this doesn't read
+node_of_item.npy.
 
-Usage: python Popularity/build_popularity.py --snapshot w90_2017-12-09
+Usage: python Popularity/build_popularity.py
 """
-import argparse
 import json
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 
 TOP_K = 20      # matches TTN's and SigLIP2's recommendation-generation depth
+MISSING = "Missing"
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
-parser = argparse.ArgumentParser()
-parser.add_argument("--snapshot", required=True,
-                     help="snapshot_id from data_processing/build_snapshot.py, e.g. w90_2017-12-09")
-SNAPSHOT_ID = parser.parse_args().snapshot
-SNAPSHOT_DIR = DATA_DIR / "tower" / SNAPSHOT_ID                      # shared artifacts
-OUT_DIR = ROOT / "Popularity" / "generated" / SNAPSHOT_ID / "recommendations"
+OUT_DIR = ROOT / "Popularity" / "generated" / "recommendations"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_PATH = OUT_DIR / "popularity.parquet"
 
@@ -78,10 +86,10 @@ REFERENCE_DATE = pd.Timestamp(DATE_THRESHOLD)     # swap for pd.Timestamp.now() 
 cutoff_time = REFERENCE_DATE.timestamp()
 recency_start_time = (REFERENCE_DATE - pd.Timedelta(days=RECENCY_WINDOW_DAYS)).timestamp()
 
-asins = np.load(SNAPSHOT_DIR / "item_asins.npy", allow_pickle=False).astype(str)
-node_of_item = np.load(SNAPSHOT_DIR / "node_of_item.npy")
-idx_of = {a: i for i, a in enumerate(asins)}
-print(f"tower items: {len(asins):,}")
+df_features = pd.read_pickle(DATA_DIR / "df_features.pkl")
+cat_by_asin = df_features[["asin", "cat_2", "cat_3", "cat_4"]].drop_duplicates("asin").set_index("asin")
+cat_by_asin["cat_4"] = cat_by_asin["cat_4"].fillna(MISSING)
+print(f"items with a category (df_features.pkl): {len(cat_by_asin):,}")
 
 df_reviews = pd.read_csv(
     DATA_DIR / "Home_and_Kitchen_filtered.csv",
@@ -95,38 +103,40 @@ print(f"reviews before {DATE_THRESHOLD}: {len(all_time):,} of {len(df_reviews):,
 print(f"  of those, in the {RECENCY_WINDOW_DAYS}-day window before it: {len(recency):,}")
 
 
-def top_by_node(reviews, variant):
-    """Raw purchase-proxy count per tower item, ranked within its own category.
+def top_by_category(reviews, variant):
+    """Raw purchase-proxy count per item, ranked within its own category.
 
-    Returns rows in the locked recommendation-generation schema:
-    category_node_id | variant | rank | candidate_asin | score.
+    Returns rows in the schema: cat_2 | cat_3 | cat_4 | variant | rank |
+    candidate_asin | score.
     """
     counts = reviews["asin"].value_counts()
-    item_idx = counts.index.map(idx_of)
-    in_tower = item_idx.notna()
+    cats = cat_by_asin.reindex(counts.index)
+    has_cat = cats["cat_2"].notna()   # false only for asins absent from df_features.pkl entirely
+
     table = pd.DataFrame({
-        "candidate_asin": counts.index[in_tower].astype(str),
-        "item_idx": item_idx[in_tower].astype(int),
-        "score": counts.to_numpy()[in_tower].astype("float32"),
+        "candidate_asin": counts.index[has_cat].astype(str),
+        "cat_2": cats.loc[has_cat, "cat_2"].to_numpy(),
+        "cat_3": cats.loc[has_cat, "cat_3"].to_numpy(),
+        "cat_4": cats.loc[has_cat, "cat_4"].to_numpy(),
+        "score": counts.to_numpy()[has_cat].astype("float32"),
     })
-    table["category_node_id"] = node_of_item[table["item_idx"].to_numpy()]
-    table = table[table["category_node_id"] > 0]   # 0 is the reserved unseen/padding node
 
+    group_cols = ["cat_2", "cat_3", "cat_4"]
     top = (table.sort_values("score", ascending=False)
-                .groupby("category_node_id", group_keys=False)
+                .groupby(group_cols, group_keys=False)
                 .head(TOP_K)
-                .sort_values(["category_node_id", "score"], ascending=[True, False]))
-    top["rank"] = top.groupby("category_node_id").cumcount() + 1
+                .sort_values(group_cols + ["score"], ascending=[True, True, True, False]))
+    top["rank"] = top.groupby(group_cols).cumcount() + 1
     top["variant"] = variant
-    return top[["category_node_id", "variant", "rank", "candidate_asin", "score"]]
+    return top[group_cols + ["variant", "rank", "candidate_asin", "score"]]
 
 
-all_time_rows = top_by_node(all_time, "all_time")
-recency_rows = top_by_node(recency, "recency")
+all_time_rows = top_by_category(all_time, "all_time")
+recency_rows = top_by_category(recency, "recency")
 print(f"all_time: {all_time_rows['candidate_asin'].nunique():,} items with >=1 review, "
-      f"{all_time_rows['category_node_id'].nunique():,} categories covered")
+      f"{len(all_time_rows[['cat_2', 'cat_3', 'cat_4']].drop_duplicates()):,} categories covered")
 print(f"recency ({RECENCY_WINDOW_DAYS}d): {recency_rows['candidate_asin'].nunique():,} items with >=1 review, "
-      f"{recency_rows['category_node_id'].nunique():,} categories covered")
+      f"{len(recency_rows[['cat_2', 'cat_3', 'cat_4']].drop_duplicates()):,} categories covered")
 
 out = pd.concat([all_time_rows, recency_rows], ignore_index=True)
 out.to_parquet(OUT_PATH)

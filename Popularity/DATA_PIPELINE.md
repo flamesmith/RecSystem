@@ -1,15 +1,16 @@
 # Popularity — Data Pipeline
 
-How a snapshot's reviews become the "Trending in Category" carousel. For
-what Popularity does conceptually, see `Popularity/README.md`. Same diagram
+How reviews become the "Trending in Category" carousel. For what
+Popularity does conceptually, see `Popularity/README.md`. Same diagram
 style as `TTN/DATA_PIPELINE.md`: white box = transformation step, colored
 box right after it = the variable(s) that step produces, amber box = the
 orchestrator script, blue box = a file on disk.
 
 The simplest of the three pipelines — one script, no separate
-"model," no functions imported from anywhere else.
+"model," no functions imported from anywhere else, and — unlike TTN and
+SigLIP2 — no `--snapshot` argument at all.
 
-## `Popularity/build_popularity.py --snapshot ...`
+## `Popularity/build_popularity.py`
 
 ```mermaid
 flowchart TB
@@ -23,17 +24,17 @@ flowchart TB
     ORCH["Popularity/build_popularity.py<br/>ORCHESTRATOR — one self-contained script,<br/>no functions imported from elsewhere"]:::orch
 
     RAWREV["Home_and_Kitchen_filtered.csv (RAW)<br/>asin, unixReviewTime"]:::raw
-    SNAP[["item_asins.npy, node_of_item.npy<br/>(from data_processing/build_snapshot.py)"]]:::file
+    FEAT[["df_features.pkl<br/>(from data_creation/build_data.py)"]]:::file
     CFG["TTN/constants.json<br/>date_threshold"]:::config
 
     P_SPLIT["split reviews by date_threshold"]:::proc
     V_SPLIT["all_time = every review before the cutoff<br/>recency = reviews within RECENCY_WINDOW_DAYS<br/>(default 60) immediately before it"]:::vars
 
-    P_COUNT["top_by_node(), run once per variant:<br/>count reviews per asin (one review = one purchase proxy);<br/>map asin → tower item_idx → its own category_node_id"]:::proc
-    V_COUNT["a review count per item,<br/>tagged with its own category_node_id"]:::vars
+    P_COUNT["top_by_category(), run once per variant:<br/>count reviews per asin (one review = one purchase proxy);<br/>map asin → its own cat_2/cat_3/cat_4 (cat_4 nulls → 'Missing')"]:::proc
+    V_COUNT["a review count per item,<br/>tagged with its own (cat_2, cat_3, cat_4)"]:::vars
 
-    P_TOPK["rank within each category_node_id,<br/>keep the top 20"]:::proc
-    V_TOPK["category_node_id, variant,<br/>rank, candidate_asin, score"]:::vars
+    P_TOPK["rank within each (cat_2, cat_3, cat_4),<br/>keep the top 20"]:::proc
+    V_TOPK["cat_2, cat_3, cat_4, variant,<br/>rank, candidate_asin, score"]:::vars
 
     OUT[["popularity.parquet"]]:::file
 
@@ -41,7 +42,7 @@ flowchart TB
 
     RAWREV --> P_SPLIT
     CFG --> P_SPLIT --> V_SPLIT --> P_COUNT
-    SNAP -.item_idx, category_node_id.-> P_COUNT
+    FEAT -.cat_2, cat_3, cat_4.-> P_COUNT
     P_COUNT --> V_COUNT --> P_TOPK --> V_TOPK --> OUT
 ```
 
@@ -51,15 +52,17 @@ flowchart TB
   co-purchase *pairing* window `data_processing/build_snapshot.py --window-days`
   uses to build TTN's training pairs) — same word, two different concepts,
   living in two different scripts.
-- **The README is stale on the output filename.** `Popularity/README.md`
-  says the output is `data/tower/<snapshot_id>/popularity_top100.json`; the
-  actual script writes `popularity.parquet`, and not even under `data/` —
-  see Prerequisites below.
+- **No longer reads `item_asins.npy`/`node_of_item.npy`.** An earlier
+  version restricted counts to TTN's co-purchase-derived item list and
+  category vocabulary — an unjustified restriction inherited from reusing
+  TTN's infrastructure, not something Popularity's own logic needs.
+  Categories now come straight from `df_features.pkl`.
 
 ## Prerequisites
 
-Requires `data_processing/build_snapshot.py --window-days N` to have already
-run for the given snapshot — reads that snapshot's `item_asins.npy` and
-`node_of_item.npy` directly from the shared `data/tower/<snapshot_id>/`.
-Output lands in `Popularity/generated/<snapshot_id>/recommendations/popularity.parquet`
-— under this model's own folder, not `data/`.
+Requires `data_creation/build_data.py` to have already produced
+`data/df_features.pkl` — no `data_processing/build_snapshot.py` step, no
+`--snapshot` argument, no dependency on any `--window-days` choice at all.
+Output lands in `Popularity/generated/recommendations/popularity.parquet`
+— one universal file, under this model's own folder, not `data/` and not
+scoped to any snapshot.
