@@ -6,9 +6,19 @@ answer the same question from different evidence.
 | Half | Evidence | Grain | Output |
 | --- | --- | --- | --- |
 | **categories** | Amazon's `also_buy` lists — what Amazon *says* is bought together | category pair | `data/complementary_categories.pkl` |
-| **pairs** | the review log — what users *actually* bought together | item pair | `data/co_purchase_pairs_{train,test}.pkl` |
+| **pairs** | the review log — what users *actually* bought together | item pair | slim (query_idx, target_idx) arrays, built per snapshot |
 
 They need not agree, and the disagreement is itself informative.
+
+`data_creation/build_data.py` runs the whole **categories** half end to end
+(see its own docstring) — that's the one-command way to (re)build
+`complementary_categories.pkl` from the raw sources. The **pairs** half is
+no longer run through a notebook to a cached pickle: `window_days` is a
+data_processing-time parameter (`--window-days` on
+`data_processing/build_snapshot.py`), so a fixed-window
+`co_purchase_pairs_{train,test}.pkl` built here would go stale the moment a
+different window is used. `build_snapshot.py` calls `co_purchase_pairs(...)`
+from `pairs.py` directly instead.
 
 ## Layout
 
@@ -175,7 +185,18 @@ stay local like every other generated table in this project.
 Every unordered pair of items the same user bought within a short window of
 each other, read straight off the interaction log.
 
-Outputs, one row per distinct item pair in each:
+**Not run through `pairs.ipynb` to a standing pickle anymore.**
+`data_processing/build_snapshot.py` calls `co_purchase_pairs(...)` below
+directly, with whatever `--window-days` that run was given — the notebook's
+own `data/co_purchase_pairs_{train,test}.pkl` output was a single fixed-window
+snapshot that a different `--window-days` value would silently make stale.
+Everything past this point (inputs, filters, output schema) still describes
+exactly what the functions do; only "written to a cached file by the
+notebook" no longer holds. Use `co_purchase_pairs`/`run_co_purchase_pairs`
+directly for standalone inspection.
+
+Outputs, one row per distinct item pair in each (if writing to a file, e.g.
+for ad-hoc inspection with `save_co_purchase_pairs`/`run_co_purchase_pairs`):
 
 | File | Interactions used |
 | --- | --- |
