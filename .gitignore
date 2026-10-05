@@ -59,6 +59,13 @@ data/asin_image_urls.json
 *.csv
 *.parquet
 
+# Explicitly called out despite already matching *.parquet above: this one's
+# 142 MB (over GitHub's 100MB push limit) and lives inside the imported
+# checkpoint's own folder (SigLIP2/checkpoints/pilot_200k/), not the usual
+# Model/generated/ location every other generated table uses -- worth a
+# named reminder of why, not just silent coverage by the blanket rule.
+SigLIP2/checkpoints/pilot_200k/recommendations/full_catalog_top40.parquet
+
 # IDE
 .idea/
 
