@@ -6,9 +6,11 @@ Three carousels, three different natural shapes going in:
   complements_proportional
                -- TTN,      recommendations/complements_proportional.parquet
                   (same model, different merge rule across licensed categories)
-  substitutes  -- SigLIP2,  recommendations/substitutes_adapted.parquet (per query item;
-                  ranked on the champion adapter's embeddings, see
-                  SigLIP2/champion_selection_siglip.json)
+  substitutes  -- SigLIP2,  checkpoints/pilot_200k/recommendations/full_catalog_top40.parquet
+                  (per query item; champion adapter applied to the full image
+                  cache, ranked within each item's own category -- NOT
+                  snapshot-scoped, so it covers far more items than the other
+                  carousels; see SigLIP2/generate_full_catalog_adapted_recommendations.py)
   popular      -- Popularity, recommendations/popularity.parquet (per CATEGORY,
                   two variants: all_time / recency)
 
@@ -65,7 +67,7 @@ SNAPSHOT_DIR = ROOT / "data" / "tower" / SNAPSHOT_ID
 REC_DIRS = {
     "complements": ROOT / "TTN" / "generated" / SNAPSHOT_ID / "recommendations",
     "complements_proportional": ROOT / "TTN" / "generated" / SNAPSHOT_ID / "recommendations",
-    "substitutes": ROOT / "SigLIP2" / "generated" / SNAPSHOT_ID / "recommendations",
+    "substitutes": ROOT / "SigLIP2" / "checkpoints" / "pilot_200k" / "recommendations",
     "popular": ROOT / "Popularity" / "generated" / "recommendations",
 }
 OUT_DIR = SNAPSHOT_DIR / "serving"
@@ -96,7 +98,7 @@ parts = []
 
 for carousel, filename, k in (("complements", "complements.parquet", DISPLAY_K),
                                ("complements_proportional", "complements_proportional.parquet", PROPORTIONAL_K),
-                               ("substitutes", "substitutes_adapted.parquet", DISPLAY_K)):
+                               ("substitutes", "full_catalog_top40.parquet", DISPLAY_K)):
     path = REC_DIRS[carousel] / filename
     if not path.exists():
         print(f"skipping {carousel}: {path.relative_to(ROOT)} not found")
