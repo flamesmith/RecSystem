@@ -10,12 +10,12 @@ process pointed at the new one.
 
 Endpoints:
   GET /items/{asin}/recommendations
-      -> all carousels for one item, DISPLAY_K each (20 for complements_proportional)
+      -> all carousels for one item, DISPLAY_K each (up to 20 for complements_proportional and association_rules)
       Query params: none yet -- carousel/variant filtering is a fast
       follow if a caller ever needs just one carousel.
   GET /items/{asin}/recommendations/{carousel}
       -> one carousel only (carousel in complements, complements_proportional,
-      substitutes, popular).
+      complements_siglip2, association_rules, substitutes, popular).
       For "popular", pass ?variant=all_time or ?variant=recency
       (default: all_time).
   GET /
@@ -39,7 +39,8 @@ ROOT = Path(__file__).resolve().parents[1]   # repo root; this file lives in web
 SNAPSHOT_ID = os.environ.get("SNAPSHOT", "w90_2017-12-09")
 DB_PATH = ROOT / "data" / "tower" / SNAPSHOT_ID / "serving" / "recommendations.db"
 
-VALID_CAROUSELS = {"complements", "complements_proportional", "substitutes", "popular"}
+VALID_CAROUSELS = {"complements", "complements_proportional", "complements_siglip2",
+                   "association_rules", "substitutes", "popular"}
 VALID_VARIANTS = {"all_time", "recency"}
 
 app = FastAPI(title="RecSystem serving API")
@@ -106,7 +107,8 @@ def all_recommendations(asin: str):
         raise HTTPException(status_code=404, detail=f"no recommendations for {asin!r}")
 
     out = {}
-    for carousel in ("complements", "complements_proportional", "substitutes"):
+    for carousel in ("complements", "complements_proportional", "complements_siglip2",
+                     "association_rules", "substitutes"):
         rows = conn.execute(
             REC_SELECT + """ WHERE r.query_asin = ? AND r.carousel = ? ORDER BY r.rank""",
             (asin, carousel),

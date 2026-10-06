@@ -6,6 +6,16 @@ Three carousels, three different natural shapes going in:
   complements_proportional
                -- TTN,      recommendations/complements_proportional.parquet
                   (same model, different merge rule across licensed categories)
+  complements_siglip2
+               -- SigLip2 complementary, recommendations/complements_top25.parquet
+                  (image similarity inside TTN's licensed complementary
+                  categories; NOT snapshot-scoped, 25 rows per query item,
+                  truncated here to DISPLAY_K)
+  association_rules
+               -- Association Rule, generated/<snapshot_id>/recommendations/association_rules.parquet
+                  (item-pair co-purchase counts inside TTN's licensed
+                  categories; its pair_count becomes `score`; not truncated,
+                  same reason as complements_proportional)
   substitutes  -- SigLIP2,  checkpoints/pilot_200k/recommendations/full_catalog_top40.parquet
                   (per query item; champion adapter applied to the full image
                   cache, ranked within each item's own category -- NOT
@@ -24,7 +34,8 @@ regardless of which of the three produced it.
 
 Output schema (data/tower/<snapshot_id>/serving/recommendations.parquet):
   query_asin | carousel | variant | rank | candidate_asin | score
-  carousel in {"complements", "complements_proportional", "substitutes", "popular"}
+  carousel in {"complements", "complements_proportional", "complements_siglip2",
+               "association_rules", "substitutes", "popular"}
   variant  is None for complements/substitutes; "all_time" or "recency" for popular
 
 "Filtering" here is exactly: truncate every carousel down to DISPLAY_K
@@ -47,7 +58,7 @@ import numpy as np
 import pandas as pd
 
 DISPLAY_K = 10
-# The proportional carousel is NOT truncated to DISPLAY_K: its 20 slots are
+# The proportional and association_rules carousels are NOT truncated to DISPLAY_K: their 20 slots are
 # allocated across licensed categories and ranked in category blocks, so
 # cutting to the top 10 would drop whole categories (measured on w90: ~9.6
 # categories per item across all 20 slots vs ~2.9 within the first 10) and
@@ -67,6 +78,8 @@ SNAPSHOT_DIR = ROOT / "data" / "tower" / SNAPSHOT_ID
 REC_DIRS = {
     "complements": ROOT / "TTN" / "generated" / SNAPSHOT_ID / "recommendations",
     "complements_proportional": ROOT / "TTN" / "generated" / SNAPSHOT_ID / "recommendations",
+    "complements_siglip2": ROOT / "SigLip2 complementary" / "recommendations",
+    "association_rules": ROOT / "Association Rule" / "generated" / SNAPSHOT_ID / "recommendations",
     "substitutes": ROOT / "SigLIP2" / "checkpoints" / "pilot_200k" / "recommendations",
     "popular": ROOT / "Popularity" / "generated" / "recommendations",
 }
@@ -98,12 +111,16 @@ parts = []
 
 for carousel, filename, k in (("complements", "complements.parquet", DISPLAY_K),
                                ("complements_proportional", "complements_proportional.parquet", PROPORTIONAL_K),
+                               ("complements_siglip2", "complements_top25.parquet", DISPLAY_K),
+                               ("association_rules", "association_rules.parquet", PROPORTIONAL_K),
                                ("substitutes", "full_catalog_top40.parquet", DISPLAY_K)):
     path = REC_DIRS[carousel] / filename
     if not path.exists():
         print(f"skipping {carousel}: {path.relative_to(ROOT)} not found")
         continue
     df = pd.read_parquet(path)
+    if carousel == "association_rules":
+        df = df.rename(columns={"pair_count": "score"})   # distinct reviewers who bought both
     df = truncate(df, "query_asin", k)
     df["carousel"] = carousel
     df["variant"] = None

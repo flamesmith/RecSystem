@@ -95,10 +95,11 @@ of 3a/3b/3c to have already run for this snapshot.
 python website/prepare_serving.py --snapshot w90_2017-12-09
 ```
 → `data/tower/w90_.../serving/recommendations.parquet` — unifies TTN's
-`complements` and `complements_proportional`, SigLIP2's `substitutes`, and
+`complements` and `complements_proportional`, SigLip2 complementary's
+`complements_siglip2`, Association Rule's `association_rules`, SigLIP2's `substitutes`, and
 Popularity's `popular` (both variants) into one table, one row per
 `(query_asin, carousel, rank)`, truncated to `DISPLAY_K` (10) -- except
-`complements_proportional`, which keeps all 20 slots (truncating would drop
+`complements_proportional` and `association_rules`, which keep all 20 slots (truncating would drop
 whole categories from its category-blocked ranking).
 
 ```bash

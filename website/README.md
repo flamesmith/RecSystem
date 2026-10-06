@@ -1,7 +1,7 @@
 # Local demo website (`website/`)
 
 A static page (`index.html`, vanilla JS, no build step) that calls the
-FastAPI serving layer and shows all three carousels for an item.
+FastAPI serving layer and shows every carousel (TTN complements x2, SigLIP2 complements, association rules, SigLIP2 substitutes, popular) for an item.
 
 ## Run
 
